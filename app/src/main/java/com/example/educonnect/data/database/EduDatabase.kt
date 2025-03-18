@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.educonnect.data.database.daos.AssignmentDao
 import com.example.educonnect.data.database.daos.AttendanceDao
 import com.example.educonnect.data.database.daos.ConversationDao
 import com.example.educonnect.data.database.daos.CourseDao
@@ -56,7 +57,7 @@ import com.example.educonnect.data.model.users.User
 abstract class EduDatabase: RoomDatabase() {
     abstract fun userDao() : UserDao
     abstract fun courseDao() : CourseDao
-    abstract fun conversationDao() : ConversationDao
+    abstract fun assignmentDao() : AssignmentDao
     abstract fun submissionDao() : SubmissionDao
     abstract fun attendanceDao() : AttendanceDao
     abstract fun notificationDao() : NotificationDao
