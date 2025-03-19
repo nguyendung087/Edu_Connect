@@ -2,6 +2,7 @@ package com.example.educonnect.data.database.offline_repos
 
 import com.example.educonnect.data.database.daos.UserDao
 import com.example.educonnect.data.database.repositories.UserRepository
+import com.example.educonnect.data.model.users.Experience
 import com.example.educonnect.data.model.users.StudentProfile
 import com.example.educonnect.data.model.users.TeacherProfile
 import com.example.educonnect.data.model.users.User
@@ -21,5 +22,10 @@ class OfflineUsersRepository(
 
     override suspend fun getStudentProfileStream(studentId: String): StudentProfile? =
         userDao.getStudentProfile(studentId)
+
+    override suspend fun insertExperienceStream(experience: Experience) = userDao.insertExperience(experience)
+
+    override fun getExperiencesByTeacherStream(teacherId: String): Flow<List<Experience>> =
+        userDao.getExperiencesByTeacher(teacherId)
 
 }

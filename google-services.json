@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "83236589421",
+    "project_id": "edu-connect-c8510",
+    "storage_bucket": "edu-connect-c8510.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83236589421:android:d3ad5c573faac0cc219464",
+        "android_client_info": {
+          "package_name": "com.example.educonnect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "83236589421-mq0kq82t0sb2nik4smqf60sbitcqdthe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.educonnect",
+            "certificate_hash": "b5dc9e5d3fa84418e2ac7beddd0ac436995ff3e8"
+          }
+        },
+        {
+          "client_id": "83236589421-29pmvm5v87tjmumeei77n1445mhr7m3m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyaLiGd4jVwOJJA2eLRPvrtE6rFJOyfUs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "83236589421-29pmvm5v87tjmumeei77n1445mhr7m3m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

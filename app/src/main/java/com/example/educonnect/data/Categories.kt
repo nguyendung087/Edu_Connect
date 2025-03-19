@@ -8,3 +8,26 @@ val courseCategories = listOf(
     Pair("Design", R.drawable.designtools_svgrepo_com),
     Pair("Database", R.drawable.database_svgrepo_com),
 )
+
+object LocalDessertReleaseData {
+    val dessertReleases = listOf(
+        "Cupcake",
+        "Donut",
+        "Eclair",
+        "Froyo",
+        "Gingerbread",
+        "Honeycomb",
+        "Ice Cream Sandwich",
+        "Jelly Bean",
+        "KitKat",
+        "Lollipop",
+        "Marshmallow",
+        "Nougat",
+        "Oreo",
+        "Pie",
+        "Quince Tart",
+        "Red Velvet Cake",
+        "Snow Cone",
+        "Tiramisu"
+    )
+}

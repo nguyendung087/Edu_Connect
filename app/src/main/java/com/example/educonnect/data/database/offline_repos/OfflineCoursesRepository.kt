@@ -9,10 +9,17 @@ import com.example.educonnect.data.model.courses.Lesson
 class OfflineCoursesRepository(
     private val courseDao: CourseDao
 ) : CourseRepository {
-    override suspend fun getAllCoursesStream(): List<Course?> = courseDao.getAllCourses()
+    override suspend fun insertCourseStream(course: Course) =
+        courseDao.insertCourse(course)
+
+    override suspend fun getAllCoursesStream(): List<Course?> =
+        courseDao.getAllCourses()
 
     override suspend fun getCourseByIdStream(courseId: String): Course? =
         courseDao.getCourseById(courseId)
+
+    override suspend fun insertLessonStream(lesson: Lesson) =
+        courseDao.insertLesson(lesson)
 
     override suspend fun getAllLessonsByCourseStream(courseId: String): List<Lesson?> =
         courseDao.getAllLessonsByCourse(courseId)

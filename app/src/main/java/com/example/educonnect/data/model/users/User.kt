@@ -10,14 +10,16 @@ data class User(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "user_id")
     val userId: String = "",
+    @ColumnInfo(name = "firebase_uid")
+    val firebaseUid: String,
     val name: String = "",
     val email: String = "",
-//    @ColumnInfo(name = "avatar_url")
-//    val avatarUrl: String = "",
+    @ColumnInfo(name = "avatar_url")
+    val avatarUrl: String = "",
     val role: String = "student",
     @ColumnInfo(name = "date_of_birth")
     val dateOfBirth: LocalDate,
-//    val number : String = "",
+    val number : String = "",
 //    @ColumnInfo(name = "created_at")
 //    val createdAt: Long = System.currentTimeMillis(),
 //    @ColumnInfo(name = "updated_at")

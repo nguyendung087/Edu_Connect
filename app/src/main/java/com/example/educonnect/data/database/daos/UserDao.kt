@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.example.educonnect.data.model.users.Experience
 import com.example.educonnect.data.model.users.StudentProfile
 import com.example.educonnect.data.model.users.TeacherProfile
 import com.example.educonnect.data.model.users.User
@@ -23,4 +24,11 @@ interface UserDao {
 
     @Query("SELECT * FROM student_profiles WHERE student_id = :studentId")
     suspend fun getStudentProfile(studentId: String): StudentProfile?
+
+    //Experience
+    @Insert
+    suspend fun insertExperience(experience: Experience)
+
+    @Query("SELECT * FROM experience WHERE teacher_id = :teacherId")
+    fun getExperiencesByTeacher(teacherId: String): Flow<List<Experience>>
 }

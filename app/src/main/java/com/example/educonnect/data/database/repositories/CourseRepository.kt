@@ -7,9 +7,13 @@ import com.example.educonnect.data.model.courses.Lesson
 import kotlinx.coroutines.flow.Flow
 
 interface CourseRepository {
+    suspend fun insertCourseStream(course: Course)
+
     suspend fun getAllCoursesStream(): List<Course?>
 
     suspend fun getCourseByIdStream(courseId: String): Course?
+
+    suspend fun insertLessonStream(lesson: Lesson)
 
     suspend fun getAllLessonsByCourseStream(courseId: String): List<Lesson?>
 

@@ -42,7 +42,10 @@ enum class E
 //}
 
 @Composable
-fun EduApp(navController: NavHostController = rememberNavController()) {
+fun EduApp(
+    innerPaddingValues: PaddingValues = PaddingValues(0.dp),
+    navController: NavHostController = rememberNavController()
+) {
     EduNavHost(navController = navController)
 }
 
