@@ -49,7 +49,11 @@ object ChatDestination : NavigationDestination {
 
 @Composable
 fun ChatScreen() {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
         ChatAppBar(
             Modifier
                 .fillMaxWidth()

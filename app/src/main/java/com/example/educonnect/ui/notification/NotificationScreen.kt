@@ -260,10 +260,12 @@ private fun NotificationContent(
     }
 }
 
-//@Composable
-//@Preview
-//private fun NotificationPreview() {
-//    EduConnectTheme {
-//        NotificationScreen()
-//    }
-//}
+@Composable
+@Preview
+private fun NotificationPreview() {
+    EduConnectTheme {
+        NotificationScreen(
+            navigateBack = {}
+        )
+    }
+}

@@ -270,8 +270,12 @@ private fun SearchBar() {
     )
 }
 
-//@Composable
-//@Preview
-//private fun HomePreview() {
-//    HomeScreen()
-//}
+@Composable
+@Preview
+private fun HomePreview() {
+    HomeScreen(
+        navigateToMentorDetails = {},
+        navigateToCourseDetails = {},
+        navigateToNotificationScreen = {}
+    )
+}

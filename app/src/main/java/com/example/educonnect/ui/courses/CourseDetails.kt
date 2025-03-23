@@ -531,10 +531,13 @@ private fun EnrollCourseBottomBar(
 
 }
 
-//@Composable
-//@Preview
-//private fun CourseDetailsPreview() {
-//    EduConnectTheme {
-//        CourseDetails()
-//    }
-//}
+@Composable
+@Preview
+private fun CourseDetailsPreview() {
+    EduConnectTheme {
+        CourseDetails(
+            onNavigateUp = {},
+            navigateBack = {}
+        )
+    }
+}

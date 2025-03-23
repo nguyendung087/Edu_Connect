@@ -114,7 +114,10 @@ class MainActivity : ComponentActivity() {
                     name = "Nguyễn Văn A",
                     email = "teacher1@example.com",
                     role = "teacher",
-                    dateOfBirth = LocalDate.of(1980, 1, 1)
+                    dateOfBirth = LocalDate.of(1980, 1, 1),
+                    avatarUrl = "",
+                    firebaseUid = "",
+                    number = ""
                 )
             )
             userRepository.updateUserStream(
@@ -123,7 +126,10 @@ class MainActivity : ComponentActivity() {
                     name = "Trần Thị B",
                     email = "teacher2@example.com",
                     role = "teacher",
-                    dateOfBirth = LocalDate.of(1985, 5, 5)
+                    dateOfBirth = LocalDate.of(1985, 5, 5),
+                    avatarUrl = "",
+                    firebaseUid = "",
+                    number = ""
                 )
             )
 

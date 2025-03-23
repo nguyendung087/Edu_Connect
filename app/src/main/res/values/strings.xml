@@ -1,14 +1,18 @@
 <resources>
     <string name="appID">3324046802900506358</string>
     <string name="app_name">EduConnect</string>
+    <string name="create">Create Account</string>
     <string name="fill_infor">Fill your information below or register with your social account</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="example_gmail">example@gmail.com</string>
+    <string name="john_wick">John Wick</string>
     <string name="agree">Agree with Terms and Condition</string>
     <string name="signup">Sign Up</string>
     <string name="or">Or sign up with</string>
-    <string name="already">Already have an account? Sign in</string>
+    <string name="already">Already have an account?</string>
+    <string name="dont">Don\'t have an account?</string>
     <string name="welcome">Hi! Welcome back to our journey</string>
     <string name="forgot">Forgot password?</string>
     <string name="orr">Or sign in with</string>

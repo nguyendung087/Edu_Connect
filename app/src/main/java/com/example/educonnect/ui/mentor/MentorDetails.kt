@@ -394,10 +394,13 @@ private fun MentorInformationTabs(
     }
 }
 
-//@Composable
-//@Preview
-//private fun MentorDetailsPreview() {
-//    EduConnectTheme {
-//        MentorDetails()
-//    }
-//}
+@Composable
+@Preview
+private fun MentorDetailsPreview() {
+    EduConnectTheme {
+        MentorDetails(
+            onNavigateUp = {},
+            navigateBack = {}
+        )
+    }
+}
