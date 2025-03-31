@@ -1,8 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android) version "2.1.0"
-    id("org.jetbrains.kotlin.plugin.compose") version "2.1.0"
-    id("com.google.devtools.ksp") version "1.8.10-1.0.9" apply false
+    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.compose.compiler)
+//    id("org.jetbrains.kotlin.plugin.compose") version "2.1.0"
+//    id("com.google.devtools.ksp") version "2.1.0-1.0.15"
+    id("com.google.devtools.ksp")
     id("com.google.gms.google-services")
 }
 
@@ -12,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.educonnect"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -66,6 +68,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.picasso)
+//    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
 
     //Zalo SDK
 //    implementation("me.zalo:sdk-core:4.2.0724")
@@ -83,6 +86,8 @@ dependencies {
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.ui.test.android)
+    ksp("androidx.room:room-compiler:2.5.0")
 
     // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
 //    ksp(libs.androidx.room.compiler)
@@ -90,6 +95,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
+//    ksp(libs.androidx.room.compiler)
 
     // Import the Firebase BoM
     implementation(platform(libs.firebase.bom))

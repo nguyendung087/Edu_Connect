@@ -1,5 +1,6 @@
 package com.example.educonnect.data.database.daos
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
@@ -8,6 +9,7 @@ import com.example.educonnect.data.model.courses.Assignment
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDateTime
 
+@Dao
 interface AssignmentDao {
     // Thêm Assignment mới (chỉ giáo viên mới có thể thực hiện)
     @Insert
@@ -27,7 +29,7 @@ interface AssignmentDao {
 
     // Lấy Assignment cụ thể bằng ID
     @Query("SELECT * FROM assignments WHERE assignment_id = :assignmentId")
-    suspend fun getAssignmentById(assignmentId: String): Assignment?
+    suspend fun getAssignmentById(assignmentId: String): Assignment
 
     // Lấy tất cả Assignment của một giáo viên cụ thể (thông qua Course)
     @Query("""
@@ -42,5 +44,5 @@ interface AssignmentDao {
 
     // Kiểm tra xem Assignment đã kết thúc chưa (dựa trên deadline)
     @Query("SELECT deadline FROM assignments WHERE assignment_id = :assignmentId")
-    suspend fun getAssignmentDeadline(assignmentId: String): LocalDateTime?
+    suspend fun getAssignmentDeadline(assignmentId: String): LocalDateTime
 }

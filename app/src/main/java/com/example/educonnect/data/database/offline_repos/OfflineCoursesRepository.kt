@@ -15,7 +15,7 @@ class OfflineCoursesRepository(
     override suspend fun getAllCoursesStream(): List<Course?> =
         courseDao.getAllCourses()
 
-    override suspend fun getCourseByIdStream(courseId: String): Course? =
+    override suspend fun getCourseByIdStream(courseId: String): Course =
         courseDao.getCourseById(courseId)
 
     override suspend fun insertLessonStream(lesson: Lesson) =

@@ -1,4 +1,6 @@
 package com.example.educonnect.ui.notification
 
-class NotificationViewModel {
+import androidx.lifecycle.ViewModel
+
+class NotificationViewModel : ViewModel() {
 }

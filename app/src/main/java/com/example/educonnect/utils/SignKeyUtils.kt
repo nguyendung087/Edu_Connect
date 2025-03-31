@@ -1,4 +1,4 @@
-package com.example.educonnect.Utils
+package com.example.educonnect.utils
 
 import android.content.Context
 import android.content.pm.PackageManager

@@ -28,7 +28,7 @@ class OfflineAttendanceRepository(
     override suspend fun getAttendanceByStudentAndLessonStream(
         studentId: String,
         lessonId: String
-    ): Attendance? = attendanceDao.getAttendanceByStudentAndLesson(studentId, lessonId)
+    ): Attendance = attendanceDao.getAttendanceByStudentAndLesson(studentId, lessonId)
 
     override fun getAttendancesByStudentAndCourseStream(
         studentId: String,

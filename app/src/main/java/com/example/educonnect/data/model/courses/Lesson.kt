@@ -3,16 +3,20 @@ package com.example.educonnect.data.model.courses
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "lessons",
     foreignKeys = [ForeignKey(
         entity = Course::class,
-        parentColumns = ["courseId"],
-        childColumns = ["courseId"],
+        parentColumns = ["course_id"],
+        childColumns = ["course_id"],
         onDelete = ForeignKey.CASCADE
-    )]
+    )],
+    indices = [
+        Index(value = ["course_id"])
+    ]
 )
 data class Lesson(
     @PrimaryKey

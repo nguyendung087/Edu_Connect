@@ -25,7 +25,7 @@ interface SubmissionDao {
 
     // Lấy Submission của một học viên cụ thể cho một Assignment cụ thể
     @Query("SELECT * FROM submissions WHERE student_id = :studentId AND assignment_id = :assignmentId")
-    suspend fun getSubmissionByStudentAndAssignment(studentId: String, assignmentId: String): Submission?
+    suspend fun getSubmissionByStudentAndAssignment(studentId: String, assignmentId: String): Submission
 
     // Lấy tất cả Submission của một học viên trong một Course cụ thể
     @Query("""

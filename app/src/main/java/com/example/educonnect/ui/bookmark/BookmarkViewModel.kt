@@ -1,4 +1,6 @@
 package com.example.educonnect.ui.bookmark
 
-class BookmarkViewModel {
+import androidx.lifecycle.ViewModel
+
+class BookmarkViewModel : ViewModel() {
 }

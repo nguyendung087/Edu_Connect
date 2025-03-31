@@ -13,7 +13,6 @@ class OfflineSubmissionRepository(
     private val submissionDao: SubmissionDao,
     private val assignmentDao: AssignmentDao
 ) : SubmissionRepository {
-    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun insertOrUpdateSubmissionStream(submission: Submission) {
         // Kiểm tra xem Assignment đã kết thúc chưa
         val deadline = submission.assignmentId?.let { assignmentDao.getAssignmentDeadline(it) }
@@ -32,7 +31,7 @@ class OfflineSubmissionRepository(
     override suspend fun getSubmissionByStudentAndAssignmentStream(
         studentId: String,
         assignmentId: String
-    ): Submission? = submissionDao.getSubmissionByStudentAndAssignment(studentId, assignmentId)
+    ): Submission = submissionDao.getSubmissionByStudentAndAssignment(studentId, assignmentId)
 
     override fun getSubmissionsByStudentAndCourseStream(
         studentId: String,

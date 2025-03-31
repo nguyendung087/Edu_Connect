@@ -3,6 +3,7 @@ package com.example.educonnect.data.model.courses
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.educonnect.data.model.users.User
 import java.time.LocalDateTime
@@ -12,16 +13,20 @@ import java.time.LocalDateTime
     foreignKeys = [
         ForeignKey(
             entity = User::class,
-            parentColumns = ["userId"],
-            childColumns = ["studentId"],
+            parentColumns = ["user_id"],
+            childColumns = ["student_id"],
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
             entity = Assignment::class,
-            parentColumns = ["assignmentId"],
-            childColumns = ["assignmentId"],
+            parentColumns = ["assignment_id"],
+            childColumns = ["assignment_id"],
             onDelete = ForeignKey.CASCADE
         ),
+    ],
+    indices = [
+        Index(value = ["student_id"]),
+        Index(value = ["assignment_id"])
     ]
 )
 data class Submission(

@@ -1,4 +1,6 @@
 package com.example.educonnect.ui.courses
 
-class CourseViewModel {
+import androidx.lifecycle.ViewModel
+
+class CourseViewModel : ViewModel(){
 }

@@ -21,6 +21,8 @@ import com.example.educonnect.ui.mentor.TopMentorDestination
 import com.example.educonnect.ui.mentor.TopMentorScreen
 import com.example.educonnect.ui.notification.NotificationDestination
 import com.example.educonnect.ui.notification.NotificationScreen
+import com.example.educonnect.ui.signup.SignUpDestination
+import com.example.educonnect.ui.signup.SignupScreen
 
 //sealed class BottomNavItem(
 //    val route: String,
@@ -39,9 +41,19 @@ fun EduNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = HomeDestination.route,
+        startDestination = SignUpDestination.route,
         modifier = modifier
     ) {
+        composable(route = SignUpDestination.route) {
+            SignupScreen(
+                navigateToHomeScreen = {
+                    navController.navigate(
+                        HomeDestination.route
+                    )
+                }
+            )
+        }
+
         composable(route = HomeDestination.route) {
             HomeScreen(
                 innerPadding = PaddingValues(0.dp),
@@ -52,12 +64,12 @@ fun EduNavHost(
                 },
                 navigateToCourseDetails = {
                     navController.navigate(
-                        "${CourseDetailsDestination.route}/${it}"
+                        "${CourseDetailsDestination.route}/$it"
                     )
                 },
                 navigateToMentorDetails = {
                     navController.navigate(
-                        "${MentorDetailsDestination.route}/${it}"
+                        "${MentorDetailsDestination.route}/$it"
                     )
                 }
             )
@@ -66,7 +78,7 @@ fun EduNavHost(
             TopMentorScreen(
                 navigateToMentorDetails = {
                     navController.navigate(
-                        "${MentorDetailsDestination.route}/${it}"
+                        "${MentorDetailsDestination.route}/$it"
                     )
                 },
 //                navigateBack = { navController.popBackStack() },
@@ -90,7 +102,7 @@ fun EduNavHost(
             CourseScreen(
                 navigateToCourseDetails = {
                     navController.navigate(
-                        "${MentorDetailsDestination.route}/${it}"
+                        "${CourseDetailsDestination.route}/$it"
                     )
                 },
 //                navigateBack = { navController.popBackStack() },

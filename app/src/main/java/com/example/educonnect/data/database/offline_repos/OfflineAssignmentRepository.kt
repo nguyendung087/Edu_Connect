@@ -21,7 +21,7 @@ class OfflineAssignmentRepository(
     override fun getAssignmentsByCourseStream(courseId: String): Flow<List<Assignment>> =
         assignmentDao.getAssignmentsByCourse(courseId)
 
-    override suspend fun getAssignmentByIdStream(assignmentId: String): Assignment? =
+    override suspend fun getAssignmentByIdStream(assignmentId: String): Assignment =
         assignmentDao.getAssignmentById(assignmentId)
 
     override fun getAssignmentsByTeacherStream(teacherId: String): Flow<List<Assignment>> =
@@ -30,7 +30,7 @@ class OfflineAssignmentRepository(
     override suspend fun endAssignmentStream(assignmentId: String, newDeadline: LocalDateTime) =
         assignmentDao.endAssignment(assignmentId, newDeadline)
 
-    override suspend fun getAssignmentDeadlineStream(assignmentId: String): LocalDateTime? =
+    override suspend fun getAssignmentDeadlineStream(assignmentId: String): LocalDateTime =
         assignmentDao.getAssignmentDeadline(assignmentId)
 
 }

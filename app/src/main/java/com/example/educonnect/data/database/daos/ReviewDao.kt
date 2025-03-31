@@ -37,18 +37,14 @@ interface ReviewDao {
     fun getCourseReviews(courseId: String): Flow<List<CourseReview>>
 
     // Lấy tất cả đánh giá của một học viên (cả giáo viên và khóa học)
-    @Query("""
-        SELECT * FROM teacher_reviews WHERE reviewer_id = :reviewerId
-        UNION ALL
-        SELECT * FROM course_reviews WHERE reviewer_id = :reviewerId
-    """)
-    fun getReviewsByReviewer(reviewerId: String): Flow<List<Any>>
+    @Query("SELECT * FROM teacher_reviews WHERE reviewer_id = :reviewerId")
+    fun getReviewsByReviewer(reviewerId: String): Flow<List<TeacherReview>>
 
     // Kiểm tra xem học viên đã tham gia khóa học chưa (giả sử có bảng `enrollments`)
-    @Query("SELECT COUNT(*) FROM enrollments WHERE student_id = :studentId AND course_id = :courseId")
+    @Query("SELECT COUNT(*) FROM enrollments WHERE user_id = :studentId AND course_id = :courseId")
     suspend fun isStudentEnrolled(studentId: String, courseId: String): Int
 
     // Kiểm tra progress khóa học
-    @Query("SELECT progress FROM enrollments WHERE student_id = :studentId AND course_id = :courseId")
+    @Query("SELECT progress FROM enrollments WHERE user_id = :studentId AND course_id = :courseId")
     suspend fun getStudentProgress(studentId: String, courseId: String): Float
 }

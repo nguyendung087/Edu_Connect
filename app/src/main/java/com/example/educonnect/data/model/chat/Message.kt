@@ -3,6 +3,7 @@ package com.example.educonnect.data.model.chat
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.educonnect.data.model.users.User
 import java.time.LocalDateTime
@@ -12,16 +13,20 @@ import java.time.LocalDateTime
     foreignKeys = [
         ForeignKey(
             entity = Conversation::class,
-            parentColumns = ["conversationId"],
-            childColumns = ["conversationId"],
+            parentColumns = ["conversation_id"],
+            childColumns = ["conversation_id"],
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
             entity = User::class,
-            parentColumns = ["userId"],
-            childColumns = ["senderId"],
+            parentColumns = ["user_id"],
+            childColumns = ["sender_id"],
             onDelete = ForeignKey.CASCADE
         ),
+    ],
+    indices = [
+        Index(value = ["conversation_id"]),
+        Index(value = ["sender_id"])
     ]
 )
 data class Message(

@@ -64,7 +64,6 @@ enum class MentorDetailsTabs(
     Reviews("Reviews")
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MentorDetails(
     navigateBack : () -> Unit,
@@ -213,7 +212,6 @@ private fun MentorCard(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun MentorInformationTabs(
     scope : CoroutineScope,

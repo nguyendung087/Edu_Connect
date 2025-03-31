@@ -33,7 +33,6 @@ enum class CourseTabs(
     CompletedCourse(text = "Completed")
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CourseScreen(
     navigateToCourseDetails : () -> Unit

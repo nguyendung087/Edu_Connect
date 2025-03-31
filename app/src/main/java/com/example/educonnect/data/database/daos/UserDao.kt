@@ -17,16 +17,16 @@ interface UserDao {
     suspend fun insertUser(user: User)
 
     @Query("SELECT * FROM users WHERE user_id = :userId")
-    fun getUserById(userId: String): Flow<User?>
+    fun getUserById(userId: String): Flow<User>
 
     @Update
     suspend fun updateUser(user: User)
 
     @Query("SELECT * FROM teacher_profiles WHERE teacher_id  = :teacherId")
-    suspend fun getTeacherProfile(teacherId: String): TeacherProfile?
+    suspend fun getTeacherProfile(teacherId: String): TeacherProfile
 
     @Query("SELECT * FROM student_profiles WHERE student_id = :studentId")
-    suspend fun getStudentProfile(studentId: String): StudentProfile?
+    suspend fun getStudentProfile(studentId: String): StudentProfile
 
     //Experience
     @Insert

@@ -1,4 +1,6 @@
 package com.example.educonnect.ui.chat
 
-class ChatViewModel {
+import androidx.lifecycle.ViewModel
+
+class ChatViewModel : ViewModel() {
 }

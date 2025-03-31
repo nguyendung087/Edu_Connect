@@ -3,6 +3,7 @@ package com.example.educonnect.data.model.users
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.time.LocalDateTime
 
@@ -10,10 +11,13 @@ import java.time.LocalDateTime
     tableName = "notifications",
     foreignKeys = [ForeignKey(
         entity = User::class,
-        parentColumns = ["userId"],
-        childColumns = ["userId"],
+        parentColumns = ["user_id"],
+        childColumns = ["user_id"],
         onDelete = ForeignKey.CASCADE
-    )]
+    )],
+    indices = [
+        Index(value = ["user_id"]),
+    ]
 )
 data class Notification(
     @PrimaryKey

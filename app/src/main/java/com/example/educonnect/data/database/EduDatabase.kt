@@ -1,12 +1,14 @@
 package com.example.educonnect.data.database
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.educonnect.data.database.daos.AssignmentDao
 import com.example.educonnect.data.database.daos.AttendanceDao
-import com.example.educonnect.data.database.daos.ConversationDao
 import com.example.educonnect.data.database.daos.CourseDao
 import com.example.educonnect.data.database.daos.NotificationDao
 import com.example.educonnect.data.database.daos.ReviewDao
@@ -29,6 +31,7 @@ import com.example.educonnect.data.model.users.Notification
 import com.example.educonnect.data.model.users.StudentProfile
 import com.example.educonnect.data.model.users.TeacherProfile
 import com.example.educonnect.data.model.users.User
+import com.example.educonnect.utils.Converters
 
 @Database(
     entities = [
@@ -38,7 +41,6 @@ import com.example.educonnect.data.model.users.User
         Conversation::class,
         Course::class,
         Message::class,
-        Lesson::class,
         Notification::class,
         Experience::class,
         CourseReview::class,
@@ -54,6 +56,7 @@ import com.example.educonnect.data.model.users.User
     version = 1,
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class EduDatabase: RoomDatabase() {
     abstract fun userDao() : UserDao
     abstract fun courseDao() : CourseDao
@@ -74,10 +77,18 @@ abstract class EduDatabase: RoomDatabase() {
                     EduDatabase::class.java,
                     "edu_database"
                 )
-                    .createFromAsset("database/edu_connect.db")
+//                    .createFromAsset("database/edu_connect.db")
                     // Wipes and rebuilds instead of migrating if no Migration object.
                     // Migration is not part of this codelab.
                     .fallbackToDestructiveMigration()
+                    .addCallback(object : RoomDatabase.Callback() {
+                        override fun onCreate(db: SupportSQLiteDatabase) {
+                            Log.d("Database", "Database created!")
+                        }
+                        override fun onOpen(db: SupportSQLiteDatabase) {
+                            Log.d("Database", "Database opened!")
+                        }
+                    })
                     .build()
                     .also {
                         INSTANCE = it

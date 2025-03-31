@@ -19,10 +19,10 @@ class OfflineUsersRepository(
 
     override suspend fun updateUserStream(user: User) = userDao.updateUser(user)
 
-    override suspend fun getTeacherProfileStream(teacherId: String): TeacherProfile? =
+    override suspend fun getTeacherProfileStream(teacherId: String): TeacherProfile =
         userDao.getTeacherProfile(teacherId)
 
-    override suspend fun getStudentProfileStream(studentId: String): StudentProfile? =
+    override suspend fun getStudentProfileStream(studentId: String): StudentProfile =
         userDao.getStudentProfile(studentId)
 
     override suspend fun insertExperienceStream(experience: Experience) = userDao.insertExperience(experience)

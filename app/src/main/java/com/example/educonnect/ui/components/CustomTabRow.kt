@@ -17,7 +17,6 @@ import com.example.educonnect.ui.courses.CourseTabs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CustomTabRow(
     selectedTabIndex : Int,
