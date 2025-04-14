@@ -28,6 +28,4 @@ interface ReviewRepository {
     fun getReviewsByReviewerStream(reviewerId: String): Flow<List<Any>>
 
     suspend fun isStudentEnrolledStream(studentId: String, courseId: String): Int
-
-    suspend fun getStudentProgressStream(studentId: String, courseId: String): Float
 }

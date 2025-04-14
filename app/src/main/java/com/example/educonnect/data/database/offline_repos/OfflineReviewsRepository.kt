@@ -32,8 +32,4 @@ class OfflineReviewsRepository(
 
     override suspend fun isStudentEnrolledStream(studentId: String, courseId: String): Int =
         reviewDao.isStudentEnrolled(studentId, courseId)
-
-    override suspend fun getStudentProgressStream(studentId: String, courseId: String): Float =
-        reviewDao.getStudentProgress(studentId, courseId)
-
 }

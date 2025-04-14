@@ -12,13 +12,27 @@ interface UserRepository {
 //    fun getAllUsersStream(): Flow<List<User>>
     suspend fun insertUserStream(user: User)
 
+    suspend fun insertAllUserStream(users: List<User>)
+
+    suspend fun insertTeacherProfileStream(teacherProfile: TeacherProfile)
+
+    suspend fun insertAllTeacherProfileStream(teacherList : List<TeacherProfile>)
+
+    suspend fun insertStudentProfileStream(studentProfile: StudentProfile)
+
+    suspend fun insertAllStudentProfileStream(studentList : List<StudentProfile>)
+
     fun getUserStream(id: String): Flow<User?>
 
     suspend fun updateUserStream(user: User)
 
-    suspend fun getTeacherProfileStream(teacherId: String): TeacherProfile?
+    suspend fun getTeacherProfileStream(teacherId: String): Flow<TeacherProfile>
 
-    suspend fun getStudentProfileStream(studentId: String): StudentProfile?
+    fun getAllTeacherProfile(): Flow<List<TeacherProfile>>
+
+    fun getStudentProfileStream(studentId: String): Flow<StudentProfile?>
+
+    fun getAllStudentProfile(): Flow<List<StudentProfile>>
 
     //Experience
     suspend fun insertExperienceStream(experience: Experience)

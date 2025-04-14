@@ -23,4 +23,18 @@ class Converters {
     @TypeConverter
     fun toLocalDateTime(millis: Long): LocalDateTime =
         Instant.ofEpochMilli(millis).atZone(ZoneOffset.UTC).toLocalDateTime()
+
+    @TypeConverter
+    fun fromTimestamp(value: String?): LocalDateTime? = value?.let { LocalDateTime.parse(it)
+    }
+
+    @TypeConverter
+    fun toTimestamp(date: LocalDateTime?): String? = date?.toString()
+
+    @TypeConverter
+    fun fromTimestampToLocalDate(value: String?): LocalDate? = value?.let { LocalDate.parse(it)
+    }
+
+    @TypeConverter
+    fun fromLocalDateToTimestamp(date: LocalDate?): String? = date?.toString()
 }

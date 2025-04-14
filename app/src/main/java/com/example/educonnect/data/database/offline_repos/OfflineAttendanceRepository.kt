@@ -25,10 +25,11 @@ class OfflineAttendanceRepository(
     override fun getAttendancesByLessonStream(lessonId: String): Flow<List<Attendance>> =
         attendanceDao.getAttendancesByLesson(lessonId)
 
-    override suspend fun getAttendanceByStudentAndLessonStream(
+    override fun getAttendanceByStudentAndLessonStream(
         studentId: String,
         lessonId: String
-    ): Attendance = attendanceDao.getAttendanceByStudentAndLesson(studentId, lessonId)
+    ): Flow<Attendance?>
+        = attendanceDao.getAttendanceByStudentAndLesson(studentId, lessonId)
 
     override fun getAttendancesByStudentAndCourseStream(
         studentId: String,

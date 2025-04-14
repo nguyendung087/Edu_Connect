@@ -133,6 +133,7 @@ private fun MentorCard(
             horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             MentorImage(
+                mentorImage = R.drawable.lecturer,
                 modifier = Modifier
                     .size(75.dp)
                     .clickable { },

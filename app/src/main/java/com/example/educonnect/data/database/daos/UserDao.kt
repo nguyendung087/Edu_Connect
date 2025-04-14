@@ -13,8 +13,23 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUser(user: User)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllUser(users: List<User>)
+
+    @Insert
+    suspend fun insertTeacherProfile(teacherProfile: TeacherProfile)
+
+    @Insert
+    suspend fun insertAllTeacherProfile(teacherList : List<TeacherProfile>)
+
+    @Insert
+    suspend fun insertStudentProfile(studentProfile: StudentProfile)
+
+    @Insert
+    suspend fun insertAllStudentProfile(studentList : List<StudentProfile>)
 
     @Query("SELECT * FROM users WHERE user_id = :userId")
     fun getUserById(userId: String): Flow<User>
@@ -23,10 +38,16 @@ interface UserDao {
     suspend fun updateUser(user: User)
 
     @Query("SELECT * FROM teacher_profiles WHERE teacher_id  = :teacherId")
-    suspend fun getTeacherProfile(teacherId: String): TeacherProfile
+    fun getTeacherProfile(teacherId: String): Flow<TeacherProfile>
+
+    @Query("SELECT * FROM teacher_profiles")
+    fun getAllTeacherProfile(): Flow<List<TeacherProfile>>
 
     @Query("SELECT * FROM student_profiles WHERE student_id = :studentId")
-    suspend fun getStudentProfile(studentId: String): StudentProfile
+    fun getStudentProfile(studentId: String): Flow<StudentProfile>
+
+    @Query("SELECT * FROM student_profiles")
+    fun getAllStudentProfile(): Flow<List<StudentProfile>>
 
     //Experience
     @Insert

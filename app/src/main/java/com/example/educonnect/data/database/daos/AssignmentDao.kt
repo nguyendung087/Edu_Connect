@@ -29,7 +29,7 @@ interface AssignmentDao {
 
     // Lấy Assignment cụ thể bằng ID
     @Query("SELECT * FROM assignments WHERE assignment_id = :assignmentId")
-    suspend fun getAssignmentById(assignmentId: String): Assignment
+    fun getAssignmentById(assignmentId: String): Flow<Assignment>
 
     // Lấy tất cả Assignment của một giáo viên cụ thể (thông qua Course)
     @Query("""
@@ -44,5 +44,5 @@ interface AssignmentDao {
 
     // Kiểm tra xem Assignment đã kết thúc chưa (dựa trên deadline)
     @Query("SELECT deadline FROM assignments WHERE assignment_id = :assignmentId")
-    suspend fun getAssignmentDeadline(assignmentId: String): LocalDateTime
+    fun getAssignmentDeadline(assignmentId: String): Flow<LocalDateTime>
 }

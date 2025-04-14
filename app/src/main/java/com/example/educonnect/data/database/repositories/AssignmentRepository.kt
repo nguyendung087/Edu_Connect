@@ -18,7 +18,7 @@ interface AssignmentRepository {
     fun getAssignmentsByCourseStream(courseId: String): Flow<List<Assignment>>
 
     // Lấy Assignment cụ thể bằng ID
-    suspend fun getAssignmentByIdStream(assignmentId: String): Assignment?
+    fun getAssignmentByIdStream(assignmentId: String): Flow<Assignment?>
 
     // Lấy tất cả Assignment của một giáo viên
     fun getAssignmentsByTeacherStream(teacherId: String): Flow<List<Assignment>>
@@ -27,5 +27,5 @@ interface AssignmentRepository {
     suspend fun endAssignmentStream(assignmentId: String, newDeadline: LocalDateTime)
 
     // Kiểm tra xem Assignment đã kết thúc chưa (dựa trên deadline)
-    suspend fun getAssignmentDeadlineStream(assignmentId: String): LocalDateTime?
+    fun getAssignmentDeadlineStream(assignmentId: String): Flow<LocalDateTime?>
 }

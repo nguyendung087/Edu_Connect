@@ -1,6 +1,7 @@
 package com.example.educonnect.ui.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material3.Tab
@@ -36,7 +37,8 @@ fun CustomTabRow(
                 color = Color(0xFF0961F5)
             )
         },
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
     ) {
         CourseTabs.entries.forEachIndexed { index, currentTab ->
             Tab(

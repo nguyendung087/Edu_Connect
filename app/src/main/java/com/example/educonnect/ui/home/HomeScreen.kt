@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Notifications
@@ -23,7 +25,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.educonnect.R
+import com.example.educonnect.ui.EduViewModelProvider
 import com.example.educonnect.ui.navigation.NavigationDestination
 
 object HomeDestination : NavigationDestination {
@@ -46,103 +52,136 @@ object HomeDestination : NavigationDestination {
 
 @Composable
 fun HomeScreen(
-    innerPadding : PaddingValues = PaddingValues(0.dp),
-    navigateToMentorDetails : () -> Unit,
-    navigateToCourseDetails : () -> Unit,
-    navigateToNotificationScreen : () -> Unit
+    innerPadding : PaddingValues,
+    navigateToMentorDetails : (String) -> Unit,
+    navigateToCourseDetails : (String) -> Unit,
+    navigateToCourseScreen : () -> Unit,
+    navigateToMentorScreen : () -> Unit,
+    viewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        factory = EduViewModelProvider.Factory
+    ),
+    navigateToNotificationScreen : () -> Unit,
 ) {
+    val uiState = viewModel.homeUiState.collectAsState()
+
     Scaffold(
         topBar = {
             HomeAppBar(
                 navigateToNotificationScreen = navigateToNotificationScreen
             )
-        }
+        },
     ) {
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(it)
                 .padding(
-                    vertical = 12.dp,
-                    horizontal = 12.dp
+                    top = it.calculateTopPadding(),
+                    bottom = it.calculateBottomPadding()
                 )
+                .padding(innerPadding)
                 .background(Color.White),
 
             ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        vertical = 16.dp,
-                        horizontal = 8.dp
+            item {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            vertical = 16.dp,
+                            horizontal = 20.dp
                     ),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                BasicTitle(
-                    title = "Categories"
-                )
-                LazyRow {
-                    item {
-                        CategoryButton(
-                            modifier = Modifier
-                                .padding(end = 24.dp)
-                                .background(
-                                    color = Color(0xFFF4F6F9),
-                                    shape = RoundedCornerShape(100.dp)
-                                )
-                                .size(70.dp),
-                        )
-                    }
-                }
-            }
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        vertical = 16.dp,
-                        horizontal = 8.dp
-                    ),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                BasicTitle(
-                    title = "Popular Courses"
-                )
-                LazyRow {
-                    item {
-                        CourseList(
-                            navigateToCourseDetails = navigateToCourseDetails
-                        )
-                    }
-                }
-            }
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        vertical = 16.dp,
-                        horizontal = 8.dp
-                    ),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                BasicTitle(
-                    title = "Top Mentor"
-                )
-                LazyRow {
-                    item {
-                        MentorButton(
-                            modifier = Modifier
-                                .padding(end = 24.dp)
-                                .size(70.dp)
-                                .clickable {
-                                    navigateToMentorDetails()
-                                },
-                        )
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    BasicTitle(
+                        title = "Categories"
+                    )
+                    LazyRow {
+                        item {
+                            CategoryButton(
+                                modifier = Modifier
+                                    .padding(end = 24.dp)
+                                    .background(
+                                        color = Color(0xFFF4F6F9),
+                                        shape = RoundedCornerShape(100.dp)
+                                    )
+                                    .size(70.dp),
+                            )
+                        }
                     }
                 }
 
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            vertical = 16.dp,
+                            horizontal = 20.dp
+                        ),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    BasicTitle(
+                        title = "Popular Courses",
+                        modifier = Modifier.clickable {
+                            navigateToCourseScreen()
+                        }
+                    )
+                    LazyRow {
+                        items(
+                            items = uiState.value.courseWithTeacherList,
+                            key = { it.course.courseId }
+                        ) { course ->
+                            CourseList(
+                                modifier = Modifier
+                                    .padding(
+                                        end = 16.dp
+                                    )
+                                    .clickable {
+                                        navigateToCourseDetails(course.course.courseId)
+                                    }
+                                    .weight(1f),
+                                courseWithTeacher = course,
+                            )
+                        }
+                    }
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            vertical = 16.dp,
+                            horizontal = 20.dp
+                        ),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    BasicTitle(
+                        title = "Top Mentor",
+                        modifier = Modifier.clickable {
+                            navigateToMentorScreen()
+                        }
+                    )
+                    LazyRow {
+                        items(
+                            items = uiState.value.mentorList,
+                            key = {
+                                it.teacherId
+                            }
+                        ) { teacher ->
+                            MentorButton(
+                                modifier = Modifier
+                                    .padding(end = 24.dp)
+                                    .size(70.dp)
+                                    .clickable {
+                                        navigateToMentorDetails(teacher.teacherId)
+                                    },
+                                mentor = teacher,
+                            )
+                        }
+                    }
+
+                }
             }
+
         }
     }
 }
@@ -262,6 +301,27 @@ private fun SearchBar() {
                 contentDescription = "Search Filter"
             )
         },
+//        colors = TextFieldColors(
+//            unfocusedIndicatorColor = Color.Transparent,
+//            focusedIndicatorColor = Color.Transparent,
+//            focusedContainerColor = Color.White,
+//            disabledTextColor = Color.DarkGray,
+//            disabledContainerColor = Color.Gray,
+//            focusedTextColor = Color.Black,
+//            unfocusedTextColor = Color.DarkGray,
+//            errorLabelColor = Color.Red,
+//            unfocusedContainerColor = Color.Gray,
+//            errorLeadingIconColor = Color(0xFF0961F5),
+//        ),
+        colors = TextFieldDefaults.colors(
+            focusedTextColor = Color.Black,
+            unfocusedTextColor = Color.DarkGray,
+            focusedContainerColor = Color.White,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedContainerColor = Color.White,
+            errorLabelColor = Color.Red,
+            unfocusedIndicatorColor = Color.Transparent
+        ),
         shape = MaterialTheme.shapes.medium,
         modifier = Modifier
             .fillMaxWidth()
@@ -270,12 +330,12 @@ private fun SearchBar() {
     )
 }
 
-@Composable
-@Preview
-private fun HomePreview() {
-    HomeScreen(
-        navigateToMentorDetails = {},
-        navigateToCourseDetails = {},
-        navigateToNotificationScreen = {}
-    )
-}
+//@Composable
+//@Preview
+//private fun HomePreview() {
+//    HomeScreen(
+//        navigateToMentorDetails = {},
+//        navigateToCourseDetails = {},
+//        navigateToNotificationScreen = {}
+//    )
+//}

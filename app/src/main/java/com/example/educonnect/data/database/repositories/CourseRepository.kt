@@ -1,19 +1,29 @@
 package com.example.educonnect.data.database.repositories
 
 import com.example.educonnect.data.model.courses.Course
+import com.example.educonnect.data.model.courses.CourseWithTeacher
 import com.example.educonnect.data.model.courses.Enrollment
 import com.example.educonnect.data.model.courses.Lesson
+import kotlinx.coroutines.flow.Flow
 
 interface CourseRepository {
     suspend fun insertCourseStream(course: Course)
 
-    suspend fun getAllCoursesStream(): List<Course?>
+    suspend fun insertAllCoursesStream(courseList : List<Course>)
 
-    suspend fun getCourseByIdStream(courseId: String): Course?
+    fun getAllCoursesStream(): Flow<List<Course?>>
 
-    suspend fun insertLessonStream(lesson: Lesson)
+    fun getCourseByIdStream(courseId: String): Flow<Course?>
 
-    suspend fun getAllLessonsByCourseStream(courseId: String): List<Lesson?>
+    fun getCoursesWithTeachers(): Flow<List<CourseWithTeacher>>
 
-    suspend fun getEnrollmentsByUserStream(studentId: String): List<Enrollment>
+    fun getCourseWithTeacherByCourse(courseId: String): Flow<CourseWithTeacher>
+
+    suspend fun insertLessonStream(lesson: List<Lesson>)
+
+    fun getAllLessonsByCourseStream(courseId: String): Flow<List<Lesson>>
+
+    fun getEnrollmentsByUserStream(studentId: String): Flow<List<Enrollment>>
+
+    fun getStudentProgressStream(studentId: String, courseId: String): Flow<Float>
 }

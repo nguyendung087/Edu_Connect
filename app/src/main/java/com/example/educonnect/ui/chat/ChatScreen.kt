@@ -148,6 +148,7 @@ private fun ChatCard() {
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 MentorImage(
+                    mentorImage = R.drawable.lecturer,
                     modifier = Modifier
                         .size(45.dp),
                 )

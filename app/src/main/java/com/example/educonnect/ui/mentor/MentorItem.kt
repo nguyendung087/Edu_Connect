@@ -1,5 +1,6 @@
 package com.example.educonnect.ui.mentor
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -29,15 +31,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.educonnect.R
+import com.example.educonnect.data.model.users.TeacherProfile
 
 @Composable
 fun MentorItem(
-    navigateToMentorDetails : () -> Unit
+    navigateToMentorDetails : (String) -> Unit,
+    mentor : TeacherProfile,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(12.dp),
+            .padding(
+                vertical = 12.dp,
+                horizontal = 20.dp
+            ),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
@@ -45,22 +52,23 @@ fun MentorItem(
             horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             MentorImage(
+                mentorImage = mentor.avatarUrl,
                 modifier = Modifier
                     .size(65.dp)
                     .clickable {
-                        navigateToMentorDetails()
+                        navigateToMentorDetails(mentor.teacherId)
                     },
             )
             Column(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
-                    "Wade Warren",
+                    mentor.name,
                     fontSize = 19.sp,
                     fontWeight = FontWeight.W500,
                 )
                 Text(
-                    "Design Expert",
+                    mentor.specialization,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.W400,
                     color = Color.Black.copy(
@@ -74,6 +82,10 @@ fun MentorItem(
             horizontalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             InteractionIcon(
+                onClick = {
+
+                },
+                icon = R.drawable.call_svgrepo_com,
                 modifier = Modifier
                     .background(
                         color = Color(0xFFF4F6F9),
@@ -82,6 +94,10 @@ fun MentorItem(
                     .size(45.dp),
             )
             InteractionIcon(
+                icon = R.drawable.message_text_1_svgrepo_com,
+                onClick = {
+
+                },
                 modifier = Modifier
                     .background(
                         color = Color(0xFFF4F6F9),
@@ -95,6 +111,7 @@ fun MentorItem(
 
 @Composable
 internal fun MentorImage(
+    @DrawableRes mentorImage : Int,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -102,7 +119,7 @@ internal fun MentorImage(
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(R.drawable.lecturer),
+            painter = painterResource(mentorImage),
             contentDescription = "Top Mentor",
             contentScale = ContentScale.Crop,
             modifier = Modifier.clip(
@@ -114,15 +131,17 @@ internal fun MentorImage(
 
 
 @Composable
-private fun InteractionIcon(
-    modifier: Modifier = Modifier
+fun InteractionIcon(
+    modifier: Modifier = Modifier,
+    @DrawableRes icon : Int,
+    onClick : () -> Unit,
 ) {
     IconButton(
         modifier = modifier,
-        onClick = { /*TODO*/ }
+        onClick = onClick
     ) {
         Icon(
-            painterResource(R.drawable.laptop_code_svgrepo_com),
+            painterResource(icon),
             modifier = Modifier.size(25.dp),
             tint = Color(0xFF0961F5),
             contentDescription = "Notification",

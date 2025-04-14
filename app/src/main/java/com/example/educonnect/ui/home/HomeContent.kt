@@ -33,10 +33,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.educonnect.R
+import com.example.educonnect.data.model.courses.Course
+import com.example.educonnect.data.model.courses.CourseWithTeacher
+import com.example.educonnect.data.model.users.TeacherProfile
 
 @Composable
 internal fun BasicTitle(
     title : String,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -53,7 +57,8 @@ internal fun BasicTitle(
             style = MaterialTheme.typography.bodyLarge,
             color = Color(0xFFFFA800),
             fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            modifier = modifier
         )
     }
 
@@ -83,15 +88,11 @@ internal fun CategoryButton(
 
 @Composable
 internal fun CourseList(
-    navigateToCourseDetails : () -> Unit
+    modifier: Modifier = Modifier,
+    courseWithTeacher : CourseWithTeacher,
 ) {
     Card(
-        modifier = Modifier.padding(
-            end = 16.dp
-        )
-            .clickable {
-                navigateToCourseDetails()
-            },
+        modifier = modifier,
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
@@ -102,10 +103,10 @@ internal fun CourseList(
             Box(
                 modifier = Modifier
                     .width(240.dp)
-            ){
+            ) {
                 Image(
-                    painter = painterResource(R.drawable.course),
-                    contentDescription = "Course List",
+                    painter = painterResource(courseWithTeacher.course.courseImage),
+                    contentDescription = courseWithTeacher.course.title,
                     modifier = Modifier
                         .clip(
                             shape = RoundedCornerShape(15.dp)
@@ -159,7 +160,7 @@ internal fun CourseList(
                 }
             }
             Text(
-                "Design Thinking Fundamental",
+                courseWithTeacher.course.title,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.W700,
             )
@@ -173,7 +174,7 @@ internal fun CourseList(
                     tint = Color.Gray
                 )
                 Text(
-                    "Robert Green",
+                    courseWithTeacher.teacher.name,
                     fontWeight = FontWeight.W500,
                     color = Color.Gray
                 )
@@ -183,7 +184,7 @@ internal fun CourseList(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    "$180",
+                    "${courseWithTeacher.course.cost}",
                     fontWeight = FontWeight.W700,
                     color = Color(0xFF0961F5),
                     fontSize = 16.sp
@@ -204,7 +205,6 @@ internal fun CourseList(
                             vertical = 5.dp,
                             horizontal = 8.dp
                         )
-
                 )
             }
 
@@ -215,14 +215,15 @@ internal fun CourseList(
 
 @Composable
 internal fun MentorButton(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    mentor : TeacherProfile
 ) {
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(R.drawable.lecturer),
+            painter = painterResource(mentor.avatarUrl),
             contentDescription = "Top Mentor",
             contentScale = ContentScale.Crop,
             modifier = Modifier.clip(

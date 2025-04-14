@@ -43,8 +43,4 @@ interface ReviewDao {
     // Kiểm tra xem học viên đã tham gia khóa học chưa (giả sử có bảng `enrollments`)
     @Query("SELECT COUNT(*) FROM enrollments WHERE user_id = :studentId AND course_id = :courseId")
     suspend fun isStudentEnrolled(studentId: String, courseId: String): Int
-
-    // Kiểm tra progress khóa học
-    @Query("SELECT progress FROM enrollments WHERE user_id = :studentId AND course_id = :courseId")
-    suspend fun getStudentProgress(studentId: String, courseId: String): Float
 }

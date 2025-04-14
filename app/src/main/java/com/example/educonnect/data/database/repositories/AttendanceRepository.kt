@@ -19,7 +19,7 @@ interface AttendanceRepository {
     fun getAttendancesByLessonStream(lessonId: String): Flow<List<Attendance>>
 
     // Lấy điểm danh của một học viên trong một buổi học
-    suspend fun getAttendanceByStudentAndLessonStream(studentId: String, lessonId: String): Attendance?
+    fun getAttendanceByStudentAndLessonStream(studentId: String, lessonId: String): Flow<Attendance?>
 
     // Lấy tất cả điểm danh của một học viên trong một khóa học
     fun getAttendancesByStudentAndCourseStream(studentId: String, courseId: String): Flow<List<Attendance>>

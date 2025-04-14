@@ -7,6 +7,7 @@ import com.example.educonnect.data.database.daos.SubmissionDao
 import com.example.educonnect.data.database.repositories.SubmissionRepository
 import com.example.educonnect.data.model.courses.Submission
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import java.time.LocalDateTime
 
 class OfflineSubmissionRepository(
@@ -14,10 +15,15 @@ class OfflineSubmissionRepository(
     private val assignmentDao: AssignmentDao
 ) : SubmissionRepository {
     override suspend fun insertOrUpdateSubmissionStream(submission: Submission) {
-        // Kiểm tra xem Assignment đã kết thúc chưa
-        val deadline = submission.assignmentId?.let { assignmentDao.getAssignmentDeadline(it) }
-        if (deadline != null && LocalDateTime.now() > deadline) {
-            throw IllegalStateException("Assignment đã kết thúc, không thể nộp bài.")
+        submission.assignmentId?.let { assignmentId ->
+            // Get the first value from the Flow
+            val deadline = assignmentDao.getAssignmentDeadline(assignmentId).firstOrNull()
+
+            deadline?.let {
+                if (LocalDateTime.now() > it) {
+                    throw IllegalStateException("Assignment đã kết thúc, không thể nộp bài.")
+                }
+            }
         }
         submissionDao.insertOrUpdate(submission)
     }
@@ -28,10 +34,11 @@ class OfflineSubmissionRepository(
     override fun getSubmissionsByAssignmentStream(assignmentId: String): Flow<List<Submission>> =
         submissionDao.getSubmissionsByAssignment(assignmentId)
 
-    override suspend fun getSubmissionByStudentAndAssignmentStream(
+    override fun getSubmissionByStudentAndAssignmentStream(
         studentId: String,
         assignmentId: String
-    ): Submission = submissionDao.getSubmissionByStudentAndAssignment(studentId, assignmentId)
+    ): Flow<Submission?>
+        = submissionDao.getSubmissionByStudentAndAssignment(studentId, assignmentId)
 
     override fun getSubmissionsByStudentAndCourseStream(
         studentId: String,

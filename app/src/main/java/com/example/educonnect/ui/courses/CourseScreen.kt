@@ -1,22 +1,28 @@
 package com.example.educonnect.ui.courses
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.educonnect.R
+import com.example.educonnect.ui.EduViewModelProvider
 import com.example.educonnect.ui.components.CustomAppBar
 import com.example.educonnect.ui.components.CustomTabRow
 import com.example.educonnect.ui.navigation.NavigationDestination
@@ -35,8 +41,14 @@ enum class CourseTabs(
 
 @Composable
 fun CourseScreen(
-    navigateToCourseDetails : () -> Unit
+    innerPadding : PaddingValues,
+    navigateToCourseDetails : (String) -> Unit,
+    viewModel: CourseViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        factory = EduViewModelProvider.Factory
+    )
 ) {
+    val uiState = viewModel.courseUiState.collectAsState()
+
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(
         pageCount = {
@@ -66,7 +78,12 @@ fun CourseScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = it.calculateTopPadding())
+                .padding(
+                    top = it.calculateTopPadding(),
+                    bottom = it.calculateBottomPadding()
+                )
+                .padding(innerPadding)
+                .background(Color.White)
         ) {
             CustomTabRow(
                 selectedTabIndex = selectedTabIndex.value,
@@ -86,9 +103,13 @@ fun CourseScreen(
                             horizontal = 12.dp
                         )
                 ) {
-                    item {
+                    items(
+                        items = uiState.value.courseList,
+                        key = { it.course.courseId }
+                    ) { course ->
                         CourseItem(
-                            navigateToCourseDetails = navigateToCourseDetails
+                            navigateToCourseDetails = navigateToCourseDetails,
+                            course = course
                         )
                     }
                 }

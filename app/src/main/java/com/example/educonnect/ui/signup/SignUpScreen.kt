@@ -1,5 +1,6 @@
 package com.example.educonnect.ui.signup
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
@@ -33,6 +34,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,6 +59,7 @@ import com.example.educonnect.ui.EduViewModelProvider
 import com.example.educonnect.ui.components.CustomIconButton
 import com.example.educonnect.ui.navigation.NavigationDestination
 import com.example.educonnect.ui.theme.EduConnectTheme
+import com.google.firebase.auth.FirebaseAuth
 import kotlin.math.sin
 
 object SignUpDestination : NavigationDestination {
@@ -66,13 +69,14 @@ object SignUpDestination : NavigationDestination {
 
 @Composable
 fun SignupScreen(
-    navigateToHomeScreen : () -> Unit,
+    navigateToInformationScreen : (String) -> Unit,
     viewModel: SignupViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         factory = EduViewModelProvider.Factory
     ),
 //    navigateToRoleSelectionScreen : () -> Unit
 ) {
-    val uiState = viewModel.registerUiState.collectAsState()
+    val uiState = viewModel._registerUiState
+//    val currentUid = FirebaseAuth.getInstance().currentUser!!.uid
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -108,12 +112,9 @@ fun SignupScreen(
             isVisible = !isVisible
         },
         onSignUp = {
-//            viewModel.validateRole(selectedRole)
-             viewModel.registerUser(email, password, selectedRole)
-//            navigateToRoleSelectionScreen()
-//            if (uiState.value == SignupUiState.Success) {
-//                navigateToHomeScreen()
-//            }
+            viewModel.registerUser(email, password, selectedRole)
+            Log.d("NAV_DEBUG", "Navigating with UID: ${uiState.uid}")
+            navigateToInformationScreen(uiState.uid)
         }
     )
 }
@@ -171,7 +172,7 @@ fun SignupBody(
             visualTransformation = VisualTransformation.None,
             placeholder = {
                 Text(
-                    stringResource(R.string.john_wick),
+                    stringResource(R.string.example_gmail),
                     style = MaterialTheme.typography.titleSmall,
                     color = Color.Gray,
                 )
@@ -580,7 +581,7 @@ enum class Role(
 private fun SignupPreview() {
     EduConnectTheme {
         SignupScreen(
-            navigateToHomeScreen = {},
+            navigateToInformationScreen = {},
 //            viewModel = viewModel(
 //                factory = EduViewModelProvider.Factory
 //            ),

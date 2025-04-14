@@ -30,7 +30,7 @@ interface AttendanceDao {
 
     // Lấy điểm danh của một học viên cụ thể trong một buổi học
     @Query("SELECT * FROM attendances WHERE user_id = :studentId AND lesson_id = :lessonId")
-    suspend fun getAttendanceByStudentAndLesson(studentId: String, lessonId: String): Attendance
+    fun getAttendanceByStudentAndLesson(studentId: String, lessonId: String): Flow<Attendance>
 
     // Lấy tất cả điểm danh của một học viên trong một khóa học
     @Query("""

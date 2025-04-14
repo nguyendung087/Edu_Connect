@@ -6,22 +6,56 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.educonnect.EduApplication
+import com.example.educonnect.ui.courses.CourseDetailsViewModel
+import com.example.educonnect.ui.courses.CourseViewModel
 import com.example.educonnect.ui.home.HomeViewModel
+import com.example.educonnect.ui.information_form.InformationFormViewModel
+import com.example.educonnect.ui.mentor.MentorDetailsViewModel
+import com.example.educonnect.ui.mentor.TopMentorViewModel
 import com.example.educonnect.ui.signup.SignupViewModel
 
 object EduViewModelProvider {
     val Factory = viewModelFactory {
-        // Initializer for ItemEditViewModel
-//        initializer {
-//            HomeViewModel(
-//                eduApplication().container.userRepository,
-//            )
-//        }
+        initializer {
+            HomeViewModel(
+                eduApplication().container.userRepository,
+                eduApplication().container.courseRepository
+            )
+        }
         initializer {
             SignupViewModel(
                 eduApplication().container.userRepository
             )
         }
+        initializer {
+            InformationFormViewModel(
+                this.createSavedStateHandle(),
+                eduApplication().container.userRepository
+            )
+        }
+        initializer {
+            CourseViewModel(
+                eduApplication().container.courseRepository
+            )
+        }
+        initializer {
+            CourseDetailsViewModel(
+                this.createSavedStateHandle(),
+                eduApplication().container.courseRepository
+            )
+        }
+        initializer {
+            TopMentorViewModel(
+                eduApplication().container.userRepository
+            )
+        }
+        initializer {
+            MentorDetailsViewModel(
+                this.createSavedStateHandle(),
+                eduApplication().container.userRepository
+            )
+        }
+
     }
 }
 

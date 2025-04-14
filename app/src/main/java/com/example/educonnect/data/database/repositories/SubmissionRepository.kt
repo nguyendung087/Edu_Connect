@@ -15,7 +15,7 @@ interface SubmissionRepository {
     fun getSubmissionsByAssignmentStream(assignmentId: String): Flow<List<Submission>>
 
     // Lấy Submission của một học viên cho một Assignment
-    suspend fun getSubmissionByStudentAndAssignmentStream(studentId: String, assignmentId: String): Submission?
+    fun getSubmissionByStudentAndAssignmentStream(studentId: String, assignmentId: String): Flow<Submission?>
 
     // Lấy tất cả Submission của một học viên trong một Course
     fun getSubmissionsByStudentAndCourseStream(studentId: String, courseId: String): Flow<List<Submission>>

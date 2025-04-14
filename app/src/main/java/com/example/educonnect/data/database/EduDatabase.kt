@@ -6,7 +6,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.educonnect.R
+import com.example.educonnect.data.SampleData
 import com.example.educonnect.data.database.daos.AssignmentDao
 import com.example.educonnect.data.database.daos.AttendanceDao
 import com.example.educonnect.data.database.daos.CourseDao
@@ -32,6 +35,11 @@ import com.example.educonnect.data.model.users.StudentProfile
 import com.example.educonnect.data.model.users.TeacherProfile
 import com.example.educonnect.data.model.users.User
 import com.example.educonnect.utils.Converters
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Database(
     entities = [
@@ -53,8 +61,8 @@ import com.example.educonnect.utils.Converters
         Attendance::class,
         Assignment::class
     ],
-    version = 1,
-    exportSchema = false
+    version = 5,
+    exportSchema = true
 )
 @TypeConverters(Converters::class)
 abstract class EduDatabase: RoomDatabase() {
@@ -78,8 +86,6 @@ abstract class EduDatabase: RoomDatabase() {
                     "edu_database"
                 )
 //                    .createFromAsset("database/edu_connect.db")
-                    // Wipes and rebuilds instead of migrating if no Migration object.
-                    // Migration is not part of this codelab.
                     .fallbackToDestructiveMigration()
                     .addCallback(object : RoomDatabase.Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
@@ -88,6 +94,7 @@ abstract class EduDatabase: RoomDatabase() {
                         override fun onOpen(db: SupportSQLiteDatabase) {
                             Log.d("Database", "Database opened!")
                         }
+
                     })
                     .build()
                     .also {

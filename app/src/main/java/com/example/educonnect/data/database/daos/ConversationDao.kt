@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.educonnect.data.model.chat.Conversation
 import com.example.educonnect.data.model.chat.Message
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ConversationDao {
@@ -13,8 +14,8 @@ interface ConversationDao {
     suspend fun insertConversation(conversation: Conversation)
 
     @Query("SELECT * FROM conversations WHERE user1_id = :userId OR user2_id = :userId")
-    suspend fun getConversationsByUser(userId: String): List<Conversation>
+    fun getConversationsByUser(userId: String): Flow<List<Conversation>>
 
     @Query("SELECT * FROM messages WHERE conversation_id = :conversationId")
-    suspend fun getMessagesByConversation(conversationId: String): List<Message>
+    fun getMessagesByConversation(conversationId: String): Flow<List<Message>>
 }

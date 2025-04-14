@@ -9,6 +9,7 @@ val Blue = Color(0xFF0961F5)
 val Yellow = Color(0xFFFFA800)
 val Black = Color(0xFF797979)
 val LightGrey = Color(0xFFF4F6F9)
+val White = Color.White
 //
 //val Purple40 = Color(0xFF6650a4)
 //val PurpleGrey40 = Color(0xFF625b71)

@@ -34,10 +34,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.educonnect.R
+import com.example.educonnect.data.model.courses.Course
+import com.example.educonnect.data.model.courses.CourseWithTeacher
 
 @Composable
 internal fun CourseItem(
-    navigateToCourseDetails : () -> Unit
+    navigateToCourseDetails : (String) -> Unit,
+    course: CourseWithTeacher
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -48,7 +51,7 @@ internal fun CourseItem(
             .fillMaxWidth()
             .padding(4.dp)
             .clickable {
-                navigateToCourseDetails()
+                navigateToCourseDetails(course.course.courseId)
             }
     ) {
         Row(
@@ -64,14 +67,12 @@ internal fun CourseItem(
                     .weight(2f)
             ) {
                 Image(
-                    painter = painterResource(R.drawable.course),
+                    painter = painterResource(course.course.courseImage),
                     contentDescription = "Course Image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.clip(
                         shape = RoundedCornerShape(10.dp)
                     )
-
-
                 )
             }
             Column(
@@ -97,7 +98,7 @@ internal fun CourseItem(
 
                 )
                 Text(
-                    "Introduction of Figma",
+                    course.course.title,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.W500,
                 )
@@ -111,7 +112,7 @@ internal fun CourseItem(
                         tint = Color.Gray
                     )
                     Text(
-                        "Robert Green",
+                        course.teacher.name,
                         fontWeight = FontWeight.W500,
                         color = Color.Gray
                     )

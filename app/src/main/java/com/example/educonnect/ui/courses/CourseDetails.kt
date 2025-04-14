@@ -1,5 +1,6 @@
 package com.example.educonnect.ui.courses
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,6 +16,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -34,6 +37,8 @@ import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -51,8 +56,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.educonnect.R
+import com.example.educonnect.data.model.courses.CourseWithTeacher
+import com.example.educonnect.data.model.courses.Lesson
+import com.example.educonnect.data.model.users.TeacherProfile
+import com.example.educonnect.ui.EduViewModelProvider
 import com.example.educonnect.ui.components.CustomAppBar
 import com.example.educonnect.ui.components.CustomIconButton
+import com.example.educonnect.ui.mentor.InteractionIcon
 import com.example.educonnect.ui.mentor.MentorImage
 import com.example.educonnect.ui.navigation.NavigationDestination
 import com.example.educonnect.ui.theme.EduConnectTheme
@@ -77,14 +87,20 @@ enum class CourseDetailsTabs(
 
 @Composable
 fun CourseDetails(
-    inner : PaddingValues = PaddingValues(0.dp),
+    innerPadding : PaddingValues = PaddingValues(0.dp),
     navigateBack : () -> Unit,
-    onNavigateUp : () -> Unit
+    navigateToMentorDetails : (String) -> Unit,
+    onNavigateUp : () -> Unit,
+    viewModel: CourseDetailsViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        factory = EduViewModelProvider.Factory
+    )
 ) {
+    val uiState = viewModel.courseUiState.collectAsState()
+
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(
         pageCount = {
-            CourseTabs.entries.size
+            CourseDetailsTabs.entries.size
         }
     )
     val selectedTabIndex = remember {
@@ -97,6 +113,7 @@ fun CourseDetails(
         )
         Box(
             modifier = Modifier
+                .weight(1f)
                 .offset(y = (-30).dp)
                 .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
         ) {
@@ -104,9 +121,11 @@ fun CourseDetails(
                 scope = scope,
                 pagerState = pagerState,
                 selectedTabIndex = selectedTabIndex.value,
+                courseWithTeacher = uiState.value.courseDetails,
+                lessons = uiState.value.lessons,
+                navigateToMentorDetails = navigateToMentorDetails,
                 modifier = Modifier
                     .align(alignment = Alignment.TopCenter)
-                    .verticalScroll(rememberScrollState())
             )
         }
         EnrollCourseBottomBar(
@@ -135,7 +154,7 @@ private fun CourseDetailsAppBar(
         CustomAppBar(
             title = "",
             hasActions = true,
-            icon = R.drawable.bookmark_svgrepo_com_dark,
+            icon = R.drawable.bookmark_svgrepo_com,
             tint = Color.Black,
             contentDescription = "Bookmark",
             navigationOnClick = navigateBack,
@@ -153,12 +172,15 @@ private fun CourseDetailsAppBar(
 
 @Composable
 private fun CourseDetailsContent(
+    courseWithTeacher: CourseWithTeacher,
+    lessons : List<Lesson>,
     scope : CoroutineScope,
     pagerState : PagerState,
     selectedTabIndex : Int,
+    navigateToMentorDetails: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
+    LazyColumn(
         modifier = modifier
             .fillMaxSize()
             .background(Color.White)
@@ -168,352 +190,413 @@ private fun CourseDetailsContent(
             ),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    "Best Seller",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = Color(0xFFFFA800),
+                    modifier = Modifier
+                        .background(
+                            color = Color(0xFFFFA800).copy(
+                                alpha = 0.15f
+                            ),
+                            shape = MaterialTheme.shapes.large,
+                        )
+                        .padding(
+                            vertical = 5.dp,
+                            horizontal = 8.dp
+                        )
+
+                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        Icons.Default.Star,
+                        contentDescription = "Ratings",
+                        tint = Color(0xFFFFA800),
+                        modifier = Modifier.size(25.dp)
+                    )
+                    Text(
+                        text = "4.5 (365 reviews)",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = Color.Gray
+                    )
+                }
+            }
+
+            Text(
+                text = courseWithTeacher.course.title,
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Medium
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row {
+                    Icon(Icons.Default.Person, contentDescription = null, tint = Color.Gray)
+                    Text(text = courseWithTeacher.teacher.name, color = Color.Gray, fontSize = 14.sp)
+                }
+                Row {
+                    Icon(Icons.Default.PlayArrow, contentDescription = null, tint = Color.Gray)
+                    Text(text = "${lessons.size} Lessons", color = Color.Gray, fontSize = 14.sp)
+                }
+                Row {
+                    Icon(Icons.Default.Star, contentDescription = null, tint = Color.Gray)
+                    Text(text = "Certificate", color = Color.Gray, fontSize = 14.sp)
+                }
+            }
+
+            TabRow(
+                selectedTabIndex = selectedTabIndex,
+                indicator = { tabPositions ->
+                    SecondaryIndicator(
+                        modifier = Modifier
+                            .tabIndicatorOffset(
+                                tabPositions[selectedTabIndex]
+                            ),
+                        height = 4.dp,
+                        color = Color(0xFF0961F5)
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                CourseDetailsTabs.entries.forEachIndexed { index, currentTab ->
+                    Tab(
+                        selected = selectedTabIndex == index,
+                        selectedContentColor = Color(0xFF0961F5),
+                        unselectedContentColor = Color.DarkGray,
+                        modifier = Modifier.background(Color.White),
+                        onClick = {
+                            scope.launch {
+                                pagerState.animateScrollToPage(
+                                    currentTab.ordinal
+                                )
+                            }
+                        },
+                        text = {
+                            Text(
+                                text = currentTab.title,
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Medium
+                            )
+                        },
+                    )
+                }
+            }
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) { page ->
+                when (page) {
+                    0 -> AboutTab(
+                        courseWithTeacher = courseWithTeacher,
+                        navigateToMentorDetails = navigateToMentorDetails
+                    )
+                    1 -> LessonTab(
+                        lessons = lessons
+                    )
+                }
+
+            }
+
+        }
+
+    }
+}
+
+@Composable
+private fun AboutTab(
+    courseWithTeacher: CourseWithTeacher,
+    navigateToMentorDetails: (String) -> Unit
+) {
+    val fullText = courseWithTeacher.course.description
+    val readMoreText = "Read more"
+    Column(
+        modifier = Modifier.padding(
+            vertical = 12.dp
+        ),
+        verticalArrangement = Arrangement.spacedBy(24.dp)
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text(
-                "Best Seller",
-                style = MaterialTheme.typography.labelLarge,
-                color = Color(0xFFFFA800),
-                modifier = Modifier
-                    .background(
-                        color = Color(0xFFFFA800).copy(
-                            alpha = 0.15f
-                        ),
-                        shape = MaterialTheme.shapes.large,
-                    )
-                    .padding(
-                        vertical = 5.dp,
-                        horizontal = 8.dp
-                    )
+                "About Course",
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Medium,
+            )
+            Text(
+                text = courseWithTeacher.course.description,
+//                            text = buildAnnotatedString {
+//                                append(fullText)
+//                                pushStringAnnotation(tag = "read_more", annotation = "read_more")
+//                                withStyle(style = SpanStyle(color = Color(0xFF0961F5))) {
+//                                    append(readMoreText)
+//                                }
+//                                pop()
+//                            },
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Medium,
+                color = Color.Gray,
+            )
+        }
 
+        Column(
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                "Mentor",
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Medium,
+            )
+            MentorInfo(
+                navigateToMentorDetails = navigateToMentorDetails,
+                courseWithTeacher = courseWithTeacher
+            )
+        }
+
+        Column(
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                "Info",
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Medium,
             )
             Row(
-                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(130.dp)
             ) {
-                Icon(
-                    Icons.Default.Star,
-                    contentDescription = "Ratings",
-                    tint = Color(0xFFFFA800),
-                    modifier = Modifier.size(25.dp)
-                )
-                Text(
-                    text = "4.5 (365 reviews)",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = Color.Gray
-                )
-            }
-        }
-
-        Text(
-            text = "Design Thinking Fundamental",
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Medium
-        )
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row {
-                Icon(Icons.Default.Person, contentDescription = null, tint = Color.Gray)
-                Text(text = "Robert Green", color = Color.Gray, fontSize = 14.sp)
-            }
-            Row {
-                Icon(Icons.Default.PlayArrow, contentDescription = null, tint = Color.Gray)
-                Text(text = "32 Lessons", color = Color.Gray, fontSize = 14.sp)
-            }
-            Row {
-                Icon(Icons.Default.Star, contentDescription = null, tint = Color.Gray)
-                Text(text = "Certificate", color = Color.Gray, fontSize = 14.sp)
-            }
-        }
-
-        TabRow(
-            selectedTabIndex = selectedTabIndex,
-            indicator = { tabPositions ->
-                SecondaryIndicator(
-                    modifier = Modifier
-                        .tabIndicatorOffset(
-                            tabPositions[selectedTabIndex]
-                        ),
-                    height = 4.dp,
-                    color = Color(0xFF0961F5)
-                )
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            CourseDetailsTabs.entries.forEachIndexed { index, currentTab ->
-                Tab(
-                    selected = selectedTabIndex == index,
-                    selectedContentColor = Color(0xFF0961F5),
-                    unselectedContentColor = Color.DarkGray,
-                    modifier = Modifier.background(Color.White),
-                    onClick = {
-                        scope.launch {
-                            pagerState.animateScrollToPage(
-                                currentTab.ordinal
-                            )
-                        }
-                    },
-                    text = {
-                        Text(
-                            text = currentTab.title,
-                            style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.Medium
-                        )
-                    },
-                )
-            }
-        }
-//        HorizontalPager(
-//            state = pagerState,
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .weight(1f)
-//        ) {
-//        }
-
-        val fullText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua "
-        val readMoreText = "Read more"
-        Column(
-            modifier = Modifier.padding(
-                vertical = 12.dp
-            ),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Text(
-                    "About Course",
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Medium,
-                )
-                Text(
-                    text = buildAnnotatedString {
-                        append(fullText)
-                        pushStringAnnotation(tag = "read_more", annotation = "read_more")
-                        withStyle(style = SpanStyle(color = Color(0xFF0961F5))) {
-                            append(readMoreText)
-                        }
-                        pop()
-                    },
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Gray,
-                )
-            }
-
-            Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Text(
-                    "Tutor",
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Medium,
-                )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(14.dp)
-                    ) {
-                        MentorImage(
-                            modifier = Modifier
-                                .size(55.dp)
-                                .clickable { },
-                        )
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Text(
-                                "Wade Warren",
-                                style = MaterialTheme.typography.bodyLarge,
-                                fontWeight = FontWeight.SemiBold,
-                            )
-                            Text(
-                                "Design Expert",
-                                style = MaterialTheme.typography.labelMedium,
-                                color = Color.Gray
-                            )
-                        }
-                    }
-                    Row(
-                        modifier = Modifier.align(Alignment.CenterVertically),
-                        horizontalArrangement = Arrangement.spacedBy(14.dp),
-                    ) {
-                        CustomIconButton(
-                            icon = R.drawable.laptop_code_svgrepo_com,
-                            contentDescription = "",
-                            onClick = { /*TODO*/ },
-                            tint = Color(0xFF0961F5),
-                            modifier = Modifier
-                                .background(
-                                    color = Color(0xFFF4F6F9),
-                                    shape = MaterialTheme.shapes.large
-                                )
-                        )
-                        CustomIconButton(
-                            icon = R.drawable.laptop_code_svgrepo_com,
-                            contentDescription = "",
-                            onClick = { /*TODO*/ },
-                            tint = Color(0xFF0961F5),
-                            modifier = Modifier
-                                .background(
-                                    color = Color(0xFFF4F6F9),
-                                    shape = MaterialTheme.shapes.large
-                                )
-                        )
-                    }
-                }
-            }
-
-            Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Text(
-                    "Info",
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Medium,
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(130.dp)
-                ) {
-                    Column {
-                        Text(
-                            "Students",
-                            style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.Gray
-                        )
-                        Text(
-                            "123,456",
-                            style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.Medium,
-                        )
-                    }
-                    Column {
-                        Text(
-                            "Language",
-                            style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.Gray
-                        )
-                        Text(
-                            "English",
-                            style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.Medium,
-                        )
-                    }
-                }
-            }
-        }
-
-        Column(
-            modifier = Modifier.padding(
-                vertical = 8.dp
-            ),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(14.dp)
-            ) {
-                Text(
-                    "Lesson (32)",
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Medium,
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
+                Column {
                     Text(
-                        "Section 1 - Introduction",
+                        "Students",
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Medium,
                         color = Color.Gray
                     )
                     Text(
-                        "15 Min",
+                        "123,456",
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Medium,
-                        color = Color(0xFF0961F5)
                     )
                 }
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.White),
-                    border = CardDefaults.outlinedCardBorder(),
-                    shape = MaterialTheme.shapes.large,
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
+                Column {
+                    Text(
+                        "Language",
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.Gray
                     )
-                ) {
-                    Row(
-                        modifier = Modifier.padding(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Box(
-                            modifier = Modifier.background(
-                                color = Color(0xFF0961F5).copy(
-                                    alpha = 0.15f
-                                ),
-                                shape = MaterialTheme.shapes.large
-                            ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                "01",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.SemiBold,
-                                color = Color(0xFF0961F5),
-                                modifier = Modifier.padding(12.dp)
-                            )
-                        }
-
-                        Column(
-                            modifier = Modifier.padding(
-                                horizontal = 8.dp
-                            )
-                        ) {
-                            Text(
-                                "Introduction to Design Thinking",
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.SemiBold,
-                            )
-                            Text(
-                                "10:00",
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.Medium,
-                                color = Color.Gray
-                            )
-                        }
-
-                        CustomIconButton(
-                            icon = R.drawable.play_svgrepo_com,
-                            contentDescription = "",
-                            onClick = { /*TODO*/ },
-                            tint = Color(0xFF0961F5)
-                        )
-                    }
+                    Text(
+                        "English",
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Medium,
+                    )
                 }
             }
+        }
+    }
+}
 
+@Composable
+private fun LessonTab(
+    lessons: List<Lesson>
+) {
+    Column(
+        modifier = Modifier.padding(
+            vertical = 8.dp
+        ),
+        verticalArrangement = Arrangement.spacedBy(24.dp)
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
+            Text(
+                "Lesson (${lessons.size})",
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Medium,
+            )
 
         }
+        LessonList(
+            lessons = lessons
+        )
 
     }
+}
+
+@Composable
+private fun MentorInfo(
+    navigateToMentorDetails : (String) -> Unit,
+    courseWithTeacher: CourseWithTeacher,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                vertical = 12.dp,
+            ),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            MentorImage(
+                mentorImage = courseWithTeacher.teacher.avatarUrl,
+                modifier = Modifier
+                    .size(65.dp)
+                    .clickable {
+                        navigateToMentorDetails(courseWithTeacher.teacher.teacherId)
+                    },
+            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    courseWithTeacher.teacher.name,
+                    fontSize = 19.sp,
+                    fontWeight = FontWeight.W500,
+                )
+                Text(
+                    courseWithTeacher.teacher.specialization,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.W400,
+                    color = Color.Black.copy(
+                        alpha = 0.3f
+                    )
+                )
+            }
+        }
+        Row(
+            modifier = Modifier.align(Alignment.CenterVertically),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            InteractionIcon(
+                icon = R.drawable.call_svgrepo_com,
+                onClick = {
+
+                },
+                modifier = Modifier
+                    .background(
+                        color = Color(0xFFF4F6F9),
+                        shape = RoundedCornerShape(100.dp)
+                    )
+                    .size(45.dp)
+                    .weight(1f),
+            )
+            InteractionIcon(
+                icon = R.drawable.message_text_1_svgrepo_com,
+                onClick = {
+
+                },
+                modifier = Modifier
+                    .background(
+                        color = Color(0xFFF4F6F9),
+                        shape = RoundedCornerShape(100.dp)
+                    )
+                    .size(45.dp)
+                    .weight(1f),
+            )
+        }
+    }
+}
+
+@SuppressLint("DefaultLocale")
+@Composable
+private fun LessonList(
+    lessons: List<Lesson>
+) {
+    for ((index, lesson) in lessons.withIndex()) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White),
+            border = CardDefaults.outlinedCardBorder(),
+            shape = MaterialTheme.shapes.large,
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White
+            )
+        ) {
+            Row(
+                modifier = Modifier.padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier.background(
+                        color = Color(0xFF0961F5).copy(
+                            alpha = 0.15f
+                        ),
+                        shape = MaterialTheme.shapes.large
+                    ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = String.format("%02d", index + 1),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color(0xFF0961F5),
+                        modifier = Modifier.padding(12.dp)
+                    )
+                }
+
+                Column(
+                    modifier = Modifier.padding(
+                        horizontal = 8.dp
+                    )
+                ) {
+                    Text(
+                        lesson.title,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                    Text(
+                        "10:00",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.Gray
+                    )
+                }
+
+                CustomIconButton(
+                    icon = R.drawable.play_svgrepo_com,
+                    contentDescription = "",
+                    onClick = { /*TODO*/ },
+                    tint = Color(0xFF0961F5)
+                )
+            }
+        }
+    }
+//    Row(
+//        modifier = Modifier.fillMaxWidth(),
+//        horizontalArrangement = Arrangement.SpaceBetween
+//    ) {
+//        Text(
+//            "Section 1 - Introduction",
+//            style = MaterialTheme.typography.bodyLarge,
+//            fontWeight = FontWeight.Medium,
+//            color = Color.Gray
+//        )
+//        Text(
+//            "15 Min",
+//            style = MaterialTheme.typography.bodyLarge,
+//            fontWeight = FontWeight.Medium,
+//            color = Color(0xFF0961F5)
+//        )
+//    }
+
 }
 
 @Composable
@@ -523,13 +606,13 @@ private fun EnrollCourseBottomBar(
 
 }
 
-@Composable
-@Preview
-private fun CourseDetailsPreview() {
-    EduConnectTheme {
-        CourseDetails(
-            onNavigateUp = {},
-            navigateBack = {}
-        )
-    }
-}
+//@Composable
+//@Preview
+//private fun CourseDetailsPreview() {
+//    EduConnectTheme {
+//        CourseDetails(
+//            onNavigateUp = {},
+//            navigateBack = {}
+//        )
+//    }
+//}

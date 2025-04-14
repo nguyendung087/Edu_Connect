@@ -13,17 +13,37 @@ class OfflineUsersRepository(
 ) : UserRepository {
     override suspend fun insertUserStream(user: User) =
         userDao.insertUser(user)
-//    override fun getAllUsersStream(): Flow<List<User>> = userDao.
+
+    override suspend fun insertAllUserStream(users: List<User>) =
+        userDao.insertAllUser(users)
+
+    override suspend fun insertTeacherProfileStream(teacherProfile: TeacherProfile) =
+        userDao.insertTeacherProfile(teacherProfile)
+
+    override suspend fun insertAllTeacherProfileStream(teacherList: List<TeacherProfile>) =
+        userDao.insertAllTeacherProfile(teacherList)
+
+    override suspend fun insertStudentProfileStream(studentProfile: StudentProfile) =
+        userDao.insertStudentProfile(studentProfile)
+
+    override suspend fun insertAllStudentProfileStream(studentList: List<StudentProfile>) =
+        userDao.insertAllStudentProfile(studentList)
 
     override fun getUserStream(id: String): Flow<User?> = userDao.getUserById(id)
 
     override suspend fun updateUserStream(user: User) = userDao.updateUser(user)
 
-    override suspend fun getTeacherProfileStream(teacherId: String): TeacherProfile =
+    override suspend fun getTeacherProfileStream(teacherId: String): Flow<TeacherProfile> =
         userDao.getTeacherProfile(teacherId)
 
-    override suspend fun getStudentProfileStream(studentId: String): StudentProfile =
+    override fun getAllTeacherProfile(): Flow<List<TeacherProfile>> =
+        userDao.getAllTeacherProfile()
+
+    override fun getStudentProfileStream(studentId: String): Flow<StudentProfile?> =
         userDao.getStudentProfile(studentId)
+
+    override fun getAllStudentProfile(): Flow<List<StudentProfile>> =
+        userDao.getAllStudentProfile()
 
     override suspend fun insertExperienceStream(experience: Experience) = userDao.insertExperience(experience)
 

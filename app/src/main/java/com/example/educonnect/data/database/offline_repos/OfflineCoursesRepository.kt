@@ -3,8 +3,10 @@ package com.example.educonnect.data.database.offline_repos
 import com.example.educonnect.data.database.daos.CourseDao
 import com.example.educonnect.data.database.repositories.CourseRepository
 import com.example.educonnect.data.model.courses.Course
+import com.example.educonnect.data.model.courses.CourseWithTeacher
 import com.example.educonnect.data.model.courses.Enrollment
 import com.example.educonnect.data.model.courses.Lesson
+import kotlinx.coroutines.flow.Flow
 
 class OfflineCoursesRepository(
     private val courseDao: CourseDao
@@ -12,19 +14,32 @@ class OfflineCoursesRepository(
     override suspend fun insertCourseStream(course: Course) =
         courseDao.insertCourse(course)
 
-    override suspend fun getAllCoursesStream(): List<Course?> =
+    override suspend fun insertAllCoursesStream(courseList: List<Course>) =
+        courseDao.insertAllCourses(courseList)
+
+    override fun getAllCoursesStream(): Flow<List<Course?>> =
         courseDao.getAllCourses()
 
-    override suspend fun getCourseByIdStream(courseId: String): Course =
+    override fun getCourseByIdStream(courseId: String): Flow<Course?> =
         courseDao.getCourseById(courseId)
 
-    override suspend fun insertLessonStream(lesson: Lesson) =
+    override fun getCoursesWithTeachers(): Flow<List<CourseWithTeacher>> =
+        courseDao.getCoursesWithTeachers()
+
+    override fun getCourseWithTeacherByCourse(courseId: String): Flow<CourseWithTeacher> =
+        courseDao.getCourseWithTeacherByCourse(courseId)
+
+    override suspend fun insertLessonStream(lesson: List<Lesson>) =
         courseDao.insertLesson(lesson)
 
-    override suspend fun getAllLessonsByCourseStream(courseId: String): List<Lesson?> =
+    override fun getAllLessonsByCourseStream(courseId: String): Flow<List<Lesson>> =
         courseDao.getAllLessonsByCourse(courseId)
 
-    override suspend fun getEnrollmentsByUserStream(studentId: String): List<Enrollment> =
+    override fun getEnrollmentsByUserStream(studentId: String): Flow<List<Enrollment>> =
         courseDao.getEnrollmentsByUser(studentId)
+
+    override fun getStudentProgressStream(studentId: String, courseId: String): Flow<Float> =
+        courseDao.getStudentProgress(studentId, courseId)
+
 
 }
