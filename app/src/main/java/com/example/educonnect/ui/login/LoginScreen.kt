@@ -23,6 +23,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,21 +41,71 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.educonnect.R
+import com.example.educonnect.ui.EduViewModelProvider
 import com.example.educonnect.ui.components.CustomIconButton
+import com.example.educonnect.ui.navigation.NavigationDestination
 import com.example.educonnect.ui.signup.CustomTextField
 import com.example.educonnect.ui.theme.EduConnectTheme
 
+object LoginDestination : NavigationDestination {
+    override val route = "login"
+    override val titleRes = R.string.signin
+}
+
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    navigateToHomeScreen : () -> Unit,
+    navigateToSignUpScreen: () -> Unit,
+    viewModel: LoginViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        factory = EduViewModelProvider.Factory
+    ),
+
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isVisible by remember {
         mutableStateOf(false)
     }
-    var isChecked by remember {
-        mutableStateOf(false)
-    }
+
+    LoginBody(
+        email = email,
+        password = password,
+        isVisible = isVisible,
+        onEmailChange = {
+            email = it
+        },
+        onPasswordChange = {
+            password = it
+        },
+        onVisibilityChange = {
+            isVisible = !isVisible
+        },
+        navigateToSignUpScreen = navigateToSignUpScreen,
+        onSignIn = {
+            viewModel.loginUser(
+                email = email,
+                password = password
+            )
+            navigateToHomeScreen()
+        }
+    )
+}
+
+@Composable
+private fun LoginBody(
+    email : String,
+    password : String,
+    isVisible : Boolean,
+    onEmailChange : (String) -> Unit,
+    onPasswordChange : (String) -> Unit,
+    onVisibilityChange : () -> Unit,
+    onSignIn : () -> Unit,
+    navigateToSignUpScreen : () -> Unit
+) {
+    val isFormValid = email.isNotBlank() &&
+            password.isNotBlank()
 
     Column(
         modifier = Modifier
@@ -80,12 +132,10 @@ fun LoginScreen() {
             textAlign = TextAlign.Center
         )
 
-
-
         CustomTextField(
             title = R.string.email,
             value = email,
-            onValueChange = { email = it },
+            onValueChange = onEmailChange,
             visualTransformation = VisualTransformation.None,
             placeholder = {
                 Text(
@@ -114,7 +164,7 @@ fun LoginScreen() {
         CustomTextField(
             title = R.string.password,
             value = password,
-            onValueChange = { password = it },
+            onValueChange = onPasswordChange,
             visualTransformation = if (isVisible) {
                 VisualTransformation.None
             } else {
@@ -135,7 +185,7 @@ fun LoginScreen() {
             },
             trailingIcon = {
                 IconButton(
-                    onClick = { isVisible = !isVisible }
+                    onClick = onVisibilityChange
                 ) {
                     Icon(
                         painter = if (isVisible) {
@@ -184,13 +234,14 @@ fun LoginScreen() {
                 .padding(
                     vertical = 16.dp
                 ),
+            enabled = isFormValid,
             colors = ButtonColors(
                 containerColor = Color(0xFF0961F5),
                 contentColor = Color.White,
                 disabledContainerColor = Color(0xFF0961F5),
                 disabledContentColor = Color.White
             ),
-            onClick = { /*TODO*/ }
+            onClick = onSignIn
         ) {
             Text(
                 stringResource(R.string.signin),
@@ -303,7 +354,7 @@ fun LoginScreen() {
                     containerColor = Color.Transparent,
                     disabledContainerColor = Color.Transparent
                 ),
-                onClick = { /*TODO*/ }
+                onClick = navigateToSignUpScreen
             ) {
                 Text(
                     stringResource(id = R.string.signup),
@@ -312,13 +363,5 @@ fun LoginScreen() {
                 )
             }
         }
-    }
-}
-
-@Composable
-@Preview
-private fun LoginPreview() {
-    EduConnectTheme {
-        LoginScreen()
     }
 }

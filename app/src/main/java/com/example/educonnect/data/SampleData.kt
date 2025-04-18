@@ -2,6 +2,7 @@ package com.example.educonnect.data
 
 import com.example.educonnect.R
 import com.example.educonnect.data.model.courses.Course
+import com.example.educonnect.data.model.users.Experience
 import com.example.educonnect.data.model.users.TeacherProfile
 import com.example.educonnect.data.model.users.User
 import java.time.LocalDate
@@ -217,6 +218,148 @@ object SampleData {
             userId = "pjSVl1FekBfP43QObPkLez9sqdV2",
             email = "teacher7@gmail.com",
             role = "Giáo viên"
+        )
+    )
+
+    val experiences = listOf(
+        // Kinh nghiệm của Trần Minh Tuấn (AI & Computer Vision)
+        Experience(
+            experienceId = "EXP-001",
+            teacherId = "pjSVl1FekBfP43QObPkLez9sqdV2",
+            companyName = "AI Tech Corp",
+            position = "Senior AI Engineer",
+            startDate = LocalDate.of(2018, 6, 1),
+            endDate = LocalDate.of(2022, 12, 31),
+            description = "Phát triển các thuật toán nhận diện khuôn mặt và ứng dụng trong an ninh."
+        ),
+        Experience(
+            experienceId = "EXP-002",
+            teacherId = "pjSVl1FekBfP43QObPkLez9sqdV2",
+            companyName = "Viện Công nghệ",
+            position = "Nghiên cứu viên",
+            startDate = LocalDate.of(2015, 1, 1),
+            endDate = LocalDate.of(2018, 5, 31),
+            description = "Nghiên cứu về học sâu và ứng dụng trong thị giác máy tính."
+        ),
+
+        // Kinh nghiệm của Nguyễn Thị Hương (Natural Language Processing)
+        Experience(
+            experienceId = "EXP-003",
+            teacherId = "7QfIwiRbmWbCNTCXVFIyshY8d9P2",
+            companyName = "Tech Solutions",
+            position = "NLP Engineer",
+            startDate = LocalDate.of(2019, 3, 1),
+            endDate = LocalDate.of(2023, 1, 31),
+            description = "Xây dựng chatbot thông minh cho dịch vụ khách hàng."
+        ),
+        Experience(
+            experienceId = "EXP-004",
+            teacherId = "7QfIwiRbmWbCNTCXVFIyshY8d9P2",
+            companyName = "Language AI Lab",
+            position = "Research Assistant",
+            startDate = LocalDate.of(2017, 9, 1),
+            endDate = LocalDate.of(2019, 2, 28),
+            description = "Tham gia dự án dịch máy sử dụng mô hình Transformer."
+        ),
+
+        // Kinh nghiệm của Lê Văn Hải (MERN Stack Development)
+        Experience(
+            experienceId = "EXP-005",
+            teacherId = "XVHFzuckFtNQK9R2F4RgZAoKKvB3",
+            companyName = "Startup Hub",
+            position = "Full-stack Developer",
+            startDate = LocalDate.of(2020, 2, 1),
+            endDate = LocalDate.of(2023, 5, 31),
+            description = "Phát triển ứng dụng web thương mại điện tử với MERN stack."
+        ),
+        Experience(
+            experienceId = "EXP-006",
+            teacherId = "XVHFzuckFtNQK9R2F4RgZAoKKvB3",
+            companyName = "Freelancer",
+            position = "Web Developer",
+            startDate = LocalDate.of(2018, 7, 1),
+            endDate = LocalDate.of(2020, 1, 31),
+            description = "Thiết kế và phát triển website cho khách hàng cá nhân và doanh nghiệp nhỏ."
+        ),
+
+        // Kinh nghiệm của Phạm Thùy Linh (Frontend Architecture)
+        Experience(
+            experienceId = "EXP-007",
+            teacherId = "9F0Gi0UE7OPjoByNY074XrBEKN12",
+            companyName = "Big Tech Company",
+            position = "Frontend Architect",
+            startDate = LocalDate.of(2019, 11, 1),
+            endDate = LocalDate.of(2023, 3, 31),
+            description = "Thiết kế kiến trúc frontend cho các dự án lớn, tối ưu hóa hiệu suất."
+        ),
+        Experience(
+            experienceId = "EXP-008",
+            teacherId = "9F0Gi0UE7OPjoByNY074XrBEKN12",
+            companyName = "Tech Academy",
+            position = "Mentor",
+            startDate = LocalDate.of(2017, 5, 1),
+            endDate = LocalDate.of(2019, 10, 31),
+            description = "Hướng dẫn và đào tạo các lập trình viên frontend junior."
+        ),
+
+        // Kinh nghiệm của Vũ Đức Mạnh (Flutter & Dart)
+        Experience(
+            experienceId = "EXP-009",
+            teacherId = "ehVd4po0KBTDksTKbaF2yIEhUo02",
+            companyName = "Mobile Solutions",
+            position = "Mobile App Developer",
+            startDate = LocalDate.of(2020, 8, 1),
+            endDate = LocalDate.of(2023, 6, 30),
+            description = "Phát triển ứng dụng di động đa nền tảng với Flutter cho các doanh nghiệp."
+        ),
+        Experience(
+            experienceId = "EXP-010",
+            teacherId = "ehVd4po0KBTDksTKbaF2yIEhUo02",
+            companyName = "Hackathon",
+            position = "Participant",
+            startDate = LocalDate.of(2019, 4, 1),
+            endDate = LocalDate.of(2019, 4, 3),
+            description = "Tham gia và giành giải trong hackathon Flutter quốc tế."
+        ),
+
+        // Kinh nghiệm của Hoàng Thị Ngọc (iOS Swift Development)
+        Experience(
+            experienceId = "EXP-011",
+            teacherId = "9zJLnRE9cJZtQYnBrNWonfLldAK2",
+            companyName = "iOS Development Co.",
+            position = "iOS Developer",
+            startDate = LocalDate.of(2018, 10, 1),
+            endDate = LocalDate.of(2022, 12, 31),
+            description = "Phát triển các ứng dụng iOS cho khách hàng doanh nghiệp."
+        ),
+        Experience(
+            experienceId = "EXP-012",
+            teacherId = "9zJLnRE9cJZtQYnBrNWonfLldAK2",
+            companyName = "App Store",
+            position = "Independent Developer",
+            startDate = LocalDate.of(2016, 3, 1),
+            endDate = LocalDate.of(2018, 9, 30),
+            description = "Phát triển và xuất bản các ứng dụng cá nhân trên App Store."
+        ),
+
+        // Kinh nghiệm của Đỗ Quang Huy (AWS & Kubernetes)
+        Experience(
+            experienceId = "EXP-013",
+            teacherId = "1NfAKkrhj4UJP8XPiu49BfsHcIr2",
+            companyName = "Cloud Services Inc.",
+            position = "Cloud System Administrator",
+            startDate = LocalDate.of(2019, 1, 1),
+            endDate = LocalDate.of(2023, 2, 28),
+            description = "Quản lý và tối ưu hóa hệ thống cloud trên AWS và Azure."
+        ),
+        Experience(
+            experienceId = "EXP-014",
+            teacherId = "1NfAKkrhj4UJP8XPiu49BfsHcIr2",
+            companyName = "DevOps Consultancy",
+            position = "DevOps Consultant",
+            startDate = LocalDate.of(2017, 6, 1),
+            endDate = LocalDate.of(2018, 12, 31),
+            description = "Tư vấn và triển khai giải pháp DevOps cho các công ty startup."
         )
     )
 }

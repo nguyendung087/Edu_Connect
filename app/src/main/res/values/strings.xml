@@ -3,12 +3,16 @@
     <string name="app_name">EduConnect</string>
     <string name="create">Create Account</string>
     <string name="fill_infor">Fill your information below or register with your social account</string>
-    <string name="infor">Information Form</string>
+    <string name="mentor_infor">Mentor Information Form</string>
+    <string name="student_infor">Student Information Form</string>
     <string name="name">Họ và tên</string>
     <string name="dob">Ngày sinh</string>
     <string name="gender">Giới tính</string>
     <string name="number">Số điện thoại</string>
     <string name="major">Chuyên ngành</string>
+    <string name="school">Trường học</string>
+    <string name="school_ex">Mời nhập trường học của bạn</string>
+    <string name="address">Địa chỉ</string>
     <string name="select_major">Chọn chuyên ngành</string>
     <string name="to_home">Đến Trang Chủ</string>
     <string name="email">Email</string>

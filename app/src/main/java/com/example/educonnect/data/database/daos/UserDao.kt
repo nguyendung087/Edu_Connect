@@ -49,9 +49,8 @@ interface UserDao {
     @Query("SELECT * FROM student_profiles")
     fun getAllStudentProfile(): Flow<List<StudentProfile>>
 
-    //Experience
     @Insert
-    suspend fun insertExperience(experience: Experience)
+    suspend fun insertExperience(experience: List<Experience>)
 
     @Query("SELECT * FROM experience WHERE teacher_id = :teacherId")
     fun getExperiencesByTeacher(teacherId: String): Flow<List<Experience>>

@@ -5,12 +5,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.educonnect.R
 import com.example.educonnect.data.SampleData
+import com.example.educonnect.data.database.repositories.BookmarkRepository
 import com.example.educonnect.data.database.repositories.CourseRepository
 import com.example.educonnect.data.database.repositories.UserRepository
+import com.example.educonnect.data.model.courses.Bookmark
 import com.example.educonnect.data.model.courses.Course
+import com.example.educonnect.data.model.users.StudentProfile
 import com.example.educonnect.data.model.users.TeacherProfile
+import com.example.educonnect.data.model.users.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +29,7 @@ import java.time.LocalDateTime
 
 class HomeViewModel(
     private val userRepository: UserRepository,
-    private val courseRepository: CourseRepository
+    private val courseRepository: CourseRepository,
 ) : ViewModel() {
 
     private var _homeUiState = MutableStateFlow(HomeUiState())
@@ -32,6 +37,30 @@ class HomeViewModel(
 
     init {
         loadData()
+    }
+
+    fun loadUser(userId: String?) {
+        if (userId == null) {
+            _homeUiState.update { currentState ->
+                currentState.copy(currentUser = null)
+            }
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                userRepository.getStudentProfileStream(userId).collect { studentProfile ->
+                    _homeUiState.update { currentState ->
+                        currentState.copy(currentUser = studentProfile)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("HomeViewModel", "Lỗi khi lấy student profile: $e")
+                _homeUiState.update { currentState ->
+                    currentState.copy(currentUser = null)
+                }
+            }
+        }
     }
 
     private fun loadData() {
@@ -67,13 +96,17 @@ class HomeViewModel(
         }
     }
 
+    companion object {
+        private const val TIMEOUT_MILLIS = 5_000L
+    }
+
     fun insertBulkUsers() {
         val userList = SampleData.users
         viewModelScope.launch {
             try {
                 userRepository.insertAllUserStream(userList)
             } catch (ex: Exception) {
-                Log.e("TeacherViewModel", "Lỗi khi chèn users", ex)
+                Log.e("HomeViewModel", "Lỗi khi chèn users", ex)
             }
         }
     }
@@ -84,7 +117,7 @@ class HomeViewModel(
             try {
                 userRepository.insertAllTeacherProfileStream(teacherList)
             } catch (ex: Exception) {
-                Log.e("TeacherViewModel", "Lỗi khi chèn teacher profiles", ex)
+                Log.e("HomeViewModel", "Lỗi khi chèn teacher profiles", ex)
             }
         }
     }
@@ -95,7 +128,18 @@ class HomeViewModel(
             try {
                 courseRepository.insertAllCoursesStream(courseList)
             } catch (ex: Exception) {
-                Log.e("TeacherViewModel", "Lỗi khi chèn course", ex)
+                Log.e("HomeViewModel", "Lỗi khi chèn course", ex)
+            }
+        }
+    }
+
+    fun insertBulkExperience() {
+        val expList = SampleData.experiences
+        viewModelScope.launch {
+            try {
+                userRepository.insertExperienceStream(expList)
+            } catch (ex: Exception) {
+                Log.e("HomeViewModel", "Lỗi khi chèn exp", ex)
             }
         }
     }

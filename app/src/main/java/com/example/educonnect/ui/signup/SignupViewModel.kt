@@ -7,10 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.educonnect.data.SampleData
-import com.example.educonnect.data.database.EduDatabase
 import com.example.educonnect.data.database.repositories.UserRepository
-import com.example.educonnect.data.model.users.TeacherProfile
 import com.example.educonnect.data.model.users.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -18,20 +15,17 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.lang.Exception
-import java.time.LocalDate
-import java.time.format.DateTimeParseException
 
 class SignupViewModel(
     private val userRepository: UserRepository
 ) : ViewModel() {
     private val auth = FirebaseAuth.getInstance()
 
-    var _registerUiState by mutableStateOf(SignupUiState())
-        private set
-
-    lateinit var currentUid : String
+//    private var _registerUiState = MutableStateFlow(SignupUiState())
+//    val registerUiState : StateFlow<SignupUiState> = _registerUiState.asStateFlow()
 
     fun registerUser(email : String, password : String, role : String) {
         if (!validateInput(email, password)) {
@@ -45,7 +39,6 @@ class SignupViewModel(
                     user?.let {
                         val uid = user.uid
                         Log.i("REGISTER_RESULT", "Đăng ký thành công với UID: $uid")
-                        currentUid = uid
                         viewModelScope.launch {
                             try {
                                 userRepository.insertUserStream(
@@ -55,6 +48,11 @@ class SignupViewModel(
                                         role = role
                                     )
                                 )
+//                                _registerUiState.update { currentState ->
+//                                    currentState.copy(
+//                                        role = role
+//                                    )
+//                                }
                                 Log.d("SIGNUP_DEBUG", "Registered UID: ${user.uid}")
                             } catch (e: Exception) {
                                 Log.e("REGISTER_RESULT", "Lỗi: $e")

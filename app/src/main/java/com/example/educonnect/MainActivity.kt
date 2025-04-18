@@ -31,7 +31,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 class MainActivity : ComponentActivity() {
-    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

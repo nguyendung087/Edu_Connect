@@ -3,6 +3,7 @@ package com.example.educonnect.data.database
 import android.content.Context
 import com.example.educonnect.data.database.offline_repos.OfflineAssignmentRepository
 import com.example.educonnect.data.database.offline_repos.OfflineAttendanceRepository
+import com.example.educonnect.data.database.offline_repos.OfflineBookmarkRepository
 import com.example.educonnect.data.database.offline_repos.OfflineCoursesRepository
 import com.example.educonnect.data.database.offline_repos.OfflineNotificationRepository
 import com.example.educonnect.data.database.offline_repos.OfflineReviewsRepository
@@ -10,6 +11,7 @@ import com.example.educonnect.data.database.offline_repos.OfflineSubmissionRepos
 import com.example.educonnect.data.database.offline_repos.OfflineUsersRepository
 import com.example.educonnect.data.database.repositories.AssignmentRepository
 import com.example.educonnect.data.database.repositories.AttendanceRepository
+import com.example.educonnect.data.database.repositories.BookmarkRepository
 import com.example.educonnect.data.database.repositories.CourseRepository
 import com.example.educonnect.data.database.repositories.NotificationRepository
 import com.example.educonnect.data.database.repositories.ReviewRepository
@@ -19,6 +21,7 @@ import com.example.educonnect.data.database.repositories.UserRepository
 interface AppContainer {
     val userRepository : UserRepository
     val courseRepository : CourseRepository
+    val bookmarkRepository : BookmarkRepository
     val notificationRepository : NotificationRepository
     val assignmentRepository : AssignmentRepository
     val submissionRepository : SubmissionRepository
@@ -38,6 +41,12 @@ class AppDataContainer(
     override val courseRepository: CourseRepository by lazy {
         OfflineCoursesRepository(
             EduDatabase.getDatabase(context).courseDao()
+        )
+    }
+
+    override val bookmarkRepository: BookmarkRepository by lazy {
+        OfflineBookmarkRepository(
+            EduDatabase.getDatabase(context).bookmarkDao()
         )
     }
 

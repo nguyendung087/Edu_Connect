@@ -45,7 +45,7 @@ class OfflineUsersRepository(
     override fun getAllStudentProfile(): Flow<List<StudentProfile>> =
         userDao.getAllStudentProfile()
 
-    override suspend fun insertExperienceStream(experience: Experience) = userDao.insertExperience(experience)
+    override suspend fun insertExperienceStream(experience: List<Experience>) = userDao.insertExperience(experience)
 
     override fun getExperiencesByTeacherStream(teacherId: String): Flow<List<Experience>> =
         userDao.getExperiencesByTeacher(teacherId)

@@ -6,10 +6,13 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.educonnect.EduApplication
+import com.example.educonnect.ui.bookmark.BookmarkViewModel
 import com.example.educonnect.ui.courses.CourseDetailsViewModel
 import com.example.educonnect.ui.courses.CourseViewModel
 import com.example.educonnect.ui.home.HomeViewModel
 import com.example.educonnect.ui.information_form.InformationFormViewModel
+import com.example.educonnect.ui.information_form.StudentInformationViewModel
+import com.example.educonnect.ui.login.LoginViewModel
 import com.example.educonnect.ui.mentor.MentorDetailsViewModel
 import com.example.educonnect.ui.mentor.TopMentorViewModel
 import com.example.educonnect.ui.signup.SignupViewModel
@@ -34,6 +37,17 @@ object EduViewModelProvider {
             )
         }
         initializer {
+            StudentInformationViewModel(
+                this.createSavedStateHandle(),
+                eduApplication().container.userRepository
+            )
+        }
+        initializer {
+            LoginViewModel(
+                eduApplication().container.userRepository
+            )
+        }
+        initializer {
             CourseViewModel(
                 eduApplication().container.courseRepository
             )
@@ -41,7 +55,8 @@ object EduViewModelProvider {
         initializer {
             CourseDetailsViewModel(
                 this.createSavedStateHandle(),
-                eduApplication().container.courseRepository
+                eduApplication().container.courseRepository,
+                eduApplication().container.bookmarkRepository
             )
         }
         initializer {
@@ -52,6 +67,13 @@ object EduViewModelProvider {
         initializer {
             MentorDetailsViewModel(
                 this.createSavedStateHandle(),
+                eduApplication().container.userRepository
+            )
+        }
+
+        initializer {
+            BookmarkViewModel(
+                eduApplication().container.bookmarkRepository,
                 eduApplication().container.userRepository
             )
         }

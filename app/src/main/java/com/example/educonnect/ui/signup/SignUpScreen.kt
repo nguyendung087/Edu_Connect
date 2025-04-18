@@ -1,9 +1,7 @@
 package com.example.educonnect.ui.signup
 
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -18,9 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.rounded.Lock
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -34,33 +30,25 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.educonnect.R
 import com.example.educonnect.ui.EduViewModelProvider
 import com.example.educonnect.ui.components.CustomIconButton
 import com.example.educonnect.ui.navigation.NavigationDestination
-import com.example.educonnect.ui.theme.EduConnectTheme
-import com.google.firebase.auth.FirebaseAuth
-import kotlin.math.sin
 
 object SignUpDestination : NavigationDestination {
     override val route = "sign_up"
@@ -69,15 +57,13 @@ object SignUpDestination : NavigationDestination {
 
 @Composable
 fun SignupScreen(
-    navigateToInformationScreen : (String) -> Unit,
+    navigateToMentorInformationScreen : () -> Unit,
+    navigateToStudentInformationScreen : () -> Unit,
+    navigateToSignInScreen: () -> Unit,
     viewModel: SignupViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         factory = EduViewModelProvider.Factory
     ),
-//    navigateToRoleSelectionScreen : () -> Unit
 ) {
-    val uiState = viewModel._registerUiState
-//    val currentUid = FirebaseAuth.getInstance().currentUser!!.uid
-
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isVisible by remember {
@@ -111,10 +97,13 @@ fun SignupScreen(
         onVisibilityChange = {
             isVisible = !isVisible
         },
+        navigateToSignInScreen = navigateToSignInScreen,
         onSignUp = {
             viewModel.registerUser(email, password, selectedRole)
-            Log.d("NAV_DEBUG", "Navigating with UID: ${uiState.uid}")
-            navigateToInformationScreen(uiState.uid)
+            when (selectedRole) {
+                "Giáo viên" -> navigateToMentorInformationScreen()
+                "Học viên" -> navigateToStudentInformationScreen()
+            }
         }
     )
 }
@@ -131,7 +120,8 @@ fun SignupBody(
     onPasswordChange : (String) -> Unit,
     onCheckChange : (Boolean) -> Unit,
     onVisibilityChange : () -> Unit,
-    onSignUp : () -> Unit
+    onSignUp : () -> Unit,
+    navigateToSignInScreen : () -> Unit
 ) {
     val isFormValid = email.isNotBlank() &&
             password.isNotBlank() &&
@@ -436,9 +426,7 @@ fun SignupBody(
                     containerColor = Color.Transparent,
                     disabledContainerColor = Color.Transparent
                 ),
-                onClick = {
-
-                }
+                onClick = navigateToSignInScreen
             ) {
                 Text(
                     stringResource(id = R.string.signin),
@@ -574,17 +562,4 @@ enum class Role(
         displayName = "Học viên",
         icon = R.drawable.graduated_student_svgrepo_com
     )
-}
-
-@Composable
-@Preview
-private fun SignupPreview() {
-    EduConnectTheme {
-        SignupScreen(
-            navigateToInformationScreen = {},
-//            viewModel = viewModel(
-//                factory = EduViewModelProvider.Factory
-//            ),
-        )
-    }
 }

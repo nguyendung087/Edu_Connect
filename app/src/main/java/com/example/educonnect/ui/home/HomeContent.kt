@@ -139,25 +139,25 @@ internal fun CourseList(
                         fontSize = 16.sp
                     )
                 }
-                IconButton(
-                    modifier = Modifier
-                        .padding(12.dp)
-                        .background(
-                            color = Color.White,
-                            shape = RoundedCornerShape(5.dp)
-                        )
-                        .size(30.dp)
-                        .align(Alignment.TopEnd),
-                    onClick = {
-
-                    }
-                ) {
-                    Icon(
-                        painterResource(R.drawable.bookmark_svgrepo_com),
-                        contentDescription = "Bookmark",
-                        tint = Color(0xFF0961F5)
-                    )
-                }
+//                IconButton(
+//                    modifier = Modifier
+//                        .padding(12.dp)
+//                        .background(
+//                            color = Color.White,
+//                            shape = RoundedCornerShape(5.dp)
+//                        )
+//                        .size(30.dp)
+//                        .align(Alignment.TopEnd),
+//                    onClick = {
+//
+//                    }
+//                ) {
+//                    Icon(
+//                        painterResource(R.drawable.bookmark_svgrepo_com),
+//                        contentDescription = "Bookmark",
+//                        tint = Color(0xFF0961F5)
+//                    )
+//                }
             }
             Text(
                 courseWithTeacher.course.title,

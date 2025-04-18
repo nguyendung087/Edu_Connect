@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -36,22 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.educonnect.R
-
-@Composable
-internal fun BookmarkList() {
-    LazyColumn(
-        modifier = Modifier
-            .background(
-                Color.White
-            )
-            .fillMaxWidth()
-            .padding(8.dp)
-    ) {
-        item {
-            BookmarkItem()
-        }
-    }
-}
+import com.example.educonnect.data.model.courses.CourseWithTeacher
 
 @Composable
 internal fun CourseTagList() {
@@ -80,7 +66,10 @@ internal fun CourseTagList() {
 }
 
 @Composable
-private fun BookmarkItem() {
+internal fun BookmarkItem(
+    bookmarkedCourse : CourseWithTeacher,
+    onShowRemoveConfirmation: (CourseWithTeacher) -> Unit
+) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color.White
@@ -103,28 +92,26 @@ private fun BookmarkItem() {
                     .weight(2.5f)
             ) {
                 Image(
-                    painter = painterResource(R.drawable.course),
-                    contentDescription = "Course Image",
+                    painter = painterResource(bookmarkedCourse.course.courseImage),
+                    contentDescription = bookmarkedCourse.course.title,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.clip(
                         shape = RoundedCornerShape(10.dp)
                     )
-
-
                 )
             }
             Column(
                 modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .weight(3.5f)
-                        .padding(
-                            start = 10.dp
-                        ),
+                    .align(Alignment.CenterVertically)
+                    .weight(3.5f)
+                    .padding(
+                        start = 10.dp
+                    ),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
 
                 Text(
-                    "Introduction of Figma",
+                    bookmarkedCourse.course.title,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.W500,
                 )
@@ -138,7 +125,7 @@ private fun BookmarkItem() {
                         tint = Color.Gray
                     )
                     Text(
-                        "Robert Green",
+                        bookmarkedCourse.teacher.name,
                         fontWeight = FontWeight.W500,
                         color = Color.Gray
                     )
@@ -148,7 +135,7 @@ private fun BookmarkItem() {
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        "$180",
+                        "$${bookmarkedCourse.course.cost}",
                         fontWeight = FontWeight.W700,
                         color = Color(0xFF0961F5),
                         fontSize = 16.sp
@@ -173,13 +160,11 @@ private fun BookmarkItem() {
                     )
                 }
             }
-
             BookmarkButton(
+                onRemove = { onShowRemoveConfirmation(bookmarkedCourse) },
                 modifier = Modifier
                     .weight(0.6f)
                     .size(30.dp)
-
-
             )
         }
     }
@@ -187,16 +172,17 @@ private fun BookmarkItem() {
 
 @Composable
 private fun BookmarkButton(
+    onRemove : () -> Unit,
     modifier: Modifier = Modifier
 ) {
     IconButton(
         modifier = modifier,
-        onClick = { /*TODO*/ }
+        onClick = onRemove
     ) {
         Icon(
-            painter = painterResource(R.drawable.bookmark_svgrepo_com),
+            painter = painterResource(R.drawable.bookmark_off_svgrepo_com),
             tint = Color(0xFF0961F5),
-            contentDescription = "BookmarkButton",
+            contentDescription = "Remove Bookmark",
             modifier = Modifier.fillMaxSize()
         )
     }
@@ -229,10 +215,4 @@ private fun CategoryTag(text: String, isSelected: Boolean, onClick: () -> Unit) 
             fontWeight = FontWeight.Medium,
         )
     }
-}
-
-@Composable
-@Preview
-private fun BookmarkPreview() {
-    BookmarkList()
 }

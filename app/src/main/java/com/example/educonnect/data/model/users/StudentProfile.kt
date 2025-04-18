@@ -24,15 +24,15 @@ import java.time.LocalDate
 class StudentProfile(
     @PrimaryKey
     @ColumnInfo(name = "student_id")
-    val studentId: String,
-    val name: String,
+    val studentId: String = "",
+    val name: String = "",
     @ColumnInfo(name = "avatar_url")
     @DrawableRes val avatarUrl: Int = R.drawable.person_crop_circle_fill_svgrepo_com,
     @ColumnInfo(name = "date_of_birth")
     val dateOfBirth: LocalDate = LocalDate.of(1990, 1, 1),
     val gender : String = "",
     val number : String = "",
-    val school: String,
-    val major: String,
-    val address : String
+    val school: String = "",
+    val major: String = "",
+    val address : String = ""
 )

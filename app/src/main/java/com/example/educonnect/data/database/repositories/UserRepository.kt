@@ -35,7 +35,7 @@ interface UserRepository {
     fun getAllStudentProfile(): Flow<List<StudentProfile>>
 
     //Experience
-    suspend fun insertExperienceStream(experience: Experience)
+    suspend fun insertExperienceStream(experience: List<Experience>)
 
     fun getExperiencesByTeacherStream(teacherId: String): Flow<List<Experience>>
 }

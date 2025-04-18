@@ -27,7 +27,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,7 +44,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.educonnect.R
+import com.example.educonnect.data.model.users.StudentProfile
+import com.example.educonnect.data.model.users.User
 import com.example.educonnect.ui.EduViewModelProvider
+import com.example.educonnect.ui.authentication.LocalAuthState
 import com.example.educonnect.ui.navigation.NavigationDestination
 
 object HomeDestination : NavigationDestination {
@@ -62,11 +67,33 @@ fun HomeScreen(
     ),
     navigateToNotificationScreen : () -> Unit,
 ) {
+    val authState = LocalAuthState.current
     val uiState = viewModel.homeUiState.collectAsState()
+    LaunchedEffect(authState.currentUserId) {
+        viewModel.loadUser(authState.currentUserId)
+    }
 
+    if (!authState.isLoggedIn) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Vui lòng đăng nhập để tiếp tục",
+                style = MaterialTheme.typography.bodyLarge,
+                fontSize = 18.sp,
+                color = Color.Black
+            )
+        }
+        return
+    }
     Scaffold(
         topBar = {
             HomeAppBar(
+                currentUser = "Hi, ${uiState.value.currentUser?.name ?: "Guest"} ",
                 navigateToNotificationScreen = navigateToNotificationScreen
             )
         },
@@ -89,7 +116,7 @@ fun HomeScreen(
                         .padding(
                             vertical = 16.dp,
                             horizontal = 20.dp
-                    ),
+                        ),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     BasicTitle(
@@ -188,6 +215,7 @@ fun HomeScreen(
 
 @Composable
 private fun HomeAppBar(
+    currentUser : String,
     navigateToNotificationScreen: () -> Unit
 ) {
     Box(
@@ -222,13 +250,21 @@ private fun HomeAppBar(
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text(
-                        text = "Hi, John 👋",
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontSize = 26.sp,
-                        color = Color.White,
-                        fontWeight = FontWeight.W700
-                    )
+                    Row {
+                        Text(
+                            text = currentUser,
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 26.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.W700
+                        )
+                        Icon(
+                            painter = painterResource(R.drawable.waving_hand_svgrepo_com),
+                            tint = Color.Unspecified,
+                            contentDescription = null,
+                            modifier = Modifier.size(25.dp)
+                        )
+                    }
                     Text(
                         text = "Let's start learning!",
                         style = MaterialTheme.typography.bodyLarge,
@@ -301,18 +337,6 @@ private fun SearchBar() {
                 contentDescription = "Search Filter"
             )
         },
-//        colors = TextFieldColors(
-//            unfocusedIndicatorColor = Color.Transparent,
-//            focusedIndicatorColor = Color.Transparent,
-//            focusedContainerColor = Color.White,
-//            disabledTextColor = Color.DarkGray,
-//            disabledContainerColor = Color.Gray,
-//            focusedTextColor = Color.Black,
-//            unfocusedTextColor = Color.DarkGray,
-//            errorLabelColor = Color.Red,
-//            unfocusedContainerColor = Color.Gray,
-//            errorLeadingIconColor = Color(0xFF0961F5),
-//        ),
         colors = TextFieldDefaults.colors(
             focusedTextColor = Color.Black,
             unfocusedTextColor = Color.DarkGray,

@@ -7,11 +7,15 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.educonnect.data.database.repositories.BookmarkRepository
 import com.example.educonnect.data.database.repositories.CourseRepository
+import com.example.educonnect.data.model.courses.Bookmark
 import com.example.educonnect.data.model.courses.CourseWithTeacher
 import com.example.educonnect.data.model.courses.Lesson
+import com.example.educonnect.ui.bookmark.BookmarkViewModel
 import com.example.educonnect.ui.home.HomeUiState
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +28,8 @@ import kotlinx.coroutines.launch
 
 class CourseDetailsViewModel(
     savedStateHandle: SavedStateHandle,
-    private val courseRepository: CourseRepository
+    private val courseRepository: CourseRepository,
+    private val bookmarkRepository: BookmarkRepository
 ) : ViewModel() {
 
     private var _courseUiState = MutableStateFlow(CourseDetailsUiState())
@@ -34,6 +39,18 @@ class CourseDetailsViewModel(
 
     init {
         loadData()
+    }
+
+    fun addBookmark(studentId: String, courseId: String) {
+        viewModelScope.launch {
+            bookmarkRepository.insertBookmark(Bookmark(studentId, courseId))
+        }
+    }
+
+    fun removeBookmark(studentId: String, courseId: String) {
+        viewModelScope.launch {
+            bookmarkRepository.deleteBookmark(Bookmark(studentId, courseId))
+        }
     }
 
     private fun loadData() {
@@ -67,6 +84,15 @@ class CourseDetailsViewModel(
                 )
             }
         }
+    }
+
+    fun isCourseBookmarked(studentId: String, courseId: String): Flow<Boolean> {
+        return bookmarkRepository.getBookmarksByStudent(studentId)
+            .map { bookmarks ->
+                bookmarks.any {
+                    it.courseId == courseId
+                }
+            }
     }
 }
 

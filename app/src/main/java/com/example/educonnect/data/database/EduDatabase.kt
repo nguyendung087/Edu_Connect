@@ -12,6 +12,7 @@ import com.example.educonnect.R
 import com.example.educonnect.data.SampleData
 import com.example.educonnect.data.database.daos.AssignmentDao
 import com.example.educonnect.data.database.daos.AttendanceDao
+import com.example.educonnect.data.database.daos.BookmarkDao
 import com.example.educonnect.data.database.daos.CourseDao
 import com.example.educonnect.data.database.daos.NotificationDao
 import com.example.educonnect.data.database.daos.ReviewDao
@@ -21,6 +22,7 @@ import com.example.educonnect.data.model.chat.Conversation
 import com.example.educonnect.data.model.chat.Message
 import com.example.educonnect.data.model.courses.Assignment
 import com.example.educonnect.data.model.courses.Attendance
+import com.example.educonnect.data.model.courses.Bookmark
 import com.example.educonnect.data.model.courses.Course
 import com.example.educonnect.data.model.courses.Enrollment
 import com.example.educonnect.data.model.courses.Grade
@@ -59,15 +61,17 @@ import java.time.LocalDateTime
         Grade::class,
         Enrollment::class,
         Attendance::class,
-        Assignment::class
+        Assignment::class,
+        Bookmark::class
     ],
-    version = 5,
+    version = 6,
     exportSchema = true
 )
 @TypeConverters(Converters::class)
 abstract class EduDatabase: RoomDatabase() {
     abstract fun userDao() : UserDao
     abstract fun courseDao() : CourseDao
+    abstract fun bookmarkDao() : BookmarkDao
     abstract fun assignmentDao() : AssignmentDao
     abstract fun submissionDao() : SubmissionDao
     abstract fun attendanceDao() : AttendanceDao
