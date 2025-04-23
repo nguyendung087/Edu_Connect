@@ -9,6 +9,7 @@
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".EduApplication"
@@ -21,27 +22,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EduConnect"
         tools:targetApi="31">
-        <!--        <activity-->
-        <!--            android:name=".SignInActivity"-->
-        <!--            android:exported="false" />-->
-        <!--        <activity-->
-        <!--            android:name=".ui.login.LoginActivity"-->
-        <!--            android:exported="false" />-->
-        <!--        <activity-->
-        <!--            android:name=".SignUpActivity"-->
-        <!--            android:exported="true">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="android.intent.action.MAIN" />-->
-
-        <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-        <!--            </intent-filter>-->
-        <!--        </activity>-->
-
-        <meta-data
-            android:name="com.zing.zalo.zalosdk.appID"
-            android:value="@string/appID" />
-
-
+        <service
+            android:name=".ui.notification.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
         <activity
             android:name=".MainActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
@@ -55,6 +42,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

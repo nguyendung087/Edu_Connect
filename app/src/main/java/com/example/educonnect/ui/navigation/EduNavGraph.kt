@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
@@ -38,6 +39,10 @@ import com.example.educonnect.ui.information_form.StudentInformationFormDestinat
 import com.example.educonnect.ui.information_form.StudentInformationScreen
 import com.example.educonnect.ui.login.LoginDestination
 import com.example.educonnect.ui.login.LoginScreen
+import com.example.educonnect.ui.profile.ProfileDestination
+import com.example.educonnect.ui.profile.ProfileEditDestination
+import com.example.educonnect.ui.profile.ProfileEditScreen
+import com.example.educonnect.ui.profile.ProfileScreen
 import com.example.educonnect.ui.signup.SignUpDestination
 import com.example.educonnect.ui.signup.SignupScreen
 
@@ -89,7 +94,9 @@ fun EduNavHost(
                     )
                 },
                 navigateToHomeScreen = {
-                    navController.navigate(HomeDestination.route)
+                    navController.navigate(HomeDestination.route) {
+                        popUpTo(LoginDestination.route) { inclusive = true }
+                    }
                 }
             )
         }
@@ -238,7 +245,38 @@ fun EduNavHost(
             }
         }
 
+        composable(route = ProfileDestination.route) {
+            MainLayout(navController = navController) { innerPadding ->
+                ProfileScreen(
+                    innerPadding = innerPadding,
+                    navigateToProfileEdits = {
+                        navController.navigate(
+                            ProfileEditDestination.route
+                        )
+                    },
+                    navigateToSettings = {},
+                    navigateToLogin = {
+                        navController.navigate(LoginDestination.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
 
+                            restoreState = false
+                        }
+                    }
+                )
+            }
+        }
+
+        composable(route = ProfileEditDestination.route) {
+            MainLayout(navController = navController) { innerPadding ->
+                ProfileEditScreen(
+                    innerPadding = innerPadding,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+        }
     }
 }
 

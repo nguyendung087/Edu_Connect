@@ -37,6 +37,12 @@ interface UserDao {
     @Update
     suspend fun updateUser(user: User)
 
+    @Update
+    suspend fun updateStudentProfile(studentProfile: StudentProfile)
+
+    @Update
+    suspend fun updateMentorProfile(teacherProfile: TeacherProfile)
+
     @Query("SELECT * FROM teacher_profiles WHERE teacher_id  = :teacherId")
     fun getTeacherProfile(teacherId: String): Flow<TeacherProfile>
 

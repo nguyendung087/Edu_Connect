@@ -38,5 +38,6 @@
     <string name="course_detail_title">Course Details</string>
     <string name="notification_title">Notification</string>
     <string name="bookmark_title">Bookmark</string>
-
+    <string name="profile_title">Profile</string>
+    <string name="profile_edit_title">Your Profile</string>
 </resources>

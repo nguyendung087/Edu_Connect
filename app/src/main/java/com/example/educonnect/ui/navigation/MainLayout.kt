@@ -32,6 +32,7 @@ import com.example.educonnect.ui.bookmark.BookmarkDestination
 import com.example.educonnect.ui.chat.ChatDestination
 import com.example.educonnect.ui.courses.CourseDestination
 import com.example.educonnect.ui.home.HomeDestination
+import com.example.educonnect.ui.profile.ProfileDestination
 
 @Composable
 fun MainLayout(
@@ -56,8 +57,7 @@ fun BottomNavigationBar(navController: NavHostController) {
         NavigationItem.Courses,
         NavigationItem.Bookmarks,
         NavigationItem.Chat,
-        NavigationItem.Chat,
-//        NavigationItem.Profile
+        NavigationItem.Profile
     )
 
     NavigationBar(
@@ -124,5 +124,5 @@ sealed class NavigationItem(val route: String, @StringRes val title: Int, @Drawa
     object Courses : NavigationItem(CourseDestination.route, R.string.course_title, R.drawable.library_svgrepo_com)
     object Bookmarks : NavigationItem(BookmarkDestination.route, R.string.bookmark_title, R.drawable.bookmark_svgrepo_com)
     object Chat : NavigationItem(ChatDestination.route, R.string.chat_title, R.drawable.chat_svgrepo_com)
-//    object Profile : NavigationItem(ProfileDestination.route, R.string.profile, R.drawable.ic_profile)
+    object Profile : NavigationItem(ProfileDestination.route, R.string.profile_title, R.drawable.person_svgrepo_com_rounded)
 }

@@ -73,10 +73,6 @@ class StudentInformationViewModel(
                 studentProfile.major.isNotEmpty() &&
                 studentProfile.school.isNotBlank()
     }
-
-    private fun fromTimestampToLocalDate(value: String?): LocalDate = value.let { LocalDate.parse(it) }
-
-    private fun fromLocalDateToTimestamp(date: LocalDate?): String? = date?.toString()
 }
 
 data class StudentProfileUiState(

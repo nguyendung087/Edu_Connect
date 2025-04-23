@@ -33,6 +33,12 @@ class OfflineUsersRepository(
 
     override suspend fun updateUserStream(user: User) = userDao.updateUser(user)
 
+    override suspend fun updateStudentProfileStream(studentProfile: StudentProfile) =
+        userDao.updateStudentProfile(studentProfile)
+
+    override suspend fun updateMentorProfileStream(teacherProfile: TeacherProfile) =
+        userDao.updateMentorProfile(teacherProfile)
+
     override suspend fun getTeacherProfileStream(teacherId: String): Flow<TeacherProfile> =
         userDao.getTeacherProfile(teacherId)
 

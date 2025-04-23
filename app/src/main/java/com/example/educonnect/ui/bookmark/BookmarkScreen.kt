@@ -94,12 +94,16 @@ fun BookmarkScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = it.calculateTopPadding())
                 .padding(
-                    start = 12.dp,
-                    end = 12.dp,
-                    bottom = innerPadding.calculateBottomPadding(),
-                    top = innerPadding.calculateTopPadding()
+                    top = it.calculateTopPadding(),
+                    bottom = it.calculateBottomPadding()
+                )
+                .padding(
+//                    start = 12.dp,
+//                    end = 12.dp,
+//                    bottom = innerPadding.calculateBottomPadding(),
+//                    top = innerPadding.calculateTopPadding()
+                    innerPadding
                 )
         ) {
             CourseTagList()

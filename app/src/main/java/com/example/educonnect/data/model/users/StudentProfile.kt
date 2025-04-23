@@ -21,7 +21,7 @@ import java.time.LocalDate
         Index(value = ["student_id"]),
     ]
 )
-class StudentProfile(
+data class StudentProfile(
     @PrimaryKey
     @ColumnInfo(name = "student_id")
     val studentId: String = "",

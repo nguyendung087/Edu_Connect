@@ -8,6 +8,7 @@ import com.example.educonnect.data.database.repositories.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,8 +34,10 @@ class LoginViewModel(
                 auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            Log.i("LOGIN_RESULT", "Đăng nhập thành công với UID: ${task.result?.user?.uid}")
+                            val uid = task.result?.user?.uid
+                            Log.i("LOGIN_RESULT", "Đăng nhập thành công với UID: $uid")
                             updateUiState(true, null)
+                            sendFcmTokenToServer(uid)
                         } else {
                             handleFirebaseException(task.exception)
                         }
@@ -62,9 +65,16 @@ class LoginViewModel(
         }
     }
 
-    fun logout() {
-        auth.signOut()
-        updateUiState(isLoggedIn = false, errorMessage = "Đã đăng xuất")
+    private fun sendFcmTokenToServer(userId: String?) {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val token = task.result
+                viewModelScope.launch {
+                    // TODO: Send token to server with userId
+                    Log.d("FCM_TOKEN", "Token for user $userId: $token")
+                }
+            }
+        }
     }
 
     private fun updateUiState(isLoggedIn : Boolean, errorMessage : String?) {

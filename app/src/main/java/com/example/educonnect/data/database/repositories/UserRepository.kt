@@ -2,6 +2,7 @@ package com.example.educonnect.data.database.repositories
 
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.example.educonnect.data.model.users.Experience
 import com.example.educonnect.data.model.users.StudentProfile
 import com.example.educonnect.data.model.users.TeacherProfile
@@ -25,6 +26,10 @@ interface UserRepository {
     fun getUserStream(id: String): Flow<User?>
 
     suspend fun updateUserStream(user: User)
+
+    suspend fun updateStudentProfileStream(studentProfile: StudentProfile)
+
+    suspend fun updateMentorProfileStream(teacherProfile: TeacherProfile)
 
     suspend fun getTeacherProfileStream(teacherId: String): Flow<TeacherProfile>
 

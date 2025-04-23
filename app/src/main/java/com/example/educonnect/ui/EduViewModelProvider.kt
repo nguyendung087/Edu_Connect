@@ -15,6 +15,9 @@ import com.example.educonnect.ui.information_form.StudentInformationViewModel
 import com.example.educonnect.ui.login.LoginViewModel
 import com.example.educonnect.ui.mentor.MentorDetailsViewModel
 import com.example.educonnect.ui.mentor.TopMentorViewModel
+import com.example.educonnect.ui.notification.NotificationViewModel
+import com.example.educonnect.ui.profile.ProfileEditViewModel
+import com.example.educonnect.ui.profile.ProfileViewModel
 import com.example.educonnect.ui.signup.SignupViewModel
 
 object EduViewModelProvider {
@@ -75,6 +78,25 @@ object EduViewModelProvider {
             BookmarkViewModel(
                 eduApplication().container.bookmarkRepository,
                 eduApplication().container.userRepository
+            )
+        }
+
+        initializer {
+            ProfileViewModel(
+                eduApplication().container.userRepository
+            )
+        }
+
+        initializer {
+            ProfileEditViewModel(
+                eduApplication().container.userRepository
+            )
+        }
+
+        initializer {
+            NotificationViewModel(
+                eduApplication().container.userRepository,
+                eduApplication().container.notificationRepository
             )
         }
 

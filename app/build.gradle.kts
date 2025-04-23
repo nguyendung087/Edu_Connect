@@ -69,17 +69,8 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.picasso)
-//    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
-
-    //Zalo SDK
-//    implementation("me.zalo:sdk-core:4.2.0724")
-//    implementation("me.zalo:sdk-auth:4.2.0724")
-//    implementation("me.zalo:sdk-authext:4.2.0724")
-//    implementation("me.zalo:sdk-openapi:4.2.0724")
-//    implementation("me.zalo:sdk-analytics:4.2.0724")
 
     //Room
-
     implementation(libs.androidx.room.runtime)
     implementation(libs.material)
     implementation(libs.androidx.activity)
@@ -88,11 +79,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.ui.test.android)
+    implementation(libs.androidx.room.runtime.android)
     ksp("androidx.room:room-compiler:2.5.0")
-
-    // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
-//    ksp(libs.androidx.room.compiler)
-
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
@@ -104,6 +92,7 @@ dependencies {
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth.ktx)
+    implementation("com.google.firebase:firebase-messaging-ktx:24.1.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
