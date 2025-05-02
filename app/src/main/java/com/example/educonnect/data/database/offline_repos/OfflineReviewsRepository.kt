@@ -29,7 +29,4 @@ class OfflineReviewsRepository(
 
     override fun getReviewsByReviewerStream(reviewerId: String): Flow<List<Any>> =
         reviewDao.getReviewsByReviewer(reviewerId)
-
-    override suspend fun isStudentEnrolledStream(studentId: String, courseId: String): Int =
-        reviewDao.isStudentEnrolled(studentId, courseId)
 }

@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -38,6 +39,7 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -126,12 +128,7 @@ fun CourseDetails(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "Vui lòng đăng nhập để tiếp tục",
-                style = MaterialTheme.typography.bodyLarge,
-                fontSize = 18.sp,
-                color = Color.Black
-            )
+            CircularProgressIndicator()
         }
         return
     }
@@ -144,6 +141,11 @@ fun CourseDetails(
 
     var showRemoveConfirmation by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
+
+    var showEnrollConfirmation by remember { mutableStateOf(false) }
+
+    val isEnrolled by viewModel.isUserEnrolled(authState.currentUserId!!, courseId)
+        .collectAsState(initial = false)
 
     Column(modifier = Modifier.fillMaxSize()) {
         CourseDetailsAppBar(
@@ -179,8 +181,56 @@ fun CourseDetails(
                     .align(alignment = Alignment.TopCenter)
             )
         }
-        EnrollCourseBottomBar(
+        EnrollmentBottomBar(
+            isEnrolled = isEnrolled,
+            courseCost = uiState.value.courseDetails.course.cost,
+            onEnrollCourse = {
+                showEnrollConfirmation = true
+            }
         )
+    }
+
+    if (showEnrollConfirmation) {
+        ModalBottomSheet(
+            onDismissRequest = { showEnrollConfirmation = false },
+            sheetState = sheetState
+        ) {
+            if (!isEnrolled) {
+                ConfirmationNotification(
+                    title = "Bạn xác nhận muốn đăng ký?",
+                    course = uiState.value.courseDetails,
+                    onConfirm = {
+                        viewModel.enrollCourse(
+                            authState.currentUserId!!,
+                            courseId
+                        )
+                    },
+                    onCancel = {
+                        showRemoveConfirmation = false
+                    }
+                )
+            } else {
+                ConfirmationNotification(
+                    title = "Bạn xác nhận muốn hủy đăng ký?",
+                    course = uiState.value.courseDetails,
+                    onConfirm = {
+                        viewModel.removeEnrollment(
+                            authState.currentUserId!!,
+                            courseId
+                        )
+                    },
+                    onCancel = {
+                        showRemoveConfirmation = false
+                    }
+                )
+            }
+        }
+    }
+
+    LaunchedEffect(isEnrolled) {
+        if (showEnrollConfirmation) {
+            showEnrollConfirmation = false
+        }
     }
 
     if (showRemoveConfirmation) {
@@ -189,6 +239,7 @@ fun CourseDetails(
             sheetState = sheetState
         ) {
             ConfirmationNotification(
+                title = "Bạn chắc chắn muốn xóa khỏi Bookmark?",
                 course = uiState.value.courseDetails,
                 onConfirm = {
                     viewModel.removeBookmark(authState.currentUserId!!, courseId)
@@ -671,19 +722,60 @@ private fun LessonList(
 }
 
 @Composable
-private fun EnrollCourseBottomBar(
-    modifier: Modifier = Modifier
+private fun EnrollmentBottomBar(
+    isEnrolled : Boolean,
+    courseCost: Double,
+    onEnrollCourse : () -> Unit
 ) {
+    Row(
+        modifier = Modifier
+            .background(Color.White)
+            .fillMaxWidth()
+            .padding(
+                horizontal = 16.dp,
+                vertical = 8.dp
+            )
+        ,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(3.dp)
+        ) {
+            Text(
+                "Total Price",
+                style = MaterialTheme.typography.titleSmall,
+                fontSize = 14.sp,
+                color = Color.Gray
+            )
+            Text(
+                "$$courseCost",
+                style = MaterialTheme.typography.titleMedium,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W700,
+                color = Color(0xFF0961F5)
+            )
+        }
 
+        TextButton(
+            modifier = Modifier
+                .background(
+                    color = if(!isEnrolled) Color(0xFF0961F5) else Color.Black.copy(
+                        alpha = 0.3f
+                    ),
+                    shape = RoundedCornerShape(50.dp)
+                ),
+            onClick = onEnrollCourse
+        ) {
+            Text(
+                if(!isEnrolled) "Đăng ký ngay" else "Hủy đăng ký",
+                style = MaterialTheme.typography.titleMedium,
+                color = if(!isEnrolled) Color.White else Color.Black,
+                fontSize = 16.sp,
+                modifier = Modifier.padding(
+                    horizontal = 40.dp
+                )
+            )
+        }
+    }
 }
-
-//@Composable
-//@Preview
-//private fun CourseDetailsPreview() {
-//    EduConnectTheme {
-//        CourseDetails(
-//            onNavigateUp = {},
-//            navigateBack = {}
-//        )
-//    }
-//}

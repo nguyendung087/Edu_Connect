@@ -23,9 +23,10 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.util.UUID
 
-class MyFirebaseMessagingService(
-    private val notificationRepository: NotificationRepository
-) : FirebaseMessagingService() {
+class MyFirebaseMessagingService : FirebaseMessagingService() {
+    private val notificationRepository: NotificationRepository by lazy {
+        (application as EduApplication).container.notificationRepository
+    }
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {

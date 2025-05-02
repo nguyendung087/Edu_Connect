@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -26,6 +27,7 @@ import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -41,6 +43,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.educonnect.R
+import com.example.educonnect.data.model.courses.Lesson
+import com.example.educonnect.data.model.users.Experience
+import com.example.educonnect.data.model.users.TeacherProfile
+import com.example.educonnect.ui.EduViewModelProvider
 import com.example.educonnect.ui.components.CustomAppBar
 import com.example.educonnect.ui.components.CustomIconButton
 import com.example.educonnect.ui.courses.CourseTabs
@@ -67,8 +73,12 @@ enum class MentorDetailsTabs(
 @Composable
 fun MentorDetails(
     navigateBack : () -> Unit,
-    onNavigateUp : () -> Unit
+    onNavigateUp : () -> Unit,
+    viewModel: MentorDetailsViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        factory = EduViewModelProvider.Factory
+    )
 ) {
+    val uiState = viewModel.mentorUiState.collectAsState()
     Scaffold(
         topBar = {
             CustomAppBar(
@@ -94,30 +104,31 @@ fun MentorDetails(
             derivedStateOf { pagerState.currentPage }
         }
 
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = it.calculateTopPadding())
+                .padding(
+                    top = it.calculateTopPadding(),
+                    bottom = it.calculateBottomPadding()
+                )
                 .padding(horizontal = 20.dp),
         ) {
-            MentorCard()
-            HorizontalDivider(
-                modifier = Modifier.padding(
-                    top = 12.dp,
-                    bottom = 4.dp
+            item {
+                MentorDetailsBody(
+                    mentor = uiState.value.mentor,
+                    experienceList = uiState.value.exp,
+                    scope = scope,
+                    pagerState = pagerState,
+                    selectedTabIndex = selectedTabIndex.value
                 )
-            )
-            MentorInformationTabs(
-                scope = scope,
-                pagerState = pagerState,
-                selectedTabIndex = selectedTabIndex.value
-            )
+            }
         }
     }
 }
 
 @Composable
 private fun MentorCard(
+    mentor : TeacherProfile,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -133,7 +144,7 @@ private fun MentorCard(
             horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             MentorImage(
-                mentorImage = R.drawable.lecturer,
+                mentorImage = mentor.avatarUrl,
                 modifier = Modifier
                     .size(75.dp)
                     .clickable { },
@@ -142,11 +153,11 @@ private fun MentorCard(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
-                    "Wade Warren",
+                    mentor.name,
                     style = MaterialTheme.typography.titleMedium,
                 )
                 Text(
-                    "Design Expert",
+                    mentor.specialization,
                     style = MaterialTheme.typography.labelLarge,
                     color = Color.Gray
                 )
@@ -214,11 +225,22 @@ private fun MentorCard(
 }
 
 @Composable
-private fun MentorInformationTabs(
+private fun MentorDetailsBody(
+    mentor: TeacherProfile,
+    experienceList : List<Experience>,
     scope : CoroutineScope,
     pagerState : PagerState,
     selectedTabIndex : Int,
 ) {
+    MentorCard(
+        mentor = mentor
+    )
+    HorizontalDivider(
+        modifier = Modifier.padding(
+            top = 12.dp,
+            bottom = 4.dp
+        )
+    )
     TabRow(
         selectedTabIndex = selectedTabIndex,
         indicator = { tabPositions ->
@@ -258,12 +280,36 @@ private fun MentorInformationTabs(
             )
         }
     }
-//    HorizontalPager(
-//        state = pagerState,
-//        modifier = Modifier
-//            .fillMaxWidth()
-//    ) {
-//    }
+
+    HorizontalPager(
+        state = pagerState,
+        modifier = Modifier
+            .fillMaxWidth()
+    ) { page ->
+//        when (page) {
+//            0 -> for (exp in experienceList) {
+//                MentorInformationTabs(
+//                    mentor = mentor,
+//                    experience = exp
+//                )
+//            }
+////            1 -> LessonTab(
+////                lessons = lessons
+////            )
+//        }
+        for (exp in experienceList) {
+            MentorInformationTabs(
+                experience = exp
+            )
+        }
+
+    }
+}
+
+@Composable
+private fun MentorInformationTabs(
+    experience: Experience
+) {
 
     val fullText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua "
     val readMoreText = "Read more"
@@ -297,46 +343,46 @@ private fun MentorInformationTabs(
             )
         }
 
-        Column(
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Text(
-                "Info",
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Medium,
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(130.dp)
-            ) {
-                Column {
-                    Text(
-                        "Students",
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.Medium,
-                        color = Color.Gray
-                    )
-                    Text(
-                        "123,456",
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.Medium,
-                    )
-                }
-                Column {
-                    Text(
-                        "Courses",
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.Medium,
-                        color = Color.Gray
-                    )
-                    Text(
-                        "32",
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.Medium,
-                    )
-                }
-            }
-        }
+//        Column(
+//            verticalArrangement = Arrangement.spacedBy(10.dp)
+//        ) {
+//            Text(
+//                "Info",
+//                style = MaterialTheme.typography.bodyLarge,
+//                fontWeight = FontWeight.Medium,
+//            )
+//            Row(
+//                modifier = Modifier.fillMaxWidth(),
+//                horizontalArrangement = Arrangement.spacedBy(130.dp)
+//            ) {
+//                Column {
+//                    Text(
+//                        "Students",
+//                        style = MaterialTheme.typography.bodyLarge,
+//                        fontWeight = FontWeight.Medium,
+//                        color = Color.Gray
+//                    )
+//                    Text(
+//                        "123,456",
+//                        style = MaterialTheme.typography.bodyLarge,
+//                        fontWeight = FontWeight.Medium,
+//                    )
+//                }
+//                Column {
+//                    Text(
+//                        "Courses",
+//                        style = MaterialTheme.typography.bodyLarge,
+//                        fontWeight = FontWeight.Medium,
+//                        color = Color.Gray
+//                    )
+//                    Text(
+//                        "32",
+//                        style = MaterialTheme.typography.bodyLarge,
+//                        fontWeight = FontWeight.Medium,
+//                    )
+//                }
+//            }
+//        }
 
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -369,13 +415,13 @@ private fun MentorInformationTabs(
                 }
                 Column {
                     Text(
-                        "Senior UX/UI Designer",
+                        experience.position,
                         style = MaterialTheme.typography.bodyLarge,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium,
                     )
                     Text(
-                        "2020 - Now",
+                        "${experience.startDate} - ${experience.endDate}",
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Medium,
                         fontSize = 14.sp,
@@ -384,7 +430,7 @@ private fun MentorInformationTabs(
                 }
             }
             Text(
-                fullText,
+                experience.description,
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Medium,
                 color = Color.Gray

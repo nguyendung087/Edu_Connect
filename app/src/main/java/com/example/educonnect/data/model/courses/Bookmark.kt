@@ -3,6 +3,8 @@ package com.example.educonnect.data.model.courses
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import com.example.educonnect.data.model.users.StudentProfile
 
 @Entity(
@@ -21,8 +23,13 @@ import com.example.educonnect.data.model.users.StudentProfile
             childColumns = ["course_id"],
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index(value = ["course_id"]),
+        Index(value = ["student_id"])
     ]
 )
+
 data class Bookmark(
     @ColumnInfo(name = "student_id") val studentId: String,
     @ColumnInfo(name = "course_id") val courseId: String

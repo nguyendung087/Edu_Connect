@@ -6,6 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.educonnect.data.model.courses.Course
+import com.example.educonnect.data.model.users.StudentProfile
 import com.example.educonnect.data.model.users.User
 import java.time.LocalDateTime
 
@@ -13,9 +14,9 @@ import java.time.LocalDateTime
     tableName = "course_reviews",
     foreignKeys = [
         ForeignKey(
-            entity = User::class,
-            parentColumns = ["user_id"],
-            childColumns = ["reviewer_id"],
+            entity = StudentProfile::class,
+            parentColumns = ["student_id"],
+            childColumns = ["student_id"],
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
@@ -26,7 +27,7 @@ import java.time.LocalDateTime
         )
     ],
     indices = [
-        Index(value = ["reviewer_id"]),
+        Index(value = ["student_id"]),
         Index(value = ["course_id"])
     ]
 )
@@ -34,8 +35,8 @@ data class CourseReview(
     @PrimaryKey
     @ColumnInfo(name = "course_review_id")
     val courseReviewId: String,
-    @ColumnInfo(name = "reviewer_id")
-    val reviewerId: String,
+    @ColumnInfo(name = "student_id")
+    val studentId: String,
     @ColumnInfo(name = "course_id")
     val courseId: String,
     val rating: Float,

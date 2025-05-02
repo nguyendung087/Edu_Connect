@@ -90,7 +90,12 @@ fun HomeScreen(
         topBar = {
             HomeAppBar(
                 currentUser = "Hi, ${uiState.value.currentUser?.name ?: "Guest"} ",
-                navigateToNotificationScreen = navigateToNotificationScreen
+                navigateToNotificationScreen = {
+                    viewModel.insertBulkUsers()
+                    viewModel.insertBulkTeacherProfiles()
+                    viewModel.insertBulkExperience()
+                    viewModel.insertBulkCourses()
+                }
             )
         },
     ) {
@@ -349,13 +354,3 @@ private fun SearchBar() {
             .padding(8.dp)
     )
 }
-
-//@Composable
-//@Preview
-//private fun HomePreview() {
-//    HomeScreen(
-//        navigateToMentorDetails = {},
-//        navigateToCourseDetails = {},
-//        navigateToNotificationScreen = {}
-//    )
-//}

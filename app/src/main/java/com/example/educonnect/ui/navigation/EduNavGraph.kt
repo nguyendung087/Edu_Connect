@@ -111,7 +111,9 @@ fun EduNavHost(
             )
         }
 
-        composable(route = StudentInformationFormDestination.route) {
+        composable(
+            route = StudentInformationFormDestination.route,
+        ) {
             StudentInformationScreen(
                 navigateToHomeScreen = {
                     navController.navigate(
@@ -155,6 +157,7 @@ fun EduNavHost(
                 )
             }
         }
+
         composable(route = TopMentorDestination.route) {
             MainLayout(
                 navController = navController
@@ -167,11 +170,10 @@ fun EduNavHost(
                             "${MentorDetailsDestination.route}/$it"
                         )
                     },
-//                navigateBack = { navController.popBackStack() },
-//                onNavigateUp = { navController.navigateUp() }
                 )
             }
         }
+
         composable(
             route = MentorDetailsDestination.routeWithArgs,
             arguments = listOf(navArgument(MentorDetailsDestination.mentorIdArg) {
@@ -182,11 +184,10 @@ fun EduNavHost(
                 MentorDetails(
                     navigateBack = { navController.popBackStack() },
                     onNavigateUp = { navController.navigateUp() }
-                    //                navigateToEditItem = { navController.navigate("${ItemEditDestination.route}/$it") },
-                    //                navigateBack = { navController.navigateUp() }
                 )
             }
         }
+
         composable(route = CourseDestination.route) {
             MainLayout(
                 navController = navController
@@ -198,11 +199,10 @@ fun EduNavHost(
                             "${CourseDetailsDestination.route}/$it"
                         )
                     },
-//                navigateBack = { navController.popBackStack() },
-//                onNavigateUp = { navController.navigateUp() }
                 )
             }
         }
+
         composable(
             route = CourseDetailsDestination.routeWithArgs,
             arguments = listOf(navArgument(CourseDetailsDestination.courseIdArg) {
@@ -215,15 +215,13 @@ fun EduNavHost(
                     navController.navigate("${MentorDetailsDestination.route}/$it")
                 },
                 onNavigateUp = { navController.navigateUp() }
-//                navigateToEditItem = { navController.navigate("${ItemEditDestination.route}/$it") },
-//                navigateBack = { navController.navigateUp() }
             )
         }
+
         composable(route = NotificationDestination.route) {
             MainLayout(navController = navController) {
                 NotificationScreen(
                     navigateBack = { navController.popBackStack() }
-//                onNavigateUp = { navController.navigateUp() }
                 )
             }
         }
@@ -238,10 +236,7 @@ fun EduNavHost(
 
         composable(route = ChatDestination.route) {
             MainLayout(navController = navController) {
-                ChatScreen(
-
-//                onNavigateUp = { navController.navigateUp() }
-                )
+                ChatScreen()
             }
         }
 

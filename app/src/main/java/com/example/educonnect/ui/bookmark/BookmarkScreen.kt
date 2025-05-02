@@ -138,6 +138,7 @@ fun BookmarkScreen(
             sheetState = sheetState
         ) {
             ConfirmationNotification(
+                title = "Bạn xác nhận muốn xóa khỏi Bookmark?",
                 course = courseToRemove!!,
                 onConfirm = {
                     viewModel.removeBookmark(

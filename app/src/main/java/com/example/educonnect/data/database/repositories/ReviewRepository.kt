@@ -26,6 +26,4 @@ interface ReviewRepository {
     fun getCourseReviewsStream(courseId: String): Flow<List<CourseReview>>
 
     fun getReviewsByReviewerStream(reviewerId: String): Flow<List<Any>>
-
-    suspend fun isStudentEnrolledStream(studentId: String, courseId: String): Int
 }

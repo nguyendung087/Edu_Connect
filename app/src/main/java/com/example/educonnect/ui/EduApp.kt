@@ -44,9 +44,3 @@ fun EduApp(
         EduNavHost(navController = navController)
     }
 }
-
-@Composable
-@Preview
-private fun EduPreview() {
-    EduApp()
-}

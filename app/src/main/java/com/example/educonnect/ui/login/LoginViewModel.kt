@@ -20,12 +20,12 @@ class LoginViewModel(
 ) : ViewModel() {
     private val auth = FirebaseAuth.getInstance()
 
-    private var _loginUiState = MutableStateFlow(LoginUiState())
+    private var _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState.Loading)
     val loginUiState : StateFlow<LoginUiState> = _loginUiState.asStateFlow()
 
     fun loginUser(email: String, password: String) {
         if (!validateInput(email, password)) {
-            updateUiState(false, "Email hoặc mật khẩu không hợp lệ")
+            _loginUiState.value = LoginUiState.Error("Email hoặc mật khẩu không hợp lệ")
             return
         }
 
@@ -36,14 +36,14 @@ class LoginViewModel(
                         if (task.isSuccessful) {
                             val uid = task.result?.user?.uid
                             Log.i("LOGIN_RESULT", "Đăng nhập thành công với UID: $uid")
-                            updateUiState(true, null)
+                            _loginUiState.value = LoginUiState.Success
                             sendFcmTokenToServer(uid)
                         } else {
                             handleFirebaseException(task.exception)
                         }
                     }
             } catch (e: Exception) {
-                updateUiState(false, e.message ?: "Đã xảy ra lỗi")
+                _loginUiState.value = LoginUiState.Error(e.message ?: "Đã xảy ra lỗi")
             }
         }
     }
@@ -54,13 +54,14 @@ class LoginViewModel(
                 auth.sendPasswordResetEmail(email)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            updateUiState(false, "Đã gửi email đặt lại mật khẩu")
+                            _loginUiState.value = LoginUiState.Success
+                            Log.i("FORGOT_PASSWORD", "Đã gửi email đặt lại mật khẩu")
                         } else {
-                            updateUiState(false, task.exception?.message ?: "Gửi email thất bại")
+                            _loginUiState.value = LoginUiState.Error(task.exception?.message ?: "Gửi email thất bại")
                         }
                     }
             } catch (e: Exception) {
-                updateUiState(false, e.message ?: "Đã xảy ra lỗi")
+                _loginUiState.value = LoginUiState.Error(e.message ?: "Đã xảy ra lỗi")
             }
         }
     }
@@ -77,15 +78,6 @@ class LoginViewModel(
         }
     }
 
-    private fun updateUiState(isLoggedIn : Boolean, errorMessage : String?) {
-        _loginUiState.update { currentState ->
-            currentState.copy(
-                isLoggedIn = isLoggedIn,
-                errorMessage = errorMessage
-            )
-        }
-    }
-
     private fun validateInput(email: String, password: String): Boolean {
         return email.isNotBlank() && password.isNotBlank() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
@@ -96,12 +88,13 @@ class LoginViewModel(
             is FirebaseAuthInvalidUserException -> "Tài khoản không tồn tại"
             else -> "Đăng nhập thất bại: ${exception?.message ?: "Lỗi không xác định"}"
         }
-        updateUiState(false, errorMessage)
+        _loginUiState.value = LoginUiState.Error(errorMessage)
         Log.e("LOGIN_RESULT", errorMessage)
     }
 }
 
-data class LoginUiState(
-    val isLoggedIn : Boolean = false,
-    val errorMessage: String? = null
-)
+sealed class LoginUiState {
+    data object Success : LoginUiState()
+    data object Loading : LoginUiState()
+    data class Error(val message : String) : LoginUiState()
+}

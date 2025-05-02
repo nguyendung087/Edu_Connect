@@ -52,7 +52,8 @@ object EduViewModelProvider {
         }
         initializer {
             CourseViewModel(
-                eduApplication().container.courseRepository
+                eduApplication().container.courseRepository,
+                eduApplication().container.userRepository,
             )
         }
         initializer {

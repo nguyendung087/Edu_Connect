@@ -36,11 +36,12 @@ import androidx.compose.ui.unit.sp
 import com.example.educonnect.R
 import com.example.educonnect.data.model.courses.Course
 import com.example.educonnect.data.model.courses.CourseWithTeacher
+import com.example.educonnect.data.model.courses.EnrollmentWithCourseAndTeacher
 
 @Composable
 internal fun CourseItem(
     navigateToCourseDetails : (String) -> Unit,
-    course: CourseWithTeacher
+    enrollment : EnrollmentWithCourseAndTeacher
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -51,7 +52,7 @@ internal fun CourseItem(
             .fillMaxWidth()
             .padding(4.dp)
             .clickable {
-                navigateToCourseDetails(course.course.courseId)
+                navigateToCourseDetails(enrollment.course.courseId)
             }
     ) {
         Row(
@@ -67,7 +68,7 @@ internal fun CourseItem(
                     .weight(2f)
             ) {
                 Image(
-                    painter = painterResource(course.course.courseImage),
+                    painter = painterResource(enrollment.course.courseImage),
                     contentDescription = "Course Image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.clip(
@@ -98,7 +99,7 @@ internal fun CourseItem(
 
                 )
                 Text(
-                    course.course.title,
+                    enrollment.course.title,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.W500,
                 )
@@ -112,7 +113,7 @@ internal fun CourseItem(
                         tint = Color.Gray
                     )
                     Text(
-                        course.teacher.name,
+                        enrollment.teacher.name,
                         fontWeight = FontWeight.W500,
                         color = Color.Gray
                     )
@@ -158,11 +159,4 @@ fun LinearIndicator(
                 .clip(RoundedCornerShape(100.dp))
         )
     }
-}
-
-
-@Composable
-@Preview
-private fun CoursePreview() {
-//    BasicList()
 }

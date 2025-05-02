@@ -5,6 +5,7 @@ import com.example.educonnect.data.database.repositories.CourseRepository
 import com.example.educonnect.data.model.courses.Course
 import com.example.educonnect.data.model.courses.CourseWithTeacher
 import com.example.educonnect.data.model.courses.Enrollment
+import com.example.educonnect.data.model.courses.EnrollmentWithCourseAndTeacher
 import com.example.educonnect.data.model.courses.Lesson
 import kotlinx.coroutines.flow.Flow
 
@@ -41,5 +42,21 @@ class OfflineCoursesRepository(
     override fun getStudentProgressStream(studentId: String, courseId: String): Flow<Float> =
         courseDao.getStudentProgress(studentId, courseId)
 
+    override fun getAllEnrollmentsByCourseCountStream(courseId: String): Flow<Int> =
+        courseDao.getAllEnrollmentsByCourseCount(courseId)
 
+    override suspend fun insertEnrollmentStream(enrollment: Enrollment) =
+        courseDao.insertEnrollment(enrollment)
+
+    override suspend fun deleteEnrollmentStream(enrollment: Enrollment) =
+        courseDao.deleteEnrollment(enrollment)
+
+    override fun getAllEnrollmentsByCourseStream(courseId: String): Flow<List<Enrollment>> =
+        courseDao.getAllEnrollmentsByCourse(courseId)
+
+    override fun getEnrollmentsWithCourseAndTeacherStream(studentId: String): Flow<List<EnrollmentWithCourseAndTeacher>> =
+        courseDao.getEnrollmentsWithCourseAndTeacher(studentId)
+
+    override fun getEnrollmentsWithCourseAndTeacherDetailsStream(courseId: String): Flow<EnrollmentWithCourseAndTeacher> =
+        courseDao.getEnrollmentsWithCourseAndTeacherDetails(courseId)
 }

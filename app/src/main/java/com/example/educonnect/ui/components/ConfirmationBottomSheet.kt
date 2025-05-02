@@ -37,6 +37,7 @@ import com.example.educonnect.ui.courses.CourseViewModel
 
 @Composable
 fun ConfirmationNotification(
+    title : String,
     course: CourseWithTeacher,
     onConfirm: () -> Unit,
     onCancel: () -> Unit
@@ -52,7 +53,7 @@ fun ConfirmationNotification(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Remove from Favorites?",
+            title,
             style = MaterialTheme.typography.titleMedium.copy(
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
@@ -65,8 +66,6 @@ fun ConfirmationNotification(
                 .padding(top = 20.dp)
 
         )
-
-
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -128,7 +127,7 @@ fun ConfirmationNotification(
                     .height(60.dp)
                     .weight(1f)
             ) {
-                Text("Cancel")
+                Text("Hủy")
             }
             Button(
                 onClick = onConfirm,
@@ -143,7 +142,7 @@ fun ConfirmationNotification(
                     .height(60.dp)
                     .weight(1f)
             ) {
-                Text("Yes, Remove")
+                Text("Xác nhận")
             }
         }
     }

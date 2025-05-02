@@ -27,26 +27,6 @@ class StudentInformationViewModel(
     private var _studentUiState = MutableStateFlow(StudentProfileUiState())
     val studentUiState : StateFlow<StudentProfileUiState> = _studentUiState.asStateFlow()
 
-    private val currentUser = FirebaseAuth.getInstance().currentUser
-    private val userId = currentUser?.uid ?: throw IllegalStateException("Người dùng chưa đăng nhập")
-
-    init {
-        Log.d("AUTH_DEBUG", "Init Info VM - Current UID: $userId")
-        _studentUiState.update { currentState ->
-            currentState.copy(
-                currentUserId = userId
-            )
-        }
-    }
-
-    fun updateUiState(studentProfile: StudentProfile) {
-        _studentUiState.update { currentState ->
-            currentState.copy(
-                studentProfile = studentProfile
-            )
-        }
-    }
-
     suspend fun saveStudentProfile(studentProfile: StudentProfile) {
         if (!validateInput(studentProfile)) {
             Log.e("INFORMATION_RESULT", "Mời nhập đầy đủ thông tin")
@@ -56,8 +36,11 @@ class StudentInformationViewModel(
         viewModelScope.launch {
             try {
                 userRepository.insertStudentProfileStream(studentProfile)
-                Log.d("INFORMATION_RESULT", "UID: ${userId}")
-
+                _studentUiState.update { currentState ->
+                    currentState.copy(
+                        isFilled = true
+                    )
+                }
             } catch (e: Exception) {
                 Log.e("INFORMATION_RESULT", "Lỗi: $e")
             }
@@ -77,5 +60,6 @@ class StudentInformationViewModel(
 
 data class StudentProfileUiState(
     val currentUserId : String = "",
+    val isFilled : Boolean = false,
     val studentProfile : StudentProfile = StudentProfile()
 )

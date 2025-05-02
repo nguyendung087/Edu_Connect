@@ -11,6 +11,7 @@ import com.example.educonnect.data.database.repositories.BookmarkRepository
 import com.example.educonnect.data.database.repositories.CourseRepository
 import com.example.educonnect.data.model.courses.Bookmark
 import com.example.educonnect.data.model.courses.CourseWithTeacher
+import com.example.educonnect.data.model.courses.Enrollment
 import com.example.educonnect.data.model.courses.Lesson
 import com.example.educonnect.ui.bookmark.BookmarkViewModel
 import com.example.educonnect.ui.home.HomeUiState
@@ -39,6 +40,28 @@ class CourseDetailsViewModel(
 
     init {
         loadData()
+    }
+
+    fun enrollCourse(studentId: String, courseId: String) {
+        viewModelScope.launch {
+            courseRepository.insertEnrollmentStream(
+                Enrollment(
+                    courseId = courseId,
+                    studentId = studentId,
+                )
+            )
+        }
+    }
+
+    fun removeEnrollment(studentId: String, courseId: String) {
+        viewModelScope.launch {
+            courseRepository.deleteEnrollmentStream(
+                Enrollment(
+                    courseId = courseId,
+                    studentId = studentId
+                )
+            )
+        }
     }
 
     fun addBookmark(studentId: String, courseId: String) {
@@ -94,9 +117,18 @@ class CourseDetailsViewModel(
                 }
             }
     }
+
+    fun isUserEnrolled(studentId: String, courseId: String): Flow<Boolean> {
+        return courseRepository.getEnrollmentsByUserStream(studentId)
+            .map { enrollments ->
+                enrollments.any { it.courseId == courseId }
+            }
+    }
 }
 
 data class CourseDetailsUiState(
     val courseDetails : CourseWithTeacher = CourseWithTeacher(),
-    val lessons : List<Lesson> = listOf()
+    val lessons : List<Lesson> = listOf(),
+    val enrollment : Enrollment = Enrollment(),
+    val isEnrolled : Boolean = false
 )

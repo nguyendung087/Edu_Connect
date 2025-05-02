@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.educonnect.data.database.repositories.UserRepository
+import com.example.educonnect.data.model.users.Experience
 import com.example.educonnect.data.model.users.TeacherProfile
 import com.example.educonnect.ui.courses.CourseDetailsUiState
 import kotlinx.coroutines.async
@@ -36,7 +37,9 @@ class MentorDetailsViewModel(
         viewModelScope.launch {
             try {
                 val mentorDeferred = async { getTeacherProfile() }
+                val experienceDeferred = async { getExperience() }
                 mentorDeferred.await()
+                experienceDeferred.await()
             } catch (e: Exception) {
                 Log.e("FETCH_DATA", "Lỗi khi lấy data: $e")
             }
@@ -53,6 +56,16 @@ class MentorDetailsViewModel(
         }
     }
 
+    private suspend fun getExperience() {
+        userRepository.getExperiencesByTeacherStream(teacherId).collect { exp ->
+            _mentorUiState.update { currentState ->
+                currentState.copy(
+                    exp = exp
+                )
+            }
+        }
+    }
+
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
@@ -60,5 +73,6 @@ class MentorDetailsViewModel(
 }
 
 data class MentorDetailsUiState(
-    val mentor : TeacherProfile = TeacherProfile()
+    val mentor : TeacherProfile = TeacherProfile(),
+    val exp : List<Experience> = emptyList()
 )

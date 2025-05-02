@@ -13,13 +13,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.rounded.Lock
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -58,14 +62,19 @@ object LoginDestination : NavigationDestination {
 fun LoginScreen(
     navigateToHomeScreen : () -> Unit,
     navigateToSignUpScreen: () -> Unit,
-    viewModel: LoginViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+    viewModel: LoginViewModel = viewModel(
         factory = EduViewModelProvider.Factory
     ),
 
 ) {
+    val uiState = viewModel.loginUiState.collectAsState()
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isVisible by remember {
+        mutableStateOf(false)
+    }
+    var showDialog by remember {
         mutableStateOf(false)
     }
 
@@ -82,15 +91,50 @@ fun LoginScreen(
         onVisibilityChange = {
             isVisible = !isVisible
         },
+        onResetPassword = {
+            showDialog = true
+        },
         navigateToSignUpScreen = navigateToSignUpScreen,
         onSignIn = {
             viewModel.loginUser(
                 email = email,
                 password = password
             )
-            navigateToHomeScreen()
+            if (uiState.value == LoginUiState.Success) {
+                navigateToHomeScreen()
+            }
         }
     )
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Quên mật khẩu?") },
+            text = {
+                Column {
+                    Text("Nhập email của bạn để đặt lại mật khẩu.")
+                    OutlinedTextField(
+                        value = email,
+                        onValueChange = { email = it },
+                        label = { Text("Email") }
+                    )
+                }
+            },
+            confirmButton = {
+                Button(onClick = {
+                    viewModel.forgotPassword(email)
+                    showDialog = false
+                }) {
+                    Text("Xác nhận")
+                }
+            },
+            dismissButton = {
+                Button(onClick = { showDialog = false }) {
+                    Text("Hủy")
+                }
+            }
+        )
+    }
 }
 
 @Composable
@@ -101,6 +145,7 @@ private fun LoginBody(
     onEmailChange : (String) -> Unit,
     onPasswordChange : (String) -> Unit,
     onVisibilityChange : () -> Unit,
+    onResetPassword : () -> Unit,
     onSignIn : () -> Unit,
     navigateToSignUpScreen : () -> Unit
 ) {
@@ -219,7 +264,7 @@ private fun LoginBody(
                     containerColor = Color.Transparent,
                     disabledContainerColor = Color.Transparent
                 ),
-                onClick = { /*TODO*/ }
+                onClick = onResetPassword
             ) {
                 Text(
                     stringResource(id = R.string.forgot),

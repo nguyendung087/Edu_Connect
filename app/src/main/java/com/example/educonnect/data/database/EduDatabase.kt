@@ -64,8 +64,8 @@ import java.time.LocalDateTime
         Assignment::class,
         Bookmark::class
     ],
-    version = 6,
-    exportSchema = true
+    version = 8,
+    exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class EduDatabase: RoomDatabase() {

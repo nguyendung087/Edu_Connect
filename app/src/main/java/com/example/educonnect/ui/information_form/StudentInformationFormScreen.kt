@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.rounded.Call
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults
@@ -27,6 +28,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import com.example.educonnect.R
 import com.example.educonnect.data.model.users.StudentProfile
 import com.example.educonnect.ui.EduViewModelProvider
+import com.example.educonnect.ui.authentication.LocalAuthState
 import com.example.educonnect.ui.navigation.NavigationDestination
 import com.example.educonnect.ui.signup.CustomTextField
 import kotlinx.coroutines.launch
@@ -68,7 +71,20 @@ fun StudentInformationScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val uiState = viewModel.studentUiState.collectAsState()
+    val authState = LocalAuthState.current
 
+    if (!authState.isLoggedIn) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator()
+        }
+        return
+    }
     var name by remember {
         mutableStateOf("")
     }
@@ -147,7 +163,7 @@ fun StudentInformationScreen(
             coroutineScope.launch {
                 viewModel.saveStudentProfile(
                     StudentProfile(
-                        studentId = uiState.value.currentUserId,
+                        studentId = authState.currentUserId!!,
                         name = name,
                         number = number,
                         gender = selectedGender,
@@ -158,7 +174,9 @@ fun StudentInformationScreen(
                     )
                 )
             }
-            navigateToHomeScreen()
+            if (uiState.value.isFilled) {
+                navigateToHomeScreen()
+            }
         }
     )
 }
