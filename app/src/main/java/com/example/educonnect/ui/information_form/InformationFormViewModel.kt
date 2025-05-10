@@ -30,27 +30,6 @@ class InformationFormViewModel(
     private var _teacherProfileState = MutableStateFlow(InformationUiState())
     val teacherProfileState : StateFlow<InformationUiState> = _teacherProfileState.asStateFlow()
 
-    private val currentUser = FirebaseAuth.getInstance().currentUser
-    private val userId = currentUser?.uid ?: throw IllegalStateException("Người dùng chưa đăng nhập")
-
-    init {
-        Log.d("AUTH_DEBUG", "Init Info VM - Current UID: $userId")
-        _teacherProfileState.update { currentState ->
-            currentState.copy(
-                currentUserId = userId
-            )
-        }
-    }
-
-    fun updateUiState(teacherProfile: TeacherProfile) {
-        _teacherProfileState.update { currentState ->
-            currentState.copy(
-                currentUserId = userId,
-                mentorProfile = teacherProfile
-            )
-        }
-    }
-
     suspend fun saveTeacherProfile(teacherProfile: TeacherProfile) {
         if (!validateInput(teacherProfile)) {
             Log.e("INFORMATION_RESULT", "Mời nhập đầy đủ thông tin")
@@ -60,10 +39,13 @@ class InformationFormViewModel(
         viewModelScope.launch {
             try {
                 userRepository.insertTeacherProfileStream(teacherProfile)
-                Log.d("INFORMATION_RESULT", "UID: ${userId}")
-                updateUiState(teacherProfile)
+                _teacherProfileState.update { currentState ->
+                    currentState.copy(
+                        isFilled = true
+                    )
+                }
             } catch (e: Exception) {
-                Log.e("INFORMATION_RESULT", "Lỗi: $e")
+                Log.e("TEACHER_INFORMATION_RESULT", "Lỗi: $e")
             }
         }
     }
@@ -75,8 +57,4 @@ class InformationFormViewModel(
                 teacherProfile.dateOfBirth.isBefore(LocalDate.now()) &&
                 teacherProfile.specialization.isNotEmpty()
     }
-
-    private fun fromTimestampToLocalDate(value: String?): LocalDate = value.let { LocalDate.parse(it) }
-
-    private fun fromLocalDateToTimestamp(date: LocalDate?): String? = date?.toString()
 }

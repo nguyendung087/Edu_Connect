@@ -9,7 +9,8 @@ import kotlinx.coroutines.flow.callbackFlow
 
 data class AuthState(
     val isLoggedIn: Boolean = false,
-    val currentUserId: String? = null
+    val currentUserId: String? = null,
+    val userRole : String? = null
 )
 
 val LocalAuthState = compositionLocalOf { AuthState() }

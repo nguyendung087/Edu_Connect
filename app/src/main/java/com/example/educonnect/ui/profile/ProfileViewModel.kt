@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.educonnect.data.database.repositories.UserRepository
 import com.example.educonnect.data.model.users.StudentProfile
+import com.example.educonnect.data.model.users.TeacherProfile
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,25 +21,40 @@ class ProfileViewModel(
     private var _profileUiState = MutableStateFlow(ProfileUiState())
     val profileUiState : StateFlow<ProfileUiState> = _profileUiState.asStateFlow()
 
-    fun getCurrentUser(userId: String?) {
-        if (userId == null) {
+    fun getCurrentUser(userId: String?, userRole : String?) {
+        if (userId == null || userRole == null) {
             _profileUiState.update { currentState ->
-                currentState.copy(currentUser = null)
+                currentState.copy(
+                    currentStudent = null,
+                    currentMentor = null
+                )
             }
             return
         }
 
         viewModelScope.launch {
             try {
-                userRepository.getStudentProfileStream(userId).collect { studentProfile ->
-                    _profileUiState.update { currentState ->
-                        currentState.copy(currentUser = studentProfile)
+                if (userRole == "Học viên") {
+                    userRepository.getStudentProfileStream(userId).collect { studentProfile ->
+                        _profileUiState.update { currentState ->
+                            currentState.copy(currentStudent = studentProfile)
+                        }
+                    }
+                }
+                else {
+                    userRepository.getTeacherProfileStream(userId).collect { mentorProfile ->
+                        _profileUiState.update { currentState ->
+                            currentState.copy(currentMentor = mentorProfile)
+                        }
                     }
                 }
             } catch (e: Exception) {
                 Log.e("HomeViewModel", "Lỗi khi lấy student profile: $e")
                 _profileUiState.update { currentState ->
-                    currentState.copy(currentUser = null)
+                    currentState.copy(
+                        currentStudent = null,
+                        currentMentor = null
+                    )
                 }
             }
         }
@@ -47,11 +63,10 @@ class ProfileViewModel(
     fun logout() {
         auth.signOut()
         _profileUiState.value = ProfileUiState()
-
-
     }
 }
 
 data class ProfileUiState(
-    val currentUser : StudentProfile? = StudentProfile()
+    val currentStudent : StudentProfile? = StudentProfile(),
+    val currentMentor : TeacherProfile? = TeacherProfile()
 )

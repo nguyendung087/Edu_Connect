@@ -34,13 +34,13 @@ import java.time.LocalDateTime
 data class TeacherReview(
     @PrimaryKey
     @ColumnInfo(name = "teacher_review_id")
-    val teacherReviewId: String,
+    val teacherReviewId: String = "",
     @ColumnInfo(name = "student_id")
-    val studentId: String,
+    val studentId: String = "",
     @ColumnInfo(name = "teacher_id")
-    val teacherId: String,
-    val rating: Float,
-    val comment: String,
+    val teacherId: String = "",
+    val rating: Float = 0.0f,
+    val comment: String = "",
     @ColumnInfo(name = "created_at")
-    val createdAt : LocalDateTime
+    val createdAt : LocalDateTime = LocalDateTime.now()
 )

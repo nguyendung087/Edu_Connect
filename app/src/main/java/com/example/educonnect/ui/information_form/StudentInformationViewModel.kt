@@ -42,7 +42,7 @@ class StudentInformationViewModel(
                     )
                 }
             } catch (e: Exception) {
-                Log.e("INFORMATION_RESULT", "Lỗi: $e")
+                Log.e("STUDENT_INFORMATION_RESULT", "Lỗi: $e")
             }
         }
     }
@@ -59,7 +59,6 @@ class StudentInformationViewModel(
 }
 
 data class StudentProfileUiState(
-    val currentUserId : String = "",
     val isFilled : Boolean = false,
     val studentProfile : StudentProfile = StudentProfile()
 )

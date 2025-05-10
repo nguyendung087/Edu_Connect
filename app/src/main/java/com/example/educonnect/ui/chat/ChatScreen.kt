@@ -37,7 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.educonnect.R
 import com.example.educonnect.ui.components.CustomAppBar
-import com.example.educonnect.ui.mentor.MentorImage
+import com.example.educonnect.ui.students_screens.mentor.MentorImage
 import com.example.educonnect.ui.navigation.NavigationDestination
 import com.example.educonnect.ui.theme.EduConnectTheme
 

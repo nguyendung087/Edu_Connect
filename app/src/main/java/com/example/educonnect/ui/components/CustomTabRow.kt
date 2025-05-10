@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.educonnect.ui.courses.CourseTabs
+import com.example.educonnect.ui.students_screens.courses.CourseTabs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

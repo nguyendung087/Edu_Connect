@@ -30,6 +30,11 @@
     <string name="signin">Sign In</string>
     <string name="home_subtitle">Let\'s start learning</string>
 
+    <string name="lesson_title">Tiêu đề</string>
+    <string name="lesson_content">Nội dung</string>
+    <string name="type">Thể loại</string>
+    <string name="file_url">Tệp đính kèm</string>
+
     <string name="home_title">Home</string>
     <string name="mentor_title">Top Mentor</string>
     <string name="mentor_detail_title">Mentor Details</string>
@@ -40,4 +45,9 @@
     <string name="bookmark_title">Bookmark</string>
     <string name="profile_title">Profile</string>
     <string name="profile_edit_title">Your Profile</string>
+
+    <string name="course_manage">Course Management</string>
+    <string name="course_manage_details">Course Management Details</string>
+    <string name="class_manage">Class Management</string>
+    <string name="class_manage_details">Class Management Details</string>
 </resources>

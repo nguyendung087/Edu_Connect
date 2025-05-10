@@ -33,13 +33,13 @@ import java.time.LocalDateTime
 data class Submission(
     @PrimaryKey
     @ColumnInfo(name = "submission_id")
-    val submissionId: String,
+    val submissionId: String = "",
     @ColumnInfo(name = "student_id")
-    val studentId: String,
+    val studentId: String = "",
     @ColumnInfo(name = "assignment_id")
-    val assignmentId: String?,
+    val assignmentId: String? = "",
     @ColumnInfo(name = "file_url")
-    val fileUrl: String,
+    val fileUrl: String = "",
     @ColumnInfo(name = "submitted_at")
-    val submittedAt : LocalDateTime
+    val submittedAt : LocalDateTime = LocalDateTime.now()
 )

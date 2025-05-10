@@ -6,17 +6,21 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.educonnect.EduApplication
-import com.example.educonnect.ui.bookmark.BookmarkViewModel
-import com.example.educonnect.ui.courses.CourseDetailsViewModel
-import com.example.educonnect.ui.courses.CourseViewModel
-import com.example.educonnect.ui.home.HomeViewModel
+import com.example.educonnect.ui.students_screens.bookmark.BookmarkViewModel
+import com.example.educonnect.ui.students_screens.courses.CourseDetailsViewModel
+import com.example.educonnect.ui.students_screens.courses.CourseViewModel
+import com.example.educonnect.ui.students_screens.home.HomeViewModel
 import com.example.educonnect.ui.information_form.InformationFormViewModel
 import com.example.educonnect.ui.information_form.StudentInformationViewModel
 import com.example.educonnect.ui.login.LoginViewModel
-import com.example.educonnect.ui.mentor.MentorDetailsViewModel
-import com.example.educonnect.ui.mentor.TopMentorViewModel
+import com.example.educonnect.ui.mentor_screens.course_management.CourseManageDetailsViewModel
+import com.example.educonnect.ui.mentor_screens.course_management.CourseManageViewModel
+import com.example.educonnect.ui.mentor_screens.home.MentorHomeViewModel
+import com.example.educonnect.ui.mentor_screens.profile.MentorProfileEditViewModel
+import com.example.educonnect.ui.students_screens.mentor.MentorDetailsViewModel
+import com.example.educonnect.ui.students_screens.mentor.TopMentorViewModel
 import com.example.educonnect.ui.notification.NotificationViewModel
-import com.example.educonnect.ui.profile.ProfileEditViewModel
+import com.example.educonnect.ui.students_screens.profile.ProfileEditViewModel
 import com.example.educonnect.ui.profile.ProfileViewModel
 import com.example.educonnect.ui.signup.SignupViewModel
 
@@ -101,6 +105,34 @@ object EduViewModelProvider {
             )
         }
 
+
+
+
+        initializer {
+            MentorHomeViewModel(
+                eduApplication().container.userRepository,
+                eduApplication().container.courseRepository,
+            )
+        }
+
+        initializer {
+            CourseManageViewModel(
+                eduApplication().container.courseRepository
+            )
+        }
+
+        initializer {
+            CourseManageDetailsViewModel(
+                this.createSavedStateHandle(),
+                eduApplication().container.courseRepository
+            )
+        }
+
+        initializer {
+            MentorProfileEditViewModel(
+                eduApplication().container.userRepository
+            )
+        }
     }
 }
 

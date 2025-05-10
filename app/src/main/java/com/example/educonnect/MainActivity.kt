@@ -22,9 +22,10 @@ import com.example.educonnect.data.model.courses.Lesson
 import com.example.educonnect.data.model.users.TeacherProfile
 import com.example.educonnect.data.model.users.User
 import com.example.educonnect.ui.EduApp
-import com.example.educonnect.ui.courses.CourseDetails
+import com.example.educonnect.ui.students_screens.courses.CourseDetails
 import com.example.educonnect.ui.signup.SignupScreen
 import com.example.educonnect.ui.theme.EduConnectTheme
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -33,9 +34,13 @@ import java.time.LocalDateTime
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseAuth.getInstance().signOut()
+        val appContainer = (application as EduApplication).container
         setContent {
             EduConnectTheme {
-                EduApp()
+                EduApp(
+                    appContainer = appContainer
+                )
             }
         }
     }

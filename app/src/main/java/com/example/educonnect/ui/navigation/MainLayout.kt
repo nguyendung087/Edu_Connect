@@ -37,10 +37,10 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.educonnect.R
-import com.example.educonnect.ui.bookmark.BookmarkDestination
+import com.example.educonnect.ui.students_screens.bookmark.BookmarkDestination
 import com.example.educonnect.ui.chat.ChatDestination
-import com.example.educonnect.ui.courses.CourseDestination
-import com.example.educonnect.ui.home.HomeDestination
+import com.example.educonnect.ui.students_screens.courses.CourseDestination
+import com.example.educonnect.ui.students_screens.home.HomeDestination
 import com.example.educonnect.ui.profile.ProfileDestination
 import com.example.educonnect.ui.theme.EduConnectTheme
 

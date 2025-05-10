@@ -6,6 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.educonnect.data.model.users.User
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Entity(
@@ -25,11 +26,11 @@ import java.time.LocalDateTime
 data class Grade(
     @PrimaryKey
     @ColumnInfo(name = "grade_id")
-    val gradeId: String,
+    val gradeId: String = "",
     @ColumnInfo(name = "submission_id")
-    val submissionId: String?,
-    val score: Float,
-    val feedback : String?,
+    val submissionId: String? = "",
+    val score: Float = 0.0f,
+    val feedback : String? = "",
     @ColumnInfo(name = "graded_at")
-    val gradedAt : LocalDateTime
+    val gradedAt : LocalDateTime = LocalDateTime.now()
 )

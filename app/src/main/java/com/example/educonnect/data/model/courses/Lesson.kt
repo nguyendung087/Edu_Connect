@@ -21,12 +21,12 @@ import androidx.room.PrimaryKey
 data class Lesson(
     @PrimaryKey
     @ColumnInfo(name = "lesson_id")
-    val lessonId: String,
+    val lessonId: String = "",
     @ColumnInfo(name = "course_id")
-    val courseId: String,
-    val title: String,
-    val content : String,
-    val type: String,
+    val courseId: String = "",
+    val title: String = "",
+    val content : String = "",
+    val type: String = "",
     @ColumnInfo(name = "file_url")
-    val fileUrl: String
+    val fileUrl: String = ""
 )

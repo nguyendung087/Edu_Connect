@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.rounded.Call
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
@@ -58,6 +59,7 @@ import com.example.educonnect.R
 import com.example.educonnect.data.LocalCourseCategoryData
 import com.example.educonnect.data.model.users.TeacherProfile
 import com.example.educonnect.ui.EduViewModelProvider
+import com.example.educonnect.ui.authentication.LocalAuthState
 import com.example.educonnect.ui.navigation.NavigationDestination
 import com.example.educonnect.ui.signup.CustomTextField
 import com.example.educonnect.ui.signup.SignupUiState
@@ -88,6 +90,20 @@ fun InformationScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val uiState = viewModel.teacherProfileState.collectAsState()
+    val authState = LocalAuthState.current
+
+    if (!authState.isLoggedIn) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator()
+        }
+        return
+    }
 
     var name by remember {
         mutableStateOf("")
@@ -154,7 +170,7 @@ fun InformationScreen(
             coroutineScope.launch {
                 viewModel.saveTeacherProfile(
                     TeacherProfile(
-                        teacherId = uiState.value.currentUserId,
+                        teacherId = authState.currentUserId!!,
                         name = name,
                         gender = selectedGender,
                         dateOfBirth = selectedDate!!,
@@ -163,7 +179,9 @@ fun InformationScreen(
                     )
                 )
             }
-            navigateToHomeScreen()
+            if (uiState.value.isFilled) {
+                navigateToHomeScreen()
+            }
         }
     )
 }
@@ -440,6 +458,7 @@ fun SpecializationDropdown(
                     .menuAnchor()
                     .fillMaxWidth(),
                 placeholder = placeholder,
+                singleLine = true,
                 value = selectedMajor,
                 onValueChange = onValueChange,
                 trailingIcon = trailingIcon,
@@ -611,19 +630,5 @@ enum class Gender(
         gender = "Nữ",
         icon = R.drawable.female_programmer_upper_body_svgrepo_com,
         backgroundColor = Color(0xFFFFA800)
-    )
-}
-
-//@SuppressLint("SimpleDateFormat")
-//fun convertMillisToDate(millis: Long): String {
-//    val formatter = SimpleDateFormat("dd/MM/yyy", Locale.getDefault())
-//    return formatter.format(Date(millis))
-//}
-
-@Composable
-@Preview
-private fun InformationPreview() {
-    InformationScreen(
-        navigateToHomeScreen = {}
     )
 }

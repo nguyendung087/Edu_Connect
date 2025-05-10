@@ -23,9 +23,19 @@ interface CourseRepository {
 
     fun getCourseWithTeacherByCourse(courseId: String): Flow<CourseWithTeacher>
 
+    fun getCourseWithTeacherByTeacher(teacherId: String?): Flow<List<CourseWithTeacher>>
+
     suspend fun insertLessonStream(lesson: List<Lesson>)
 
+    suspend fun insertALessonStream(lesson: Lesson)
+
+    suspend fun deleteLessonStream(lesson: Lesson)
+
+    suspend fun updateLessonStream(lesson : Lesson)
+
     fun getAllLessonsByCourseStream(courseId: String): Flow<List<Lesson>>
+
+    fun getLessonCountByCourse(courseId: String): Flow<Int>
 
     fun getEnrollmentsByUserStream(studentId: String): Flow<List<Enrollment>>
 

@@ -59,7 +59,7 @@ fun ProfileScreen(
     val authState = LocalAuthState.current
     val uiState = viewModel.profileUiState.collectAsState()
     LaunchedEffect(authState.currentUserId) {
-        viewModel.getCurrentUser(authState.currentUserId)
+        viewModel.getCurrentUser(authState.currentUserId, authState.userRole)
     }
 
     if (!authState.isLoggedIn) {
@@ -94,66 +94,129 @@ fun ProfileScreen(
             )
         }
     ) {
-        uiState.value.currentUser?.let { user ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(
-                        top = it.calculateTopPadding(),
-                        bottom = it.calculateBottomPadding()
-                    )
-                    .padding(innerPadding)
-                    .background(Color.White),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                ProfileAvatar(
-                    userAvatar = user.avatarUrl,
-                    userName = user.name
-                )
+        when (authState.userRole) {
+            "Giáo viên" ->
+                uiState.value.currentMentor?.let { user ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(
+                                top = it.calculateTopPadding(),
+                                bottom = it.calculateBottomPadding()
+                            )
+                            .padding(innerPadding)
+                            .background(Color.White),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        ProfileAvatar(
+                            userAvatar = user.avatarUrl,
+                            userName = user.name
+                        )
+
+                        ProfileContent(
+                            profile = ProfileItem.PROFILE,
+                            onClick = { navigateToProfileEdits(user.teacherId) }
+                        )
+                        HorizontalDivider(
+                            color = Color.Black.copy(
+                                alpha = 0.1f
+                            ),
+                            modifier = Modifier
+                                .padding(horizontal = 20.dp)
+                        )
 
 
-                ProfileContent(
-                    profile = ProfileItem.PROFILE,
-                    onClick = { navigateToProfileEdits(user.studentId) }
-                )
-                HorizontalDivider(
-                    color = Color.Black.copy(
-                        alpha = 0.1f
-                    ),
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp)
-                )
+                        ProfileContent(
+                            profile = ProfileItem.SETTING,
+                            onClick = navigateToSettings
+                        )
+                        HorizontalDivider(
+                            color = Color.Black.copy(
+                                alpha = 0.1f
+                            ),
+                            modifier = Modifier
+                                .padding(horizontal = 20.dp)
+                        )
 
 
-                ProfileContent(
-                    profile = ProfileItem.SETTING,
-                    onClick = navigateToSettings
-                )
-                HorizontalDivider(
-                    color = Color.Black.copy(
-                        alpha = 0.1f
-                    ),
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp)
-                )
+                        ProfileContent(
+                            profile = ProfileItem.LOGOUT,
+                            onClick = {
+                                viewModel.logout()
+                                navigateToLogin()
+                            }
+                        )
+                        HorizontalDivider(
+                            color = Color.Black.copy(
+                                alpha = 0.1f
+                            ),
+                            modifier = Modifier
+                                .padding(horizontal = 20.dp)
+                        )
 
-
-                ProfileContent(
-                    profile = ProfileItem.LOGOUT,
-                    onClick = {
-                        viewModel.logout()
-                        navigateToLogin()
                     }
-                )
-                HorizontalDivider(
-                    color = Color.Black.copy(
-                        alpha = 0.1f
-                    ),
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp)
-                )
+                }
+            else ->
+                uiState.value.currentStudent?.let { user ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(
+                                top = it.calculateTopPadding(),
+                                bottom = it.calculateBottomPadding()
+                            )
+                            .padding(innerPadding)
+                            .background(Color.White),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        ProfileAvatar(
+                            userAvatar = user.avatarUrl,
+                            userName = user.name
+                        )
 
-            }
+                        ProfileContent(
+                            profile = ProfileItem.PROFILE,
+                            onClick = { navigateToProfileEdits(user.studentId) }
+                        )
+                        HorizontalDivider(
+                            color = Color.Black.copy(
+                                alpha = 0.1f
+                            ),
+                            modifier = Modifier
+                                .padding(horizontal = 20.dp)
+                        )
+
+
+                        ProfileContent(
+                            profile = ProfileItem.SETTING,
+                            onClick = navigateToSettings
+                        )
+                        HorizontalDivider(
+                            color = Color.Black.copy(
+                                alpha = 0.1f
+                            ),
+                            modifier = Modifier
+                                .padding(horizontal = 20.dp)
+                        )
+
+
+                        ProfileContent(
+                            profile = ProfileItem.LOGOUT,
+                            onClick = {
+                                viewModel.logout()
+                                navigateToLogin()
+                            }
+                        )
+                        HorizontalDivider(
+                            color = Color.Black.copy(
+                                alpha = 0.1f
+                            ),
+                            modifier = Modifier
+                                .padding(horizontal = 20.dp)
+                        )
+
+                    }
+                }
         } ?: run {
             Column(
                 modifier = Modifier

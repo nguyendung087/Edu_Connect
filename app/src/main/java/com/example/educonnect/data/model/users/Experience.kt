@@ -22,15 +22,15 @@ import java.time.LocalDate
 data class Experience(
     @PrimaryKey
     @ColumnInfo(name = "experience_id")
-    val experienceId: String,
+    val experienceId: String = "",
     @ColumnInfo(name = "teacher_id")
-    val teacherId: String,
+    val teacherId: String = "",
     @ColumnInfo(name = "company_name")
-    val companyName: String,
-    val position: String,
+    val companyName: String = "",
+    val position: String = "",
     @ColumnInfo(name = "start_date")
-    val startDate: LocalDate,
+    val startDate: LocalDate = LocalDate.of(1990, 1, 1),
     @ColumnInfo(name = "end_date")
-    val endDate: LocalDate,
-    val description: String
+    val endDate: LocalDate = LocalDate.of(1990, 1, 1),
+    val description: String = ""
 )

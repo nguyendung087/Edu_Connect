@@ -32,12 +32,12 @@ import java.time.LocalDateTime
 data class Message(
     @PrimaryKey
     @ColumnInfo(name = "message_id")
-    val messageId: String,
+    val messageId: String = "",
     @ColumnInfo(name = "conversation_id")
-    val conversationId: String,
+    val conversationId: String = "",
     @ColumnInfo(name = "sender_id")
-    val senderId: String,
-    val content: String,
+    val senderId: String = "",
+    val content: String = "",
     val timestamp: LocalDateTime,
-    val status: String
+    val status: String = ""
 )

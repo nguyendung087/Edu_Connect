@@ -30,11 +30,26 @@ class OfflineCoursesRepository(
     override fun getCourseWithTeacherByCourse(courseId: String): Flow<CourseWithTeacher> =
         courseDao.getCourseWithTeacherByCourse(courseId)
 
+    override fun getCourseWithTeacherByTeacher(teacherId: String?): Flow<List<CourseWithTeacher>> =
+        courseDao.getCourseWithTeacherByTeacher(teacherId)
+
     override suspend fun insertLessonStream(lesson: List<Lesson>) =
         courseDao.insertLesson(lesson)
 
+    override suspend fun insertALessonStream(lesson: Lesson) =
+        courseDao.insertALesson(lesson)
+
+    override suspend fun deleteLessonStream(lesson: Lesson) =
+        courseDao.deleteLesson(lesson)
+
+    override suspend fun updateLessonStream(lesson: Lesson) =
+        courseDao.updateLesson(lesson)
+
     override fun getAllLessonsByCourseStream(courseId: String): Flow<List<Lesson>> =
         courseDao.getAllLessonsByCourse(courseId)
+
+    override fun getLessonCountByCourse(courseId: String): Flow<Int> =
+        courseDao.getLessonCountByCourse(courseId)
 
     override fun getEnrollmentsByUserStream(studentId: String): Flow<List<Enrollment>> =
         courseDao.getEnrollmentsByUser(studentId)

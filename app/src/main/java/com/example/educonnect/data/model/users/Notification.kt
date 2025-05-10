@@ -22,14 +22,14 @@ import java.time.LocalDateTime
 data class Notification(
     @PrimaryKey
     @ColumnInfo(name = "notification_id")
-    val notificationId: String,
+    val notificationId: String = "",
     @ColumnInfo(name = "user_id")
-    val userId: String,
-    val title : String,
-    val content: String,
-    val type: String,
+    val userId: String = "",
+    val title : String = "",
+    val content: String = "",
+    val type: String = "",
     @ColumnInfo(name = "is_read")
-    val isRead : Boolean,
+    val isRead : Boolean = false,
     @ColumnInfo(name = "time_stamp")
-    val timeStamp : LocalDateTime
+    val timeStamp : LocalDateTime = LocalDateTime.now()
 )

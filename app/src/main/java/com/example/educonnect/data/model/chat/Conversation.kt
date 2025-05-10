@@ -32,13 +32,13 @@ import java.time.LocalDateTime
 data class Conversation(
     @PrimaryKey
     @ColumnInfo(name = "conversation_id")
-    val conversationId: String,
+    val conversationId: String = "",
     @ColumnInfo(name = "user1_id")
-    val user1Id: String,
+    val user1Id: String = "",
     @ColumnInfo(name = "user2_id")
-    val user2Id: String,
+    val user2Id: String = "",
     @ColumnInfo(name = "created_at")
-    val createdAt: LocalDateTime,
+    val createdAt: LocalDateTime = LocalDateTime.now(),
     @ColumnInfo(name = "updated_at")
-    val updatedAt: LocalDateTime
+    val updatedAt: LocalDateTime = LocalDateTime.now()
 )

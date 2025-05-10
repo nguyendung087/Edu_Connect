@@ -2,6 +2,7 @@ package com.example.educonnect.data
 
 import com.example.educonnect.R
 import com.example.educonnect.data.model.courses.Course
+import com.example.educonnect.data.model.courses.Lesson
 import com.example.educonnect.data.model.users.Experience
 import com.example.educonnect.data.model.users.TeacherProfile
 import com.example.educonnect.data.model.users.User
@@ -360,6 +361,386 @@ object SampleData {
             startDate = LocalDate.of(2017, 6, 1),
             endDate = LocalDate.of(2018, 12, 31),
             description = "Tư vấn và triển khai giải pháp DevOps cho các công ty startup."
+        )
+    )
+
+    val lessons = listOf(
+        // Lessons for AI-101: Xây dựng hệ thống nhận diện khuôn mặt
+        Lesson(
+            lessonId = "AI-101-1",
+            courseId = "AI-101",
+            title = "Giới thiệu về Nhận diện khuôn mặt",
+            content = "Tổng quan về nhận diện khuôn mặt và ứng dụng của nó trong thực tế.",
+            type = "Video",
+            fileUrl = "https://example.com/ai101_1.mp4"
+        ),
+        Lesson(
+            lessonId = "AI-101-2",
+            courseId = "AI-101",
+            title = "Cơ bản về OpenCV",
+            content = "Hướng dẫn cài đặt OpenCV và các chức năng cơ bản.",
+            type = "Documents",
+            fileUrl = "https://example.com/ai101_2.mp4"
+        ),
+        Lesson(
+            lessonId = "AI-101-3",
+            courseId = "AI-101",
+            title = "Phát hiện khuôn mặt với Haar Cascades",
+            content = "Sử dụng Haar Cascades trong OpenCV để phát hiện khuôn mặt trong ảnh và video.",
+            type = "Documents",
+            fileUrl = "https://example.com/ai101_3.mp4"
+        ),
+        Lesson(
+            lessonId = "AI-101-4",
+            courseId = "AI-101",
+            title = "Mô hình Deep Learning cho Nhận diện khuôn mặt",
+            content = "Giới thiệu các mô hình deep learning như FaceNet cho nhận diện khuôn mặt.",
+            type = "Documents",
+            fileUrl = "https://example.com/ai101_4.mp4"
+        ),
+        Lesson(
+            lessonId = "AI-101-5",
+            courseId = "AI-101",
+            title = "Xây dựng hệ thống nhận diện khuôn mặt",
+            content = "Hướng dẫn từng bước để xây dựng một hệ thống nhận diện khuôn mặt hoàn chỉnh.",
+            type = "Documents",
+            fileUrl = "https://example.com/ai101_5.mp4"
+        ),
+
+        // Lessons for NLP-101: Xử lý ngôn ngữ tự nhiên với BERT
+        Lesson(
+            lessonId = "NLP-101-1",
+            courseId = "NLP-101",
+            title = "Giới thiệu về NLP và BERT",
+            content = "Tổng quan về xử lý ngôn ngữ tự nhiên và mô hình BERT.",
+            type = "Video",
+            fileUrl = "https://example.com/nlp101_1.mp4"
+        ),
+        Lesson(
+            lessonId = "NLP-101-2",
+            courseId = "NLP-101",
+            title = "Cơ bản về Transformer",
+            content = "Hiểu về kiến trúc Transformer và vai trò của nó trong NLP.",
+            type = "Documents",
+            fileUrl = "https://example.com/nlp101_2.mp4"
+        ),
+        Lesson(
+            lessonId = "NLP-101-3",
+            courseId = "NLP-101",
+            title = "Fine-tuning BERT cho các tác vụ NLP",
+            content = "Học cách tinh chỉnh BERT cho các tác vụ như phân loại văn bản.",
+            type = "Documents",
+            fileUrl = "https://example.com/nlp101_3.mp4"
+        ),
+        Lesson(
+            lessonId = "NLP-101-4",
+            courseId = "NLP-101",
+            title = "Xây dựng chatbot với BERT",
+            content = "Sử dụng BERT để xây dựng một chatbot thông minh.",
+            type = "Documents",
+            fileUrl = "https://example.com/nlp101_4.mp4"
+        ),
+        Lesson(
+            lessonId = "NLP-101-5",
+            courseId = "NLP-101",
+            title = "Ứng dụng BERT trong dịch máy",
+            content = "Khám phá cách BERT được sử dụng trong các hệ thống dịch máy.",
+            type = "Documents",
+            fileUrl = "https://example.com/nlp101_5.mp4"
+        ),
+
+        // Lessons for WEB-101: Xây dựng REST API với Node.js
+        Lesson(
+            lessonId = "WEB-101-1",
+            courseId = "WEB-101",
+            title = "Giới thiệu về REST API",
+            content = "Hiểu về khái niệm REST và cách thiết kế API.",
+            type = "Video",
+            fileUrl = "https://example.com/web101_1.mp4"
+        ),
+        Lesson(
+            lessonId = "WEB-101-2",
+            courseId = "WEB-101",
+            title = "Cài đặt môi trường Node.js và Express",
+            content = "Hướng dẫn cài đặt Node.js và framework Express.",
+            type = "Documents",
+            fileUrl = "https://example.com/web101_2.mp4"
+        ),
+        Lesson(
+            lessonId = "WEB-101-3",
+            courseId = "WEB-101",
+            title = "Xây dựng các route cơ bản",
+            content = "Tạo các route cho API với Express.",
+            type = "Documents",
+            fileUrl = "https://example.com/web101_3.mp4"
+        ),
+        Lesson(
+            lessonId = "WEB-101-4",
+            courseId = "WEB-101",
+            title = "Xác thực với JWT",
+            content = "Triển khai xác thực người dùng sử dụng JSON Web Tokens.",
+            type = "Documents",
+            fileUrl = "https://example.com/web101_4.mp4"
+        ),
+        Lesson(
+            lessonId = "WEB-101-5",
+            courseId = "WEB-101",
+            title = "Kết nối với PostgreSQL",
+            content = "Kết nối API với cơ sở dữ liệu PostgreSQL.",
+            type = "Documents",
+            fileUrl = "https://example.com/web101_5.mp4"
+        ),
+
+        // Lessons for WEB-102: Microfrontend với Module Federation
+        Lesson(
+            lessonId = "WEB-102-1",
+            courseId = "WEB-102",
+            title = "Khái niệm Microfrontend",
+            content = "Tìm hiểu về Microfrontend và lợi ích của nó.",
+            type = "Video",
+            fileUrl = "https://example.com/web102_1.mp4"
+        ),
+        Lesson(
+            lessonId = "WEB-102-2",
+            courseId = "WEB-102",
+            title = "Giới thiệu Module Federation",
+            content = "Hiểu về Module Federation trong Webpack 5.",
+            type = "Documents",
+            fileUrl = "https://example.com/web102_2.mp4"
+        ),
+        Lesson(
+            lessonId = "WEB-102-3",
+            courseId = "WEB-102",
+            title = "Thiết lập dự án Microfrontend",
+            content = "Bắt đầu một dự án Microfrontend với Module Federation.",
+            type = "Documents",
+            fileUrl = "https://example.com/web102_3.mp4"
+        ),
+        Lesson(
+            lessonId = "WEB-102-4",
+            courseId = "WEB-102",
+            title = "Chia sẻ component giữa các module",
+            content = "Cách chia sẻ và sử dụng component giữa các microfrontend.",
+            type = "Documents",
+            fileUrl = "https://example.com/web102_4.mp4"
+        ),
+        Lesson(
+            lessonId = "WEB-102-5",
+            courseId = "WEB-102",
+            title = "Triển khai Microfrontend",
+            content = "Các best practices khi triển khai Microfrontend.",
+            type = "Documents",
+            fileUrl = "https://example.com/web102_5.mp4"
+        ),
+
+        // Lessons for MOB-101: Flutter Animation Masterclass
+        Lesson(
+            lessonId = "MOB-101-1",
+            courseId = "MOB-101",
+            title = "Cơ bản về Animation trong Flutter",
+            content = "Giới thiệu về animation và cách sử dụng trong Flutter.",
+            type = "Video",
+            fileUrl = "https://example.com/mob101_1.mp4"
+        ),
+        Lesson(
+            lessonId = "MOB-101-2",
+            courseId = "MOB-101",
+            title = "Sử dụng AnimationController",
+            content = "Học cách điều khiển animation với AnimationController.",
+            type = "Documents",
+            fileUrl = "https://example.com/mob101_2.mp4"
+        ),
+        Lesson(
+            lessonId = "MOB-101-3",
+            courseId = "MOB-101",
+            title = "Tạo animation với Rive",
+            content = "Sử dụng Rive để tạo animation phức tạp.",
+            type = "Documents",
+            fileUrl = "https://example.com/mob101_3.mp4"
+        ),
+        Lesson(
+            lessonId = "MOB-101-4",
+            courseId = "MOB-101",
+            title = "Animation nâng cao",
+            content = "Các kỹ thuật animation nâng cao trong Flutter.",
+            type = "Documents",
+            fileUrl = "https://example.com/mob101_4.mp4"
+        ),
+        Lesson(
+            lessonId = "MOB-101-5",
+            courseId = "MOB-101",
+            title = "Ứng dụng animation trong app",
+            content = "Áp dụng animation vào các thành phần của ứng dụng.",
+            type = "Documents",
+            fileUrl = "https://example.com/mob101_5.mp4"
+        ),
+
+        // Lessons for MOB-102: SwiftUI Pro Tips
+        Lesson(
+            lessonId = "MOB-102-1",
+            courseId = "MOB-102",
+            title = "Giới thiệu SwiftUI",
+            content = "Tổng quan về SwiftUI và cách xây dựng giao diện.",
+            type = "Video",
+            fileUrl = "https://example.com/mob102_1.mp4"
+        ),
+        Lesson(
+            lessonId = "MOB-102-2",
+            courseId = "MOB-102",
+            title = "Sử dụng Combine framework",
+            content = "Học về reactive programming với Combine.",
+            type = "Documents",
+            fileUrl = "https://example.com/mob102_2.mp4"
+        ),
+        Lesson(
+            lessonId = "MOB-102-3",
+            courseId = "MOB-102",
+            title = "Quản lý dữ liệu với Core Data",
+            content = "Sử dụng Core Data để lưu trữ dữ liệu trong ứng dụng.",
+            type = "Documents",
+            fileUrl = "https://example.com/mob102_3.mp4"
+        ),
+        Lesson(
+            lessonId = "MOB-102-4",
+            courseId = "MOB-102",
+            title = "Tối ưu hóa giao diện",
+            content = "Các tips để tối ưu hóa giao diện SwiftUI.",
+            type = "Documents",
+            fileUrl = "https://example.com/mob102_4.mp4"
+        ),
+        Lesson(
+            lessonId = "MOB-102-5",
+            courseId = "MOB-102",
+            title = "Xây dựng app hoàn chỉnh",
+            content = "Hướng dẫn xây dựng một ứng dụng hoàn chỉnh với SwiftUI.",
+            type = "Documents",
+            fileUrl = "https://example.com/mob102_5.mp4"
+        ),
+
+        // Lessons for DEV-101: Terraform Infrastructure as Code
+        Lesson(
+            lessonId = "DEV-101-1",
+            courseId = "DEV-101",
+            title = "Giới thiệu về IaC và Terraform",
+            content = "Hiểu về Infrastructure as Code và công cụ Terraform.",
+            type = "Video",
+            fileUrl = "https://example.com/dev101_1.mp4"
+        ),
+        Lesson(
+            lessonId = "DEV-101-2",
+            courseId = "DEV-101",
+            title = "Cài đặt và cấu hình Terraform",
+            content = "Hướng dẫn cài đặt Terraform và cấu hình cơ bản.",
+            type = "Documents",
+            fileUrl = "https://example.com/dev101_2.mp4"
+        ),
+        Lesson(
+            lessonId = "DEV-101-3",
+            courseId = "DEV-101",
+            title = "Viết Terraform configuration",
+            content = "Học cách viết các file configuration cho Terraform.",
+            type = "Documents",
+            fileUrl = "https://example.com/dev101_3.mp4"
+        ),
+        Lesson(
+            lessonId = "DEV-101-4",
+            courseId = "DEV-101",
+            title = "Triển khai trên AWS",
+            content = "Sử dụng Terraform để triển khai infrastructure trên AWS.",
+            type = "Documents",
+            fileUrl = "https://example.com/dev101_4.mp4"
+        ),
+        Lesson(
+            lessonId = "DEV-101-5",
+            courseId = "DEV-101",
+            title = "Quản lý multi-cloud với Terraform",
+            content = "Cách quản lý nhiều nhà cung cấp cloud với Terraform.",
+            type = "Documents",
+            fileUrl = "https://example.com/dev101_5.mp4"
+        ),
+
+        // Lessons for BLOCK-101: Smart Contract Development
+        Lesson(
+            lessonId = "BLOCK-101-1",
+            courseId = "BLOCK-101",
+            title = "Cơ bản về Blockchain và Ethereum",
+            content = "Giới thiệu về công nghệ Blockchain và nền tảng Ethereum.",
+            type = "Video",
+            fileUrl = "https://example.com/block101_1.mp4"
+        ),
+        Lesson(
+            lessonId = "BLOCK-101-2",
+            courseId = "BLOCK-101",
+            title = "Ngôn ngữ Solidity",
+            content = "Học ngôn ngữ lập trình Solidity cho Smart Contract.",
+            type = "Documents",
+            fileUrl = "https://example.com/block101_2.mp4"
+        ),
+        Lesson(
+            lessonId = "BLOCK-101-3",
+            courseId = "BLOCK-101",
+            title = "Viết Smart Contract đơn giản",
+            content = "Hướng dẫn viết một Smart Contract cơ bản.",
+            type = "Documents",
+            fileUrl = "https://example.com/block101_3.mp4"
+        ),
+        Lesson(
+            lessonId = "BLOCK-101-4",
+            courseId = "BLOCK-101",
+            title = "Triển khai Smart Contract",
+            content = "Cách triển khai Smart Contract lên mạng Ethereum.",
+            type = "Documents",
+            fileUrl = "https://example.com/block101_4.mp4"
+        ),
+        Lesson(
+            lessonId = "BLOCK-101-5",
+            courseId = "BLOCK-101",
+            title = "Xây dựng DApp",
+            content = "Hướng dẫn xây dựng một ứng dụng phi tập trung (DApp).",
+            type = "Documents",
+            fileUrl = "https://example.com/block101_5.mp4"
+        ),
+
+        // Lessons for GAME-101: Unity 3D Game Programming
+        Lesson(
+            lessonId = "GAME-101-1",
+            courseId = "GAME-101",
+            title = "Giới thiệu Unity và C#",
+            content = "Tổng quan về Unity và ngôn ngữ lập trình C#.",
+            type = "Video",
+            fileUrl = "https://example.com/game101_1.mp4"
+        ),
+        Lesson(
+            lessonId = "GAME-101-2",
+            courseId = "GAME-101",
+            title = "Thiết lập cảnh game",
+            content = "Học cách thiết lập cảnh game trong Unity.",
+            type = "Documents",
+            fileUrl = "https://example.com/game101_2.mp4"
+        ),
+        Lesson(
+            lessonId = "GAME-101-3",
+            courseId = "GAME-101",
+            title = "Lập trình nhân vật",
+            content = "Viết code để điều khiển nhân vật trong game.",
+            type = "Documents",
+            fileUrl = "https://example.com/game101_3.mp4"
+        ),
+        Lesson(
+            lessonId = "GAME-101-4",
+            courseId = "GAME-101",
+            title = "Xử lý va chạm và vật lý",
+            content = "Sử dụng physics engine để xử lý va chạm.",
+            type = "Documents",
+            fileUrl = "https://example.com/game101_4.mp4"
+        ),
+        Lesson(
+            lessonId = "GAME-101-5",
+            courseId = "GAME-101",
+            title = "Xây dựng game FPS hoàn chỉnh",
+            content = "Hướng dẫn xây dựng một game FPS từ đầu đến cuối.",
+            type = "Documents",
+            fileUrl = "https://example.com/game101_5.mp4"
         )
     )
 }

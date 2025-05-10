@@ -33,7 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.educonnect.data.model.courses.CourseWithTeacher
-import com.example.educonnect.ui.courses.CourseViewModel
+import com.example.educonnect.ui.students_screens.courses.CourseViewModel
 
 @Composable
 fun ConfirmationNotification(

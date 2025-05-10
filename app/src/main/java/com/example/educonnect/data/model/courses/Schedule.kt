@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 
 @Entity(
     tableName = "schedules",
@@ -21,11 +22,11 @@ import androidx.room.PrimaryKey
 data class Schedule(
     @PrimaryKey
     @ColumnInfo(name = "schedule_id")
-    val scheduleId: String,
+    val scheduleId: String = "",
     @ColumnInfo(name = "lesson_id")
-    val lessonId: String,
+    val lessonId: String = "",
     @ColumnInfo(name = "start_time")
-    val startTime: Long,
+    val startTime: LocalDateTime = LocalDateTime.now(),
     @ColumnInfo(name = "end_time")
-    val endTime: Long
+    val endTime: LocalDateTime = LocalDateTime.now()
 )

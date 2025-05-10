@@ -22,12 +22,12 @@ import java.time.LocalDateTime
 data class Assignment(
     @PrimaryKey
     @ColumnInfo(name = "assignment_id")
-    val assignmentId: String,
+    val assignmentId: String = "",
     @ColumnInfo(name = "course_id")
-    val courseId: String,
-    val title: String,
-    val description : String,
-    val deadline: LocalDateTime,
+    val courseId: String = "",
+    val title: String = "",
+    val description : String = "",
+    val deadline: LocalDateTime = LocalDateTime.now(),
     @ColumnInfo(name = "max_score")
-    val maxScore: Float
+    val maxScore: Float = 0.0f
 )
