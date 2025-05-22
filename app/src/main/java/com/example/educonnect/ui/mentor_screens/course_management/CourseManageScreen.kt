@@ -97,13 +97,15 @@ fun CourseManageScreen(
     ) {
         Column(
             modifier = Modifier
+                .background(Color.White)
                 .fillMaxSize()
                 .padding(
+                    start = 20.dp,
+                    end = 20.dp,
                     top = it.calculateTopPadding(),
                     bottom = it.calculateBottomPadding()
                 )
                 .padding(innerPadding)
-                .background(Color.White),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),

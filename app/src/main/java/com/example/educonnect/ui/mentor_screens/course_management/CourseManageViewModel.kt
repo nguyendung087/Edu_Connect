@@ -25,7 +25,7 @@ class CourseManageViewModel(
 
     fun loadCourseWithTeacher(teacherId : String?) {
         viewModelScope.launch {
-            courseRepository.getCourseWithTeacherByTeacher(teacherId).collect { courses ->
+            courseRepository.getCourseWithTeacherByTeacherStream(teacherId).collect { courses ->
                 _courseUiState.update { currentState ->
                     currentState.copy(
                         courseWithTeacherList = courses
@@ -33,7 +33,7 @@ class CourseManageViewModel(
                 }
 
                 courses.forEach { course ->
-                    courseRepository.getLessonCountByCourse(course.course.courseId).collect { count ->
+                    courseRepository.getLessonCountByCourseStream(course.course.courseId).collect { count ->
                         _courseUiState.update { currentState ->
                             currentState.copy(
                                 lessonCounts = count

@@ -6,6 +6,7 @@ import com.example.educonnect.data.model.courses.Course
 import com.example.educonnect.data.model.courses.CourseWithTeacher
 import com.example.educonnect.data.model.courses.Enrollment
 import com.example.educonnect.data.model.courses.EnrollmentWithCourseAndTeacher
+import com.example.educonnect.data.model.courses.EnrollmentWithStudent
 import com.example.educonnect.data.model.courses.Lesson
 import kotlinx.coroutines.flow.Flow
 
@@ -24,13 +25,16 @@ class OfflineCoursesRepository(
     override fun getCourseByIdStream(courseId: String): Flow<Course?> =
         courseDao.getCourseById(courseId)
 
-    override fun getCoursesWithTeachers(): Flow<List<CourseWithTeacher>> =
+    override fun searchCoursesWithTeacherStream(query: String): Flow<List<CourseWithTeacher>> =
+        courseDao.searchCoursesWithTeacher(query)
+
+    override fun getCoursesWithTeachersStream(): Flow<List<CourseWithTeacher>> =
         courseDao.getCoursesWithTeachers()
 
-    override fun getCourseWithTeacherByCourse(courseId: String): Flow<CourseWithTeacher> =
+    override fun getCourseWithTeacherByCourseStream(courseId: String): Flow<CourseWithTeacher> =
         courseDao.getCourseWithTeacherByCourse(courseId)
 
-    override fun getCourseWithTeacherByTeacher(teacherId: String?): Flow<List<CourseWithTeacher>> =
+    override fun getCourseWithTeacherByTeacherStream(teacherId: String?): Flow<List<CourseWithTeacher>> =
         courseDao.getCourseWithTeacherByTeacher(teacherId)
 
     override suspend fun insertLessonStream(lesson: List<Lesson>) =
@@ -48,7 +52,7 @@ class OfflineCoursesRepository(
     override fun getAllLessonsByCourseStream(courseId: String): Flow<List<Lesson>> =
         courseDao.getAllLessonsByCourse(courseId)
 
-    override fun getLessonCountByCourse(courseId: String): Flow<Int> =
+    override fun getLessonCountByCourseStream(courseId: String): Flow<Int> =
         courseDao.getLessonCountByCourse(courseId)
 
     override fun getEnrollmentsByUserStream(studentId: String): Flow<List<Enrollment>> =
@@ -59,6 +63,9 @@ class OfflineCoursesRepository(
 
     override fun getAllEnrollmentsByCourseCountStream(courseId: String): Flow<Int> =
         courseDao.getAllEnrollmentsByCourseCount(courseId)
+
+    override fun getStudentsByCourseStream(courseId: String): Flow<List<EnrollmentWithStudent>> =
+        courseDao.getStudentsByCourse(courseId)
 
     override suspend fun insertEnrollmentStream(enrollment: Enrollment) =
         courseDao.insertEnrollment(enrollment)

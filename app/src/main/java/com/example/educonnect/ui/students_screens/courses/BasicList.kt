@@ -121,11 +121,13 @@ internal fun CourseItem(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    val progress = String.format("%.0f", enrollment.enrollment.progress)
                     LinearIndicator(
+                        currentProgress = enrollment.enrollment.progress,
                         modifier = Modifier.weight(3f)
                     )
                     Text(
-                        "20/25",
+                        "$progress/25",
                         color = Color.Gray,
                         modifier = Modifier
                             .padding(start = 8.dp)
@@ -139,12 +141,9 @@ internal fun CourseItem(
 
 @Composable
 fun LinearIndicator(
+    currentProgress : Float,
     modifier: Modifier = Modifier
 ) {
-    var currentProgress by remember { mutableStateOf(20 / 25f) }
-//    var loading by remember { mutableStateOf(false) }
-//    val scope = rememberCoroutineScope()
-
     Column(
         modifier = modifier
     ) {
@@ -152,7 +151,7 @@ fun LinearIndicator(
             color = Color(0xFF0961F5),
 
             progress = {
-                currentProgress
+                currentProgress / 25
             },
             modifier = Modifier
                 .height(8.dp)

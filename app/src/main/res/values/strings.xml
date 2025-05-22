@@ -29,6 +29,11 @@
     <string name="orr">Or sign in with</string>
     <string name="signin">Sign In</string>
     <string name="home_subtitle">Let\'s start learning</string>
+    <string name="category">Phân loại</string>
+    <string name="description">Nội dung</string>
+    <string name="assign">Thời gian giao</string>
+    <string name="deadline">Hạn nộp</string>
+    <string name="max_score">Điểm tối đa</string>
 
     <string name="lesson_title">Tiêu đề</string>
     <string name="lesson_content">Nội dung</string>
@@ -36,9 +41,11 @@
     <string name="file_url">Tệp đính kèm</string>
 
     <string name="home_title">Home</string>
+    <string name="search_title">Seacrh</string>
     <string name="mentor_title">Top Mentor</string>
     <string name="mentor_detail_title">Mentor Details</string>
     <string name="chat_title">Chat</string>
+    <string name="conversation_title">Conversation</string>
     <string name="course_title">My Course</string>
     <string name="course_detail_title">Course Details</string>
     <string name="notification_title">Notification</string>
@@ -50,4 +57,8 @@
     <string name="course_manage_details">Course Management Details</string>
     <string name="class_manage">Class Management</string>
     <string name="class_manage_details">Class Management Details</string>
+    <string name="planning">My Planning</string>
+    <string name="grade">Grade Books</string>
+    <string name="student">Students</string>
+    <string name="assignment">Assignment</string>
 </resources>

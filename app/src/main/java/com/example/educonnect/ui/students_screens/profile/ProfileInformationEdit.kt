@@ -1,6 +1,12 @@
 package com.example.educonnect.ui.students_screens.profile
 
 import android.annotation.SuppressLint
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.util.Base64
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -47,12 +53,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.example.educonnect.R
 import com.example.educonnect.data.model.users.StudentProfile
 import com.example.educonnect.ui.EduViewModelProvider
@@ -80,6 +90,7 @@ fun ProfileEditScreen(
         factory = EduViewModelProvider.Factory
     )
 ) {
+    val uiState = viewModel.userProfileUiState
     val coroutineScope = rememberCoroutineScope()
 
     var expanded by remember { mutableStateOf(false) }
@@ -90,6 +101,15 @@ fun ProfileEditScreen(
     LaunchedEffect(authState.currentUserId) {
         authState.currentUserId?.let { userId ->
             viewModel.setCurrentUserId(userId)
+            viewModel.downloadAvatar()
+        }
+    }
+
+    val pickImageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri  ->
+        uri?.let {
+            viewModel.uploadFile(it)
         }
     }
 
@@ -122,7 +142,7 @@ fun ProfileEditScreen(
         }
     ) {
         ProfileEditBody(
-            uiState = viewModel.userProfileUiState,
+            uiState = uiState,
             onProfileChange = viewModel::updateUiState,
             expanded = expanded,
             onExpandedChange = {
@@ -139,6 +159,7 @@ fun ProfileEditScreen(
             onDateDismissRequest = {
                 showDatePicker = false
             },
+            pickImageLauncher = pickImageLauncher,
             onClick = {
                 expanded = false
             },
@@ -175,6 +196,7 @@ private fun ProfileEditBody(
     expanded: Boolean,
     onExpandedChange: (Boolean) -> Unit,
     onDismissRequest: () -> Unit,
+    pickImageLauncher: ActivityResultLauncher<String>,
     onClick: (String) -> Unit,
     onSignUp: () -> Unit,
     modifier: Modifier = Modifier
@@ -196,6 +218,8 @@ private fun ProfileEditBody(
                     datePickerState = datePickerState,
                     onExpandedChange = onExpandedChange,
                     onDismissRequest = onDismissRequest,
+                    pickImageLauncher = pickImageLauncher,
+                    userAvatar = uiState.currentUser.avatarUrl,
                     onClick = onClick
                 )
                 TextButton(
@@ -255,13 +279,15 @@ private fun ProfileTextField(
     datePickerState: DatePickerState,
     onExpandedChange : (Boolean) -> Unit,
     onDismissRequest : () -> Unit,
+    userAvatar: String,
+    pickImageLauncher: ActivityResultLauncher<String>,
     onClick : (String) -> Unit,
 ) {
     ProfileAvatar(
-        userAvatar = currentUser.avatarUrl,
+        userAvatar = userAvatar,
         userName = currentUser.name,
         onClick = {
-
+            pickImageLauncher.launch("*/*")
         }
     )
 
@@ -518,27 +544,35 @@ private fun ProfileTextField(
 
 @Composable
 private fun ProfileAvatar(
-    @DrawableRes userAvatar : Int,
+    userAvatar : String,
     userName : String,
     onClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
-            .padding(vertical = 12.dp)
-            .clickable {
-
-            },
+            .padding(vertical = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Box(
+            modifier = Modifier.clickable {
+                onClick()
+            },
             contentAlignment = Alignment.BottomEnd
         ) {
-            Image(
-                painter = painterResource(id = userAvatar),
-                contentDescription = userName,
-                modifier = Modifier.size(150.dp)
-            )
+            if (userAvatar.isBlank()) {
+                CircularProgressIndicator(modifier = Modifier.size(150.dp))
+            }
+            else {
+                Image(
+                    rememberAsyncImagePainter(
+                        model = userAvatar.ifBlank { R.drawable.person_crop_circle_fill_svgrepo_com },
+                        placeholder = painterResource(R.drawable.person_crop_circle_fill_svgrepo_com)
+                    ),
+                    contentDescription = userName,
+                    modifier = Modifier.size(150.dp)
+                )
+            }
             Box(
                 modifier = Modifier
                     .size(35.dp)

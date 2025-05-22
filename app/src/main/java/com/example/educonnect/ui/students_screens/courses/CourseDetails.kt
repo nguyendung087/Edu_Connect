@@ -3,12 +3,15 @@ package com.example.educonnect.ui.students_screens.courses
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -53,7 +56,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -147,10 +152,15 @@ fun CourseDetails(
     val isEnrolled by viewModel.isUserEnrolled(authState.currentUserId!!, courseId)
         .collectAsState(initial = false)
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Gray)
+    ) {
         CourseDetailsAppBar(
             navigateBack = navigateBack,
             isBookmarked = isBookmarked,
+            courseImage = uiState.value.courseDetails.course.courseImage,
             onBookmarkChange = {
                 if (isBookmarked) {
                     showRemoveConfirmation = true
@@ -166,8 +176,7 @@ fun CourseDetails(
         )
         Box(
             modifier = Modifier
-                .weight(1f)
-                .offset(y = (-30).dp)
+                .fillMaxHeight()
                 .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
         ) {
             CourseDetailsContent(
@@ -178,16 +187,24 @@ fun CourseDetails(
                 lessons = uiState.value.lessons,
                 navigateToMentorDetails = navigateToMentorDetails,
                 modifier = Modifier
-                    .align(alignment = Alignment.TopCenter)
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .padding(
+                        top = 20.dp,
+                        start = 20.dp,
+                        end = 20.dp
+                    )
+            )
+            EnrollmentBottomBar(
+                isEnrolled = isEnrolled,
+                courseCost = uiState.value.courseDetails.course.cost,
+                onEnrollCourse = {
+                    showEnrollConfirmation = true
+                },
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
             )
         }
-        EnrollmentBottomBar(
-            isEnrolled = isEnrolled,
-            courseCost = uiState.value.courseDetails.course.cost,
-            onEnrollCourse = {
-                showEnrollConfirmation = true
-            }
-        )
     }
 
     if (showEnrollConfirmation) {
@@ -206,7 +223,7 @@ fun CourseDetails(
                         )
                     },
                     onCancel = {
-                        showRemoveConfirmation = false
+                        showEnrollConfirmation = false
                     }
                 )
             } else {
@@ -220,7 +237,7 @@ fun CourseDetails(
                         )
                     },
                     onCancel = {
-                        showRemoveConfirmation = false
+                        showEnrollConfirmation = false
                     }
                 )
             }
@@ -255,6 +272,7 @@ fun CourseDetails(
 
 @Composable
 private fun CourseDetailsAppBar(
+    courseImage : Int,
     navigateBack : () -> Unit,
     onBookmarkChange : () -> Unit,
     isBookmarked : Boolean
@@ -262,16 +280,14 @@ private fun CourseDetailsAppBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(300.dp)
-
+            .height(200.dp)
     ) {
         Image(
-            painter = painterResource(R.drawable.course),
+            painter = painterResource(courseImage),
             contentDescription = "Course Preview",
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxSize()
-
         )
         CustomAppBar(
             title = "",
@@ -303,13 +319,7 @@ private fun CourseDetailsContent(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(
-                horizontal = 20.dp,
-                vertical = 30.dp
-            ),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         item {
@@ -333,7 +343,6 @@ private fun CourseDetailsContent(
                             vertical = 5.dp,
                             horizontal = 8.dp
                         )
-
                 )
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -445,7 +454,9 @@ private fun AboutTab(
     val fullText = courseWithTeacher.course.description
     val readMoreText = "Read more"
     Column(
-        modifier = Modifier.padding(
+        modifier = Modifier
+            .height(400.dp)
+            .padding(
             vertical = 12.dp
         ),
         verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -536,7 +547,9 @@ private fun LessonTab(
     lessons: List<Lesson>
 ) {
     Column(
-        modifier = Modifier.padding(
+        modifier = Modifier
+            .height(700.dp)
+            .padding(
             vertical = 8.dp
         ),
         verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -554,7 +567,6 @@ private fun LessonTab(
         LessonList(
             lessons = lessons
         )
-
     }
 }
 
@@ -652,8 +664,10 @@ private fun LessonList(
             )
         ) {
             Row(
-                modifier = Modifier.padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Box(
                     modifier = Modifier.background(
@@ -681,7 +695,7 @@ private fun LessonList(
                     Text(
                         lesson.title,
                         style = MaterialTheme.typography.bodyMedium,
-                        fontSize = 15.sp,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold,
                     )
                     Text(
@@ -692,12 +706,6 @@ private fun LessonList(
                     )
                 }
 
-                CustomIconButton(
-                    icon = R.drawable.play_svgrepo_com,
-                    contentDescription = "",
-                    onClick = { /*TODO*/ },
-                    tint = Color(0xFF0961F5)
-                )
             }
         }
     }
@@ -725,57 +733,80 @@ private fun LessonList(
 private fun EnrollmentBottomBar(
     isEnrolled : Boolean,
     courseCost: Double,
-    onEnrollCourse : () -> Unit
+    onEnrollCourse : () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = Modifier
-            .background(Color.White)
+    Card(
+        modifier = modifier
             .fillMaxWidth()
-            .padding(
-                horizontal = 16.dp,
-                vertical = 8.dp
-            )
-        ,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+            .graphicsLayer {
+                shadowElevation = 8.dp.toPx()
+                translationY = 8f
+                shape = RoundedCornerShape(20.dp)
+                clip = false
+            }
+            .padding(top = 3.dp),
+        shape = RoundedCornerShape(
+            topStart = 20.dp,
+            topEnd = 20.dp,
+            bottomStart = 0.dp,
+            bottomEnd = 0.dp
+        ),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White,
+        ),
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(3.dp)
-        ) {
-            Text(
-                "Total Price",
-                style = MaterialTheme.typography.titleSmall,
-                fontSize = 14.sp,
-                color = Color.Gray
-            )
-            Text(
-                "$$courseCost",
-                style = MaterialTheme.typography.titleMedium,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.W700,
-                color = Color(0xFF0961F5)
-            )
-        }
-
-        TextButton(
+        Row(
             modifier = Modifier
-                .background(
-                    color = if(!isEnrolled) Color(0xFF0961F5) else Color.Black.copy(
-                        alpha = 0.3f
-                    ),
-                    shape = RoundedCornerShape(50.dp)
+                .background(Color.White)
+                .fillMaxWidth()
+                .padding(
+                    horizontal = 16.dp,
+                    vertical = 20.dp
                 ),
-            onClick = onEnrollCourse
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                if(!isEnrolled) "Đăng ký ngay" else "Hủy đăng ký",
-                style = MaterialTheme.typography.titleMedium,
-                color = if(!isEnrolled) Color.White else Color.Black,
-                fontSize = 16.sp,
-                modifier = Modifier.padding(
-                    horizontal = 40.dp
+            Column(
+                verticalArrangement = Arrangement.spacedBy(3.dp)
+            ) {
+                Text(
+                    "Total Price",
+                    style = MaterialTheme.typography.titleSmall,
+                    fontSize = 16.sp,
+                    color = Color.Gray
                 )
-            )
+                Text(
+                    "$$courseCost",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.W700,
+                    color = Color(0xFF0961F5)
+                )
+            }
+
+            TextButton(
+                modifier = Modifier
+                    .background(
+                        color = if (!isEnrolled) Color(0xFF0961F5) else Color.Black.copy(
+                            alpha = 0.3f
+                        ),
+                        shape = RoundedCornerShape(50.dp)
+                    ),
+                onClick = onEnrollCourse
+            ) {
+                Text(
+                    if (!isEnrolled) "Đăng ký ngay" else "Hủy đăng ký",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = if (!isEnrolled) Color.White else Color.Black.copy(alpha = 0.4f),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.W700,
+                    modifier = Modifier.padding(
+                        horizontal = 40.dp,
+                        vertical = 12.dp
+                    )
+                )
+            }
         }
     }
 }

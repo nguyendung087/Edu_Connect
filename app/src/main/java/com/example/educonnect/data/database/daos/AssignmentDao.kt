@@ -32,6 +32,8 @@ interface AssignmentDao {
     """)
     fun getAssignmentsByTeacher(teacherId: String): Flow<List<Assignment>>
 
+
+
     @Query("UPDATE assignments SET deadline = :newDeadline WHERE assignment_id = :assignmentId")
     suspend fun endAssignment(assignmentId: String, newDeadline: LocalDateTime)
 

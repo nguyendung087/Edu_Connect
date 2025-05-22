@@ -26,8 +26,8 @@ data class Assignment(
     @ColumnInfo(name = "course_id")
     val courseId: String = "",
     val title: String = "",
+    val type : String = "",
     val description : String = "",
+    val assignTime : LocalDateTime = LocalDateTime.now(),
     val deadline: LocalDateTime = LocalDateTime.now(),
-    @ColumnInfo(name = "max_score")
-    val maxScore: Float = 0.0f
 )

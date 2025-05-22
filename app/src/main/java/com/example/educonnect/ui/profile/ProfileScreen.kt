@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.example.educonnect.R
 import com.example.educonnect.ui.EduViewModelProvider
 import com.example.educonnect.ui.authentication.LocalAuthState
@@ -233,7 +234,7 @@ fun ProfileScreen(
 
 @Composable
 private fun ProfileAvatar(
-    @DrawableRes userAvatar : Int,
+    userAvatar : String,
     userName : String
 ) {
     Column(
@@ -242,7 +243,9 @@ private fun ProfileAvatar(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Image(
-            painter = painterResource(id = userAvatar),
+            painter = rememberAsyncImagePainter(
+                model = userAvatar.ifBlank { R.drawable.person_crop_circle_fill_svgrepo_com }
+            ),
             contentDescription = userName,
             modifier = Modifier.size(150.dp)
         )

@@ -43,12 +43,15 @@ import com.example.educonnect.ui.information_form.StudentInformationFormDestinat
 import com.example.educonnect.ui.information_form.StudentInformationScreen
 import com.example.educonnect.ui.login.LoginDestination
 import com.example.educonnect.ui.login.LoginScreen
+import com.example.educonnect.ui.mentor_screens.assignments.AssignmentDetailsDestination
+import com.example.educonnect.ui.mentor_screens.assignments.AssignmentDetailsScreen
 import com.example.educonnect.ui.mentor_screens.course_management.CourseManageDestination
-import com.example.educonnect.ui.mentor_screens.course_management.CourseManageDetailsDestination
-import com.example.educonnect.ui.mentor_screens.course_management.CourseManageDetailsScreen
 import com.example.educonnect.ui.mentor_screens.course_management.CourseManageScreen
 import com.example.educonnect.ui.mentor_screens.home.MentorHomeDestination
 import com.example.educonnect.ui.mentor_screens.home.MentorHomeScreen
+import com.example.educonnect.ui.mentor_screens.lessons.LessonTabs
+import com.example.educonnect.ui.mentor_screens.planning.PlanningDestination
+import com.example.educonnect.ui.mentor_screens.planning.PlanningScreen
 import com.example.educonnect.ui.mentor_screens.profile.MentorProfileEditDestination
 import com.example.educonnect.ui.mentor_screens.profile.MentorProfileEditScreen
 import com.example.educonnect.ui.permissions.AppScreen
@@ -57,6 +60,8 @@ import com.example.educonnect.ui.profile.ProfileDestination
 import com.example.educonnect.ui.students_screens.profile.ProfileEditDestination
 import com.example.educonnect.ui.students_screens.profile.ProfileEditScreen
 import com.example.educonnect.ui.profile.ProfileScreen
+import com.example.educonnect.ui.search.StudentSearchDestination
+import com.example.educonnect.ui.search.StudentSearchScreen
 import com.example.educonnect.ui.signup.SignUpDestination
 import com.example.educonnect.ui.signup.SignupScreen
 
@@ -122,6 +127,27 @@ fun EduNavHost(
             )
         }
 
+        composable(route = StudentSearchDestination.route) {
+            if (hasPermission(AppScreen.STUDENT_SEARCH, authState.userRole)) {
+                MainLayout(navController = navController) { innerPadding ->
+                    StudentSearchScreen(
+                        innerPadding = innerPadding,
+                        onNavigateUp = {
+                            navController.popBackStack()
+                        },
+                        navigateToMentorDetails = {
+                            navController.navigate(AppScreen.MENTOR_DETAILS.replace("{mentorId}", it))
+                        },
+                        navigateToCourseDetails = {
+                            navController.navigate(AppScreen.STUDENT_COURSE_DETAILS.replace("{courseId}", it))
+                        }
+                    )
+                }
+            } else {
+                UnauthorizedScreen(navController)
+            }
+        }
+
         composable(route = HomeDestination.route) {
             if (hasPermission(AppScreen.STUDENT_HOME, authState.userRole)) {
                 MainLayout(navController = navController) { innerPadding ->
@@ -135,6 +161,9 @@ fun EduNavHost(
                         },
                         navigateToNotificationScreen = {
                             navController.navigate(AppScreen.NOTIFICATION)
+                        },
+                        navigateToSearchScreen = {
+                            navController.navigate(AppScreen.STUDENT_SEARCH)
                         },
                         navigateToCourseDetails = {
                             navController.navigate(AppScreen.STUDENT_COURSE_DETAILS.replace("{courseId}", it))
@@ -155,6 +184,9 @@ fun EduNavHost(
                     TopMentorScreen(
                         innerPadding = innerPadding,
                         navigateBack = { navController.popBackStack() },
+                        navigateToChatScreen = {
+                            navController.navigate(AppScreen.CHAT.replace("{conversationId}", it))
+                        },
                         navigateToMentorDetails = {
                             navController.navigate(AppScreen.MENTOR_DETAILS.replace("{mentorId}", it))
                         }
@@ -239,7 +271,12 @@ fun EduNavHost(
             }
         }
 
-        composable(route = ChatDestination.route) {
+        composable(
+            route = ChatDestination.routeWithArgs,
+            arguments = listOf(navArgument(ChatDestination.conversationIdArg) {
+                type = NavType.StringType
+            })
+        ) {
             if (hasPermission(AppScreen.CHAT, authState.userRole)) {
                 MainLayout(navController = navController) {
                     ChatScreen()
@@ -313,7 +350,7 @@ fun EduNavHost(
                     CourseManageScreen(
                         innerPadding = innerPadding,
                         navigateToCourseManageDetails = {
-                            navController.navigate(AppScreen.COURSE_MANAGEMENT_DETAILS.replace("{courseId}", it))
+                            navController.navigate(AppScreen.TEACHER_PLANNING.replace("{courseId}", it))
                         }
                     )
                 }
@@ -323,20 +360,37 @@ fun EduNavHost(
         }
 
         composable(
-            route = CourseManageDetailsDestination.routeWithArgs,
-            arguments = listOf(navArgument(CourseManageDetailsDestination.courseIdArg) {
+            route = PlanningDestination.routeWithArgs,
+            arguments = listOf(navArgument(PlanningDestination.courseIdArg) {
                 type = NavType.StringType
             })
         ) {
-            if (hasPermission(AppScreen.COURSE_MANAGEMENT_DETAILS, authState.userRole)) {
-                MainLayout(navController = navController) { innerPadding ->
-                    CourseManageDetailsScreen(
+            if (hasPermission(AppScreen.TEACHER_PLANNING, authState.userRole)) {
+                TeacherMainLayout(navController = navController) { innerPadding ->
+                    PlanningScreen(
                         innerPadding = innerPadding,
-                        onNavigateBack = {
-                            navController.popBackStack()
+                        navigateToAssignmentDetails = {
+                            navController.navigate(AppScreen.TEACHER_ASSIGNMENT_DETAILS.replace("{assignmentId}", it))
                         }
                     )
                 }
+            } else {
+                UnauthorizedScreen(navController)
+            }
+        }
+
+        composable(
+            route = AssignmentDetailsDestination.routeWithArgs,
+            arguments = listOf(navArgument(AssignmentDetailsDestination.assignmentIdArg) {
+                type = NavType.StringType
+            })
+        ) {
+            if (hasPermission(AppScreen.TEACHER_ASSIGNMENT_DETAILS, authState.userRole)) {
+                AssignmentDetailsScreen(
+                    navigateUp = {
+                        navController.popBackStack()
+                    }
+                )
             } else {
                 UnauthorizedScreen(navController)
             }

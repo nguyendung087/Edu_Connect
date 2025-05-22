@@ -64,7 +64,7 @@ import java.time.LocalDateTime
         Assignment::class,
         Bookmark::class
     ],
-    version = 11,
+    version = 16,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

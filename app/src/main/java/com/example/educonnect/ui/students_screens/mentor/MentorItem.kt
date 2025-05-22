@@ -30,12 +30,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.example.educonnect.R
 import com.example.educonnect.data.model.users.TeacherProfile
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 @Composable
 fun MentorItem(
     navigateToMentorDetails : (String) -> Unit,
+    onClick: () -> Unit,
     mentor : TeacherProfile,
 ) {
     Row(
@@ -95,9 +99,7 @@ fun MentorItem(
             )
             InteractionIcon(
                 icon = R.drawable.message_text_1_svgrepo_com,
-                onClick = {
-
-                },
+                onClick = onClick,
                 modifier = Modifier
                     .background(
                         color = Color(0xFFF4F6F9),
@@ -111,7 +113,7 @@ fun MentorItem(
 
 @Composable
 internal fun MentorImage(
-    @DrawableRes mentorImage : Int,
+    mentorImage : String,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -119,7 +121,9 @@ internal fun MentorImage(
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(mentorImage),
+            painter = rememberAsyncImagePainter(
+                model = mentorImage.ifBlank { R.drawable.person_crop_circle_fill_svgrepo_com }
+            ),
             contentDescription = "Top Mentor",
             contentScale = ContentScale.Crop,
             modifier = Modifier.clip(

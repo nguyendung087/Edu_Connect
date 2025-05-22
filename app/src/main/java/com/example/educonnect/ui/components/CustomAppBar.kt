@@ -93,7 +93,7 @@ fun CustomAppBar(
 }
 
 @Composable
-private fun NavigationButton(
+internal fun NavigationButton(
     @DrawableRes icon : Int,
     onClick : () -> Unit,
     tint: Color,
@@ -109,7 +109,7 @@ private fun NavigationButton(
 }
 
 @Composable
-private fun ActionButton(
+internal fun ActionButton(
     @DrawableRes icon : Int,
     contentDescription : String,
     onClick : () -> Unit,

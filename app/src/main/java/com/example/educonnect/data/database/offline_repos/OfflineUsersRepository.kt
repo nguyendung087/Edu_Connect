@@ -42,13 +42,13 @@ class OfflineUsersRepository(
     override suspend fun getTeacherProfileStream(teacherId: String): Flow<TeacherProfile> =
         userDao.getTeacherProfile(teacherId)
 
-    override fun getAllTeacherProfile(): Flow<List<TeacherProfile>> =
+    override fun getAllTeacherProfileStream(): Flow<List<TeacherProfile>> =
         userDao.getAllTeacherProfile()
 
     override fun getStudentProfileStream(studentId: String): Flow<StudentProfile?> =
         userDao.getStudentProfile(studentId)
 
-    override fun getAllStudentProfile(): Flow<List<StudentProfile>> =
+    override fun getAllStudentProfileStream(): Flow<List<StudentProfile>> =
         userDao.getAllStudentProfile()
 
     override suspend fun insertExperienceStream(experience: List<Experience>) = userDao.insertExperience(experience)
@@ -56,4 +56,6 @@ class OfflineUsersRepository(
     override fun getExperiencesByTeacherStream(teacherId: String): Flow<List<Experience>> =
         userDao.getExperiencesByTeacher(teacherId)
 
+    override fun searchMentorsStream(query: String): Flow<List<TeacherProfile>> =
+        userDao.searchMentors(query)
 }

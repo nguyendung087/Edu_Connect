@@ -1,5 +1,6 @@
 package com.example.educonnect.data
 
+import androidx.compose.ui.graphics.Color
 import com.example.educonnect.R
 
 object LocalCourseCategoryData {
@@ -10,3 +11,13 @@ object LocalCourseCategoryData {
         Pair("Database", R.drawable.database_svgrepo_com),
     )
 }
+
+object LocalAssignmentCategoryData {
+    val assignmentCategories = listOf(
+        Pair("Quiz", Color(0xFF0961F5)),
+        Pair("Homework", Color(0xFF08AC6C)),
+        Pair("Test", Color(0xFF8C00BF)),
+        Pair("Coursework", Color(0xFFFF800D)),
+    )
+}
+

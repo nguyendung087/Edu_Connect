@@ -37,7 +37,7 @@ data class Message(
     val conversationId: String = "",
     @ColumnInfo(name = "sender_id")
     val senderId: String = "",
-    val content: String = "",
-    val timestamp: LocalDateTime,
+    val content: String? = "",
+    val timestamp: LocalDateTime = LocalDateTime.now(),
     val status: String = ""
 )

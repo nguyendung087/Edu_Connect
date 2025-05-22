@@ -33,14 +33,16 @@ interface UserRepository {
 
     suspend fun getTeacherProfileStream(teacherId: String): Flow<TeacherProfile>
 
-    fun getAllTeacherProfile(): Flow<List<TeacherProfile>>
+    fun getAllTeacherProfileStream(): Flow<List<TeacherProfile>>
 
     fun getStudentProfileStream(studentId: String): Flow<StudentProfile?>
 
-    fun getAllStudentProfile(): Flow<List<StudentProfile>>
+    fun getAllStudentProfileStream(): Flow<List<StudentProfile>>
 
     //Experience
     suspend fun insertExperienceStream(experience: List<Experience>)
 
     fun getExperiencesByTeacherStream(teacherId: String): Flow<List<Experience>>
+
+    fun searchMentorsStream(query: String): Flow<List<TeacherProfile>>
 }

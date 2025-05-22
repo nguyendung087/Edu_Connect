@@ -27,7 +27,7 @@ data class TeacherProfile(
     var teacherId: String = "",
     val name: String = "",
     @ColumnInfo(name = "avatar_url")
-    @DrawableRes val avatarUrl: Int = R.drawable.person_crop_circle_fill_svgrepo_com,
+    val avatarUrl: String = "",
     @ColumnInfo(name = "date_of_birth")
     val dateOfBirth: LocalDate = LocalDate.of(1990, 1, 1),
     val number: String = "",

@@ -60,4 +60,7 @@ interface UserDao {
 
     @Query("SELECT * FROM experience WHERE teacher_id = :teacherId")
     fun getExperiencesByTeacher(teacherId: String): Flow<List<Experience>>
+
+    @Query("SELECT * FROM teacher_profiles WHERE name LIKE '%' || :query || '%' OR specialization LIKE '%' || :query || '%'")
+    fun searchMentors(query: String): Flow<List<TeacherProfile>>
 }

@@ -115,7 +115,7 @@ object SampleData {
         TeacherProfile(
             teacherId = "pjSVl1FekBfP43QObPkLez9sqdV2",
             name = "Trần Minh Tuấn",
-            avatarUrl = R.drawable.teacher1,
+//            avatarUrl = R.drawable.teacher1,
             dateOfBirth = LocalDate.of(1988, 5, 12),
             gender = "Nam",
             number = "0912345678",
@@ -125,7 +125,7 @@ object SampleData {
         TeacherProfile(
             teacherId = "7QfIwiRbmWbCNTCXVFIyshY8d9P2",
             name = "Nguyễn Thị Hương",
-            avatarUrl = R.drawable.teacher2,
+//            avatarUrl = R.drawable.teacher2,
             gender = "Nữ",
             dateOfBirth = LocalDate.of(1997, 9, 25),
             number = "0987654321",
@@ -136,7 +136,7 @@ object SampleData {
         TeacherProfile(
             teacherId = "XVHFzuckFtNQK9R2F4RgZAoKKvB3",
             name = "Lê Văn Hải",
-            avatarUrl = R.drawable.teacher3,
+//            avatarUrl = R.drawable.teacher3,
             gender = "Nam",
             dateOfBirth = LocalDate.of(1996, 11, 3),
             number = "0909123456",
@@ -146,7 +146,7 @@ object SampleData {
         TeacherProfile(
             teacherId = "9F0Gi0UE7OPjoByNY074XrBEKN12",
             name = "Phạm Thùy Linh",
-            avatarUrl = R.drawable.teacher4,
+//            avatarUrl = R.drawable.teacher4,
             gender = "Nữ",
             dateOfBirth = LocalDate.of(1991, 4, 18),
             number = "0978123456",
@@ -156,7 +156,7 @@ object SampleData {
         TeacherProfile(
             teacherId = "ehVd4po0KBTDksTKbaF2yIEhUo02",
             name = "Vũ Đức Mạnh",
-            avatarUrl = R.drawable.teacher5,
+//            avatarUrl = R.drawable.teacher5,
             gender = "Nam",
             dateOfBirth = LocalDate.of(1990, 7, 19),
             number = "0966123456",
@@ -166,7 +166,7 @@ object SampleData {
         TeacherProfile(
             teacherId = "9zJLnRE9cJZtQYnBrNWonfLldAK2",
             name = "Hoàng Thị Ngọc",
-            avatarUrl = R.drawable.teacher6,
+//            avatarUrl = R.drawable.teacher6,
             gender = "Nữ",
             dateOfBirth = LocalDate.of(1987, 12, 30),
             number = "0933123456",
@@ -176,7 +176,7 @@ object SampleData {
         TeacherProfile(
             teacherId = "1NfAKkrhj4UJP8XPiu49BfsHcIr2",
             name = "Đỗ Quang Huy",
-            avatarUrl = R.drawable.teacher7,
+//            avatarUrl = R.drawable.teacher7,
             gender = "Nam",
             dateOfBirth = LocalDate.of(1993, 4,22),
             number = "0944123456",

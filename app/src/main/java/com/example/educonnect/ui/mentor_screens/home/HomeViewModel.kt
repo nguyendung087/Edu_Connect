@@ -49,7 +49,7 @@ class MentorHomeViewModel(
 
     fun getCoursesWithTeachersList(teacherId : String?) {
         viewModelScope.launch {
-            courseRepository.getCourseWithTeacherByTeacher(teacherId).collect { courses ->
+            courseRepository.getCourseWithTeacherByTeacherStream(teacherId).collect { courses ->
                 _homeUiState.update { currentState ->
                     currentState.copy(
                         courseWithTeacherList = courses

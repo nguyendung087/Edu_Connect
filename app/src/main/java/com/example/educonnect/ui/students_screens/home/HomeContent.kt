@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.example.educonnect.R
 import com.example.educonnect.data.model.courses.Course
 import com.example.educonnect.data.model.courses.CourseWithTeacher
@@ -223,7 +224,9 @@ internal fun MentorButton(
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(mentor.avatarUrl),
+            painter = rememberAsyncImagePainter(
+                model = mentor.avatarUrl.ifBlank { R.drawable.person_crop_circle_fill_svgrepo_com }
+            ),
             contentDescription = "Top Mentor",
             contentScale = ContentScale.Crop,
             modifier = Modifier.clip(

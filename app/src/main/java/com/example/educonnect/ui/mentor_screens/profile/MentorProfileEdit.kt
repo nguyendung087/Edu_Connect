@@ -1,6 +1,9 @@
 package com.example.educonnect.ui.mentor_screens.profile
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -53,6 +56,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.example.educonnect.R
 import com.example.educonnect.data.model.users.StudentProfile
 import com.example.educonnect.data.model.users.TeacherProfile
@@ -109,6 +113,14 @@ fun MentorProfileEditScreen(
         return
     }
 
+    val pickImageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri  ->
+        uri?.let {
+//            viewModel.uploadFile(it)
+        }
+    }
+
     Scaffold(
         topBar = {
             CustomAppBar(
@@ -150,6 +162,7 @@ fun MentorProfileEditScreen(
                     viewModel.updateUserProfile()
                 }
             },
+            pickImageLauncher = pickImageLauncher,
             modifier = Modifier
                 .background(Color.White)
                 .fillMaxSize()
@@ -179,6 +192,7 @@ private fun ProfileEditBody(
     onExpandedChange: (Boolean) -> Unit,
     onDismissRequest: () -> Unit,
     onClick: (String) -> Unit,
+    pickImageLauncher: ActivityResultLauncher<String>,
     onSignUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -199,6 +213,7 @@ private fun ProfileEditBody(
                     datePickerState = datePickerState,
                     onExpandedChange = onExpandedChange,
                     onDismissRequest = onDismissRequest,
+                    pickImageLauncher = pickImageLauncher,
                     onClick = onClick
                 )
                 TextButton(
@@ -258,13 +273,14 @@ private fun ProfileTextField(
     datePickerState: DatePickerState,
     onExpandedChange : (Boolean) -> Unit,
     onDismissRequest : () -> Unit,
+    pickImageLauncher: ActivityResultLauncher<String>,
     onClick : (String) -> Unit,
 ) {
     ProfileAvatar(
         userAvatar = currentUser.avatarUrl,
         userName = currentUser.name,
         onClick = {
-
+            pickImageLauncher.launch("*/*")
         }
     )
 
@@ -451,24 +467,24 @@ private fun ProfileTextField(
 
 @Composable
 private fun ProfileAvatar(
-    @DrawableRes userAvatar : Int,
+    userAvatar : String,
     userName : String,
     onClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
-            .padding(vertical = 12.dp)
-            .clickable {
-
-            },
+            .padding(vertical = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Box(
+            modifier = Modifier.clickable { onClick() },
             contentAlignment = Alignment.BottomEnd
         ) {
             Image(
-                painter = painterResource(id = userAvatar),
+                painter = rememberAsyncImagePainter(
+                    model = userAvatar.ifBlank { R.drawable.person_crop_circle_fill_svgrepo_com }
+                ),
                 contentDescription = userName,
                 modifier = Modifier.size(150.dp)
             )

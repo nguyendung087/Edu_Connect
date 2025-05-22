@@ -90,7 +90,7 @@ class CourseDetailsViewModel(
     }
 
     private suspend fun getCourseWithTeacherByCourse() {
-        courseRepository.getCourseWithTeacherByCourse(courseId).collect { course ->
+        courseRepository.getCourseWithTeacherByCourseStream(courseId).collect { course ->
             _courseUiState.update { currentState ->
                 currentState.copy(
                     courseDetails = course

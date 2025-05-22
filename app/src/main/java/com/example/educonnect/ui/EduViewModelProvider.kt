@@ -13,16 +13,25 @@ import com.example.educonnect.ui.students_screens.home.HomeViewModel
 import com.example.educonnect.ui.information_form.InformationFormViewModel
 import com.example.educonnect.ui.information_form.StudentInformationViewModel
 import com.example.educonnect.ui.login.LoginViewModel
-import com.example.educonnect.ui.mentor_screens.course_management.CourseManageDetailsViewModel
+import com.example.educonnect.ui.mentor_screens.assignments.AssignmentDetailsViewModel
+import com.example.educonnect.ui.mentor_screens.assignments.AssignmentViewModel
 import com.example.educonnect.ui.mentor_screens.course_management.CourseManageViewModel
 import com.example.educonnect.ui.mentor_screens.home.MentorHomeViewModel
+import com.example.educonnect.ui.mentor_screens.lessons.LessonsViewModel
+import com.example.educonnect.ui.mentor_screens.planning.PlanningViewModel
 import com.example.educonnect.ui.mentor_screens.profile.MentorProfileEditViewModel
+import com.example.educonnect.ui.mentor_screens.students.StudentManageViewModel
 import com.example.educonnect.ui.students_screens.mentor.MentorDetailsViewModel
 import com.example.educonnect.ui.students_screens.mentor.TopMentorViewModel
 import com.example.educonnect.ui.notification.NotificationViewModel
 import com.example.educonnect.ui.students_screens.profile.ProfileEditViewModel
 import com.example.educonnect.ui.profile.ProfileViewModel
+import com.example.educonnect.ui.search.SearchViewModel
 import com.example.educonnect.ui.signup.SignupViewModel
+import com.example.educonnect.services.recent_search.SearchPreferencesManager
+import com.example.educonnect.services.supabase.SupabaseFileRepository
+import com.example.educonnect.ui.chat.ChatViewModel
+import com.example.educonnect.ui.chat.ConversationViewModel
 
 object EduViewModelProvider {
     val Factory = viewModelFactory {
@@ -69,6 +78,7 @@ object EduViewModelProvider {
         }
         initializer {
             TopMentorViewModel(
+                eduApplication().supabase,
                 eduApplication().container.userRepository
             )
         }
@@ -94,7 +104,10 @@ object EduViewModelProvider {
 
         initializer {
             ProfileEditViewModel(
-                eduApplication().container.userRepository
+                eduApplication(),
+                eduApplication().supabase,
+                eduApplication().container.userRepository,
+                SupabaseFileRepository(eduApplication().supabase)
             )
         }
 
@@ -122,14 +135,63 @@ object EduViewModelProvider {
         }
 
         initializer {
-            CourseManageDetailsViewModel(
+            PlanningViewModel(
+                this.createSavedStateHandle(),
+            )
+        }
+
+        initializer {
+            LessonsViewModel(
                 this.createSavedStateHandle(),
                 eduApplication().container.courseRepository
             )
         }
 
         initializer {
+            StudentManageViewModel(
+                this.createSavedStateHandle(),
+                eduApplication().container.courseRepository
+            )
+        }
+
+        initializer {
+            AssignmentViewModel(
+                this.createSavedStateHandle(),
+                eduApplication().container.assignmentRepository
+            )
+        }
+
+        initializer {
+            AssignmentDetailsViewModel(
+                this.createSavedStateHandle(),
+                eduApplication().container.submissionRepository,
+                eduApplication().container.assignmentRepository
+            )
+        }
+
+        initializer {
             MentorProfileEditViewModel(
+                eduApplication().container.userRepository
+            )
+        }
+
+        initializer {
+            SearchViewModel(
+                SearchPreferencesManager(eduApplication()),
+                eduApplication().container.userRepository,
+                eduApplication().container.courseRepository
+            )
+        }
+
+        initializer {
+            ConversationViewModel(
+                eduApplication().container.userRepository
+            )
+        }
+
+        initializer {
+            ChatViewModel(
+                this.createSavedStateHandle(),
                 eduApplication().container.userRepository
             )
         }

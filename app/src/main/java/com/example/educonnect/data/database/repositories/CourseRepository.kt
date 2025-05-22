@@ -7,6 +7,7 @@ import com.example.educonnect.data.model.courses.Course
 import com.example.educonnect.data.model.courses.CourseWithTeacher
 import com.example.educonnect.data.model.courses.Enrollment
 import com.example.educonnect.data.model.courses.EnrollmentWithCourseAndTeacher
+import com.example.educonnect.data.model.courses.EnrollmentWithStudent
 import com.example.educonnect.data.model.courses.Lesson
 import kotlinx.coroutines.flow.Flow
 
@@ -19,11 +20,13 @@ interface CourseRepository {
 
     fun getCourseByIdStream(courseId: String): Flow<Course?>
 
-    fun getCoursesWithTeachers(): Flow<List<CourseWithTeacher>>
+    fun searchCoursesWithTeacherStream(query: String): Flow<List<CourseWithTeacher>>
 
-    fun getCourseWithTeacherByCourse(courseId: String): Flow<CourseWithTeacher>
+    fun getCoursesWithTeachersStream(): Flow<List<CourseWithTeacher>>
 
-    fun getCourseWithTeacherByTeacher(teacherId: String?): Flow<List<CourseWithTeacher>>
+    fun getCourseWithTeacherByCourseStream(courseId: String): Flow<CourseWithTeacher>
+
+    fun getCourseWithTeacherByTeacherStream(teacherId: String?): Flow<List<CourseWithTeacher>>
 
     suspend fun insertLessonStream(lesson: List<Lesson>)
 
@@ -35,13 +38,15 @@ interface CourseRepository {
 
     fun getAllLessonsByCourseStream(courseId: String): Flow<List<Lesson>>
 
-    fun getLessonCountByCourse(courseId: String): Flow<Int>
+    fun getLessonCountByCourseStream(courseId: String): Flow<Int>
 
     fun getEnrollmentsByUserStream(studentId: String): Flow<List<Enrollment>>
 
     fun getStudentProgressStream(studentId: String, courseId: String): Flow<Float>
 
     fun getAllEnrollmentsByCourseCountStream(courseId: String): Flow<Int>
+
+    fun getStudentsByCourseStream(courseId: String) : Flow<List<EnrollmentWithStudent>>
 
     suspend fun insertEnrollmentStream(enrollment: Enrollment)
 

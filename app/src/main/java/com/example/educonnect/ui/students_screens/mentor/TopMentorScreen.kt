@@ -18,6 +18,8 @@ import com.example.educonnect.R
 import com.example.educonnect.ui.EduViewModelProvider
 import com.example.educonnect.ui.components.CustomAppBar
 import com.example.educonnect.ui.navigation.NavigationDestination
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 object TopMentorDestination : NavigationDestination {
     override val route = "top_mentor"
@@ -28,6 +30,7 @@ object TopMentorDestination : NavigationDestination {
 fun TopMentorScreen(
     innerPadding : PaddingValues,
     navigateBack : () -> Unit,
+    navigateToChatScreen: (String) -> Unit,
     navigateToMentorDetails : (String) -> Unit,
     viewModel: TopMentorViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         factory = EduViewModelProvider.Factory
@@ -66,7 +69,13 @@ fun TopMentorScreen(
             ) { mentor ->
                 MentorItem(
                     mentor = mentor,
-                    navigateToMentorDetails = navigateToMentorDetails
+                    navigateToMentorDetails = navigateToMentorDetails,
+                    onClick = {
+                        val studentId = Firebase.auth.currentUser?.uid ?: ""
+                        viewModel.checkAndCreateConversation(studentId, mentor.teacherId) { conversationId ->
+                            navigateToChatScreen(conversationId)
+                        }
+                    }
                 )
             }
         }

@@ -6,6 +6,7 @@ import com.example.educonnect.data.database.daos.AssignmentDao
 import com.example.educonnect.data.database.daos.SubmissionDao
 import com.example.educonnect.data.database.repositories.SubmissionRepository
 import com.example.educonnect.data.model.courses.Submission
+import com.example.educonnect.data.model.courses.SubmissionWithStudent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import java.time.LocalDateTime
@@ -39,6 +40,9 @@ class OfflineSubmissionRepository(
         assignmentId: String
     ): Flow<Submission?>
         = submissionDao.getSubmissionByStudentAndAssignment(studentId, assignmentId)
+
+    override fun getSubmissionWithStudentStream(assignmentId: String): Flow<List<SubmissionWithStudent>> =
+        submissionDao.getSubmissionWithStudent(assignmentId)
 
     override fun getSubmissionsByStudentAndCourseStream(
         studentId: String,

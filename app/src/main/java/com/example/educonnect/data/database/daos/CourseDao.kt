@@ -1,17 +1,24 @@
 package com.example.educonnect.data.database.daos
 
+import androidx.annotation.DrawableRes
+import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.Update
+import com.example.educonnect.R
 import com.example.educonnect.data.model.courses.Course
 import com.example.educonnect.data.model.courses.CourseWithTeacher
 import com.example.educonnect.data.model.courses.Enrollment
 import com.example.educonnect.data.model.courses.EnrollmentWithCourseAndTeacher
+import com.example.educonnect.data.model.courses.EnrollmentWithStudent
 import com.example.educonnect.data.model.courses.Lesson
+import com.example.educonnect.data.model.users.StudentProfile
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 @Dao
 interface CourseDao {
@@ -26,6 +33,29 @@ interface CourseDao {
 
     @Query("SELECT * FROM courses WHERE course_id = :courseId")
     fun getCourseById(courseId: String): Flow<Course>
+
+    @Query("""
+        SELECT 
+            courses.course_id AS course_course_id,
+            courses.teacher_id AS course_teacher_id,
+            courses.course_image AS course_course_image,
+            courses.title AS course_title,
+            courses.description AS course_description,
+            courses.cost AS course_cost,
+            courses.created_at AS course_created_at,
+            teacher_profiles.teacher_id AS teacher_teacher_id,
+            teacher_profiles.name AS teacher_name,
+            teacher_profiles.avatar_url AS teacher_avatar_url,
+            teacher_profiles.specialization AS teacher_specialization,
+            teacher_profiles.date_of_birth AS teacher_date_of_birth,
+            teacher_profiles.number AS teacher_number,
+            teacher_profiles.gender AS teacher_gender
+        FROM courses 
+        INNER JOIN teacher_profiles 
+        ON courses.teacher_id = teacher_profiles.teacher_id
+        WHERE courses.title LIKE '%' || :query || '%' OR courses.description LIKE '%' || :query || '%' OR teacher_profiles.name LIKE '%' || :query || '%'
+    """)
+    fun searchCoursesWithTeacher(query: String): Flow<List<CourseWithTeacher>>
 
     @Query("""
         SELECT 
@@ -124,6 +154,27 @@ interface CourseDao {
 
     @Query("SELECT * FROM enrollments WHERE course_id = :courseId")
     fun getAllEnrollmentsByCourse(courseId: String) : Flow<List<Enrollment>>
+
+    @Query("""
+    SELECT 
+        enrollments.student_id AS enrollment_student_id,
+        enrollments.course_id AS enrollment_course_id,
+        enrollments.status AS enrollment_status,
+        enrollments.progress AS enrollment_progress,
+        student_profiles.student_id AS student_student_id,
+        student_profiles.name AS student_name,
+        student_profiles.avatar_url AS student_avatar_url,
+        student_profiles.date_of_birth AS student_date_of_birth,
+        student_profiles.gender AS student_gender,
+        student_profiles.number AS student_number,
+        student_profiles.school AS student_school,
+        student_profiles.major AS student_major,
+        student_profiles.address AS student_address
+    FROM enrollments  
+    INNER JOIN student_profiles ON enrollments.student_id = student_profiles.student_id
+    WHERE enrollments.course_id = :courseId  
+    """)
+    fun getStudentsByCourse(courseId: String) : Flow<List<EnrollmentWithStudent>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertEnrollment(enrollment: Enrollment)

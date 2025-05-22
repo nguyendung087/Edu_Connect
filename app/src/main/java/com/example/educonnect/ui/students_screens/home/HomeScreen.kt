@@ -67,6 +67,7 @@ fun HomeScreen(
         factory = EduViewModelProvider.Factory
     ),
     navigateToNotificationScreen : () -> Unit,
+    navigateToSearchScreen: () -> Unit
 ) {
     val authState = LocalAuthState.current
     val uiState = viewModel.homeUiState.collectAsState()
@@ -90,6 +91,7 @@ fun HomeScreen(
         topBar = {
             HomeAppBar(
                 currentUser = "Hi, ${uiState.value.currentUser?.name ?: "Guest"} ",
+                navigateToSearchScreen = navigateToSearchScreen,
                 navigateToNotificationScreen = {
                     viewModel.insertBulkUsers()
                     viewModel.insertBulkTeacherProfiles()
@@ -218,7 +220,8 @@ fun HomeScreen(
 @Composable
 private fun HomeAppBar(
     currentUser : String,
-    navigateToNotificationScreen: () -> Unit
+    navigateToNotificationScreen: () -> Unit,
+    navigateToSearchScreen : () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -288,7 +291,9 @@ private fun HomeAppBar(
                         .size(45.dp)
                 )
             }
-            SearchBar()
+            SearchBar(
+                navigateToSearchScreen = navigateToSearchScreen
+            )
         }
     }
 }
@@ -317,7 +322,9 @@ private fun NotificationButton(
 }
 
 @Composable
-private fun SearchBar() {
+internal fun SearchBar(
+    navigateToSearchScreen : () -> Unit
+) {
     var searchText by remember { mutableStateOf("") }
 
     TextField(
@@ -349,9 +356,13 @@ private fun SearchBar() {
             unfocusedIndicatorColor = Color.Transparent
         ),
         shape = MaterialTheme.shapes.medium,
+        enabled = false,
         modifier = Modifier
             .fillMaxWidth()
             .height(68.dp)
             .padding(8.dp)
+            .clickable {
+                navigateToSearchScreen()
+            }
     )
 }

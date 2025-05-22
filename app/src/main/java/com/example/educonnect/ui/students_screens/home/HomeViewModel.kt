@@ -77,7 +77,7 @@ class HomeViewModel(
     }
 
     private suspend fun getCoursesWithTeachersList() {
-        courseRepository.getCoursesWithTeachers().collect { courses ->
+        courseRepository.getCoursesWithTeachersStream().collect { courses ->
             _homeUiState.update { currentState ->
                 currentState.copy(
                     courseWithTeacherList = courses
@@ -87,7 +87,7 @@ class HomeViewModel(
     }
 
     private suspend fun getMentorList() {
-        userRepository.getAllTeacherProfile().collect { mentors ->
+        userRepository.getAllTeacherProfileStream().collect { mentors ->
             _homeUiState.update { currentState ->
                 currentState.copy(
                     mentorList = mentors

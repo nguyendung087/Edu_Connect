@@ -171,7 +171,7 @@ internal fun BookmarkItem(
 }
 
 @Composable
-private fun BookmarkButton(
+internal fun BookmarkButton(
     onRemove : () -> Unit,
     modifier: Modifier = Modifier
 ) {
